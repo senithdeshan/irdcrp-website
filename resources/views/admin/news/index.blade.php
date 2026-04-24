@@ -19,6 +19,7 @@
                     <th>Title</th>
                     <th>Date</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +28,15 @@
                         <td>{{ $item->title_en }}</td>
                         <td>{{ $item->published_date }}</td>
                         <td>{{ ucfirst($item->status) }}</td>
+                        <td>
+    <a href="{{ route('admin.news.edit', $item->id) }}" class="btn btn-sm btn-primary">Edit</a>
+
+    <form action="{{ route('admin.news.destroy', $item->id) }}" method="POST" class="d-inline">
+        @csrf
+        @method('DELETE')
+        <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this news?')">Delete</button>
+    </form>
+</td>
                     </tr>
                 @endforeach
             </tbody>

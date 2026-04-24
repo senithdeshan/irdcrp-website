@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\News;
 
 class PageController extends Controller
 {
@@ -22,9 +23,14 @@ class PageController extends Controller
         return view('areas');
     }
 
-    public function news() {
-        return view('news');
-    }
+    public function news()
+{
+    $news = News::where('status', 'published')
+        ->latest()
+        ->get();
+
+    return view('news', compact('news'));
+}
 
     public function procurement() {
         return view('procurement');
@@ -45,4 +51,9 @@ class PageController extends Controller
     public function contact() {
         return view('contact');
     }
+
+    public function showNews(News $news)
+{
+    return view('news-show', compact('news'));
+}
 }

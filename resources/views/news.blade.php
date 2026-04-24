@@ -18,53 +18,38 @@
     </div>
 
     <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card feature-card">
-                <div style="height:200px; background:#EAF7F0;" class="d-flex align-items-center justify-content-center">
-                    <span class="fs-1">📰</span>
-                </div>
-                <div class="card-body p-4">
-                    <small class="text-success fw-bold">News</small>
-                    <h5 class="fw-bold mt-2">IRDCRP Project Launch Update</h5>
-                    <p>
-                        Initial project updates and activities will be published here after official approval.
-                    </p>
-                    <a href="#" class="btn btn-green btn-sm">Read More</a>
-                </div>
-            </div>
-        </div>
+        @forelse($news as $item)
+            <div class="col-md-4">
+                <div class="card feature-card">
+                    <div style="height:200px; background:#EAF7F0;" class="d-flex align-items-center justify-content-center">
+                        <span class="fs-1">📰</span>
+                    </div>
 
-        <div class="col-md-4">
-            <div class="card feature-card">
-                <div style="height:200px; background:#EAF7F0;" class="d-flex align-items-center justify-content-center">
-                    <span class="fs-1">📅</span>
-                </div>
-                <div class="card-body p-4">
-                    <small class="text-success fw-bold">Event</small>
-                    <h5 class="fw-bold mt-2">Stakeholder Consultation Programme</h5>
-                    <p>
-                        Information on workshops, meetings and consultations will be updated in this section.
-                    </p>
-                    <a href="#" class="btn btn-green btn-sm">Read More</a>
-                </div>
-            </div>
-        </div>
+                    <div class="card-body p-4">
+                        <small class="text-success fw-bold">
+                            {{ $item->published_date ?? 'No date' }}
+                        </small>
 
-        <div class="col-md-4">
-            <div class="card feature-card">
-                <div style="height:200px; background:#EAF7F0;" class="d-flex align-items-center justify-content-center">
-                    <span class="fs-1">🌱</span>
-                </div>
-                <div class="card-body p-4">
-                    <small class="text-success fw-bold">Field Update</small>
-                    <h5 class="fw-bold mt-2">Climate Resilience Field Activities</h5>
-                    <p>
-                        Field-level progress, success stories and implementation updates will be shared here.
-                    </p>
-                    <a href="#" class="btn btn-green btn-sm">Read More</a>
+                        <h5 class="fw-bold mt-2">
+                            {{ $item->title_en }}
+                        </h5>
+
+                        <p>
+                            {{ Str::limit($item->content_en, 120) }}
+                        </p>
+
+                        <a href="{{ route('news.show', $item->id) }}" class="btn btn-green btn-sm">Read More</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        @empty
+            <div class="col-12 text-center">
+                <div class="card feature-card p-5">
+                    <h5 class="fw-bold">No news available yet.</h5>
+                    <p class="mb-0">Latest project updates will be published here soon.</p>
+                </div>
+            </div>
+        @endforelse
     </div>
 </section>
 

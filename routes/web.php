@@ -1,41 +1,56 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CmsPageController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DownloadController;
+use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\VacancyController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\PageController;
+use Illuminate\Support\Facades\Route;
 
-
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PageController::class, 'home']);
+Route::get('/about', [PageController::class, 'about']);
+Route::get('/components', [PageController::class, 'components']);
+Route::get('/areas', [PageController::class, 'areas']);
+Route::get('/news', [PageController::class, 'news'])->name('news.index');
+Route::get('/news/{news}', [PageController::class, 'showNews'])->name('news.show');
+Route::get('/procurement', [PageController::class, 'procurement']);
+Route::get('/downloads', [PageController::class, 'downloads'])->name('downloads.index');
+Route::get('/downloads/file/{download}', [PageController::class, 'downloadFile'])->name('download.file');
+Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery.index');
+Route::get('/vacancies', [PageController::class, 'vacancies'])->name('vacancies.index');
+Route::get('/vacancies/{vacancy}', [PageController::class, 'showVacancy'])->name('vacancies.show');
+Route::get('/grm', [PageController::class, 'grm']);
+Route::get('/contact', [PageController::class, 'contact']);
+Route::get('/p/{page:slug}', [PageController::class, 'showCmsPage'])->name('page.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('home');
+
+    Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+    Route::get('/news/create', [NewsController::class, 'create'])->name('news.create');
+    Route::post('/news', [NewsController::class, 'store'])->name('news.store');
+    Route::get('/news/{news}/edit', [NewsController::class, 'edit'])->name('news.edit');
+    Route::put('/news/{news}', [NewsController::class, 'update'])->name('news.update');
+    Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('news.destroy');
+
+    Route::resource('gallery', GalleryController::class)->except(['show']);
+    Route::resource('vacancies', VacancyController::class)->except(['show']);
+    Route::resource('downloads', DownloadController::class)->except(['show']);
+    Route::resource('pages', CmsPageController::class)->except(['show']);
 });
 
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    Route::get('/news', [NewsController::class, 'index'])->name('admin.news.index');
-    Route::get('/news/create', [NewsController::class, 'create'])->name('admin.news.create');
-    Route::post('/news', [NewsController::class, 'store'])->name('admin.news.store');
-});
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'si', 'ta'])) {
+        session(['locale' => $locale]);
+    }
 
-// Public single news
-Route::get('/news/{news}', [PageController::class, 'showNews'])->name('news.show');
-
-// Admin news
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    Route::get('/news', [NewsController::class, 'index'])->name('admin.news.index');
-    Route::get('/news/create', [NewsController::class, 'create'])->name('admin.news.create');
-    Route::post('/news', [NewsController::class, 'store'])->name('admin.news.store');
-    Route::get('/news/{news}/edit', [NewsController::class, 'edit'])->name('admin.news.edit');
-    Route::put('/news/{news}', [NewsController::class, 'update'])->name('admin.news.update');
-    Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('admin.news.destroy');
+    return back();
 });
 
 require __DIR__.'/auth.php';

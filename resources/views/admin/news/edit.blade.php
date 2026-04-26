@@ -6,7 +6,7 @@
     <h2 class="section-title mb-4">Edit News</h2>
 
     <div class="card feature-card p-4">
-        <form method="POST" action="{{ route('admin.news.update', $news->id) }}">
+        <form method="POST" action="{{ route('admin.news.update', $news->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -38,6 +38,15 @@
             <div class="mb-3">
                 <label>Content TA</label>
                 <textarea name="content_ta" class="form-control" rows="4">{{ $news->content_ta }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label>Image</label>
+                <input type="file" name="image" class="form-control">
+
+                @if($news->image)
+                    <img src="{{ asset('storage/'.$news->image) }}" width="120" class="mt-2 rounded">
+                @endif
             </div>
 
             <div class="mb-3">

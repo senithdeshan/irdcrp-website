@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 48" width="256" height="48" role="img" aria-labelledby="wbtitle">
+  <title id="wbtitle">The World Bank</title>
+  <!-- High-contrast partner mark for light backgrounds; crisp at any size -->
+  <g fill="none" stroke="#0077C8" stroke-width="1.35" stroke-linecap="round" transform="translate(3,3)">
+    <circle cx="19" cy="19" r="17" fill="none"/>
+    <ellipse cx="19" cy="19" rx="6.5" ry="17"/>
+    <path d="M2 19h34"/>
+    <path d="M19 2c4 4 5 7 5 17s-1 15-5 20"/>
+    <path d="M19 2c-4 4-5 7-5 17s1 15 5 20"/>
+  </g>
+  <text
+    x="50"
+    y="30"
+    font-family="Segoe UI, system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
+    font-size="13.5"
+    font-weight="700"
+    fill="#002F6C"
+    letter-spacing="0.04em"
+  >THE WORLD BANK</text>
+</svg>

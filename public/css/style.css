@@ -1,0 +1,223 @@
+/* IRDCRP public layout + shared page styles (served as /css/style.css) */
+:root {
+    --primary-blue: #0A3D62;
+    --primary-green: #27AE60;
+    --light-green: #EAF7F0;
+    --dark-text: #1f2937;
+}
+
+body {
+    font-family: "Segoe UI", system-ui, Arial, sans-serif;
+    color: var(--dark-text);
+    background: #ffffff;
+}
+
+.navbar {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.navbar-brand {
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    font-weight: 500;
+}
+
+.navbar-custom {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+}
+
+/* Add to the first block on non-hero pages (fixed navbar clears content) */
+.pt-under-fixed-nav {
+    padding-top: 5.5rem;
+}
+
+/* Optional: full-width hero for pages that use .hero (e.g. simple landing) */
+.hero {
+    min-height: 90vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.55)), url("/images/hero.jpg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+/* When hero.jpg is missing, gradient still shows; add an image in public/images/ */
+.hero h1 {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 700;
+}
+
+.hero p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    opacity: 0.95;
+}
+
+.section {
+    padding: 60px 0;
+}
+
+.hero-section {
+    background: linear-gradient(120deg, rgba(10, 61, 98, 0.95), rgba(39, 174, 96, 0.92)), url("/images/hero-agriculture.jpg");
+    background-size: cover;
+    background-position: center;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+}
+
+.section-title {
+    font-weight: 700;
+    color: var(--primary-blue);
+}
+
+.section-subtitle {
+    color: #6b7280;
+    max-width: 720px;
+    margin: auto;
+}
+
+.feature-card {
+    border: 0;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: 0.3s;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+}
+
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--light-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-green);
+    font-size: 28px;
+    margin-bottom: 18px;
+}
+
+.btn-green {
+    background: var(--primary-green);
+    color: white;
+    border-radius: 30px;
+    padding: 10px 24px;
+}
+
+.btn-green:hover {
+    background: #1f8f4f;
+    color: white;
+}
+
+/* Public layout footer (Bootstrap pages) */
+footer.public-footer {
+    background: var(--primary-blue);
+    color: white;
+    padding: 40px 0;
+}
+
+/* Neat header logo strip (Bootstrap / public layout) */
+.public-navbar-logos {
+    display: inline-flex;
+    align-items: stretch;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid rgba(228, 228, 231, 0.95);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.public-navbar-logos__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.25rem;
+    padding: 0.45rem 0.65rem;
+}
+
+@media (min-width: 576px) {
+    .public-navbar-logos__item {
+        min-height: 3.5rem;
+        padding: 0.5rem 0.9rem;
+    }
+}
+
+.public-navbar-logos__item--brand {
+    padding-left: 0.75rem;
+    padding-right: 0.5rem;
+}
+
+.public-navbar-logos__item--brand img {
+    max-height: 2.5rem;
+    width: auto;
+    max-width: 10rem;
+    object-fit: contain;
+    object-position: left center;
+}
+
+@media (min-width: 576px) {
+    .public-navbar-logos__item--brand img {
+        max-height: 2.75rem;
+        max-width: 11.5rem;
+    }
+}
+
+.public-navbar-logos__item--emblem {
+    width: 3.25rem;
+    flex-shrink: 0;
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+}
+
+.public-navbar-logos__item--emblem img {
+    max-height: 2.75rem;
+    max-width: 2.75rem;
+    object-fit: contain;
+}
+
+@media (min-width: 576px) {
+    .public-navbar-logos__item--emblem {
+        width: 3.5rem;
+    }
+
+    .public-navbar-logos__item--emblem img {
+        max-height: 3rem;
+        max-width: 3rem;
+    }
+}
+
+.public-navbar-logos__item--bank {
+    min-width: 5.5rem;
+    max-width: 8.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.75rem;
+}
+
+.public-navbar-logos__item--bank img {
+    max-height: 1.75rem;
+    width: 100%;
+    object-fit: contain;
+}
+
+@media (min-width: 768px) {
+    .public-navbar-logos__item--bank img {
+        max-height: 2rem;
+    }
+}
+
+.public-navbar-logos__divider {
+    width: 1px;
+    flex-shrink: 0;
+    align-self: stretch;
+    margin: 0.5rem 0;
+    background: rgba(214, 211, 209, 0.95);
+}

@@ -6,10 +6,8 @@
     <h2 class="section-title mb-4">Add News</h2>
 
     <div class="card feature-card p-4">
-        <form method="POST" action="{{ route('admin.news.store') }}">
+        <form method="POST" action="{{ route('admin.news.store') }}" enctype="multipart/form-data">
             @csrf
-
-            <h5 class="fw-bold text-success">English Content</h5>
 
             <div class="mb-3">
                 <label>Title EN</label>
@@ -21,10 +19,6 @@
                 <textarea name="content_en" class="form-control" rows="5" required></textarea>
             </div>
 
-            <hr>
-
-            <h5 class="fw-bold text-success">Sinhala Content</h5>
-
             <div class="mb-3">
                 <label>Title SI</label>
                 <input type="text" name="title_si" class="form-control">
@@ -35,10 +29,6 @@
                 <textarea name="content_si" class="form-control" rows="4"></textarea>
             </div>
 
-            <hr>
-
-            <h5 class="fw-bold text-success">Tamil Content</h5>
-
             <div class="mb-3">
                 <label>Title TA</label>
                 <input type="text" name="title_ta" class="form-control">
@@ -47,6 +37,11 @@
             <div class="mb-3">
                 <label>Content TA</label>
                 <textarea name="content_ta" class="form-control" rows="4"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label>Image</label>
+                <input type="file" name="image" class="form-control">
             </div>
 
             <div class="mb-3">

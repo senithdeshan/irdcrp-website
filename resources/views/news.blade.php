@@ -10,34 +10,22 @@
 </section>
 
 <section class="container py-5">
-    <div class="text-center mb-5">
-        <h2 class="section-title">Latest News</h2>
-        <p class="section-subtitle">
-            Recent project updates, field activities, workshops and public announcements.
-        </p>
-    </div>
-
     <div class="row g-4">
         @forelse($news as $item)
             <div class="col-md-4">
                 <div class="card feature-card">
-                    <div style="height:200px; background:#EAF7F0;" class="d-flex align-items-center justify-content-center">
-                        <span class="fs-1">📰</span>
-                    </div>
+                    @if($item->image)
+                        <img src="{{ asset('storage/'.$item->image) }}" style="height:200px; width:100%; object-fit:cover;">
+                    @else
+                        <div style="height:200px; background:#EAF7F0;" class="d-flex align-items-center justify-content-center">
+                            <span class="fs-1">📰</span>
+                        </div>
+                    @endif
 
                     <div class="card-body p-4">
-                        <small class="text-success fw-bold">
-                            {{ $item->published_date ?? 'No date' }}
-                        </small>
-
-                        <h5 class="fw-bold mt-2">
-                            {{ $item->title_en }}
-                        </h5>
-
-                        <p>
-                            {{ Str::limit($item->content_en, 120) }}
-                        </p>
-
+                        <small class="text-success fw-bold">{{ $item->published_date ?? 'No date' }}</small>
+                        <h5 class="fw-bold mt-2">{{ $item->title_en }}</h5>
+                        <p>{{ Str::limit($item->content_en, 120) }}</p>
                         <a href="{{ route('news.show', $item->id) }}" class="btn btn-green btn-sm">Read More</a>
                     </div>
                 </div>
@@ -46,7 +34,6 @@
             <div class="col-12 text-center">
                 <div class="card feature-card p-5">
                     <h5 class="fw-bold">No news available yet.</h5>
-                    <p class="mb-0">Latest project updates will be published here soon.</p>
                 </div>
             </div>
         @endforelse

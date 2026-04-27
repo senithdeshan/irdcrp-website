@@ -17,7 +17,7 @@
             <div class="container">
                 <div class="public-navbar-logos me-2 me-lg-3" role="group" aria-label="Partner logos">
                     <a class="public-navbar-logos__item public-navbar-logos__item--brand text-decoration-none" href="{{ url('/') }}" title="{{ config('app.name', 'IRDCRP') }}">
-                        <img src="{{ asset(config('irdcrp.logos.irdcrp')) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" width="200" height="72">
+                        <img src="{{ asset(config('irdcrp.logos.irdcrp')) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" width="200" height="256">
                     </a>
                     <span class="public-navbar-logos__divider d-none d-sm-block" aria-hidden="true"></span>
                     <div class="public-navbar-logos__item public-navbar-logos__item--emblem d-none d-sm-flex" title="{{ __('messages.logo_emblem_alt') }}">

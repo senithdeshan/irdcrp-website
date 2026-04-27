@@ -30,6 +30,33 @@
     $tLoc = in_array(app()->getLocale(), ['en', 'si', 'ta'], true) ? app()->getLocale() : 'en';
     $stats = config('irdcrp.home_stats', []);
     $mapEmbedUrl = config('irdcrp.map_embed_url');
+    $weatherAreas = config('irdcrp.weather_areas', []);
+    if (! is_array($weatherAreas) || $weatherAreas === []) {
+        $weatherAreas = [
+            ['id' => 'ampara', 'lat' => 7.297, 'lon' => 81.679, 'name' => ['en' => 'Ampara', 'si' => 'අම්පාර', 'ta' => 'அம்பாறை']],
+        ];
+    }
+    $weatherWidget = [
+        'areas' => $weatherAreas,
+        'locale' => $tLoc,
+        'defaultImage' => asset(config('irdcrp.weather_default_image')),
+        'condLabels' => [
+            'clear' => __('messages.weather_cond_clear'),
+            'cloudy' => __('messages.weather_cond_cloudy'),
+            'fog' => __('messages.weather_cond_fog'),
+            'drizzle' => __('messages.weather_cond_drizzle'),
+            'rain' => __('messages.weather_cond_rain'),
+            'snow' => __('messages.weather_cond_snow'),
+            'thunder' => __('messages.weather_cond_thunder'),
+        ],
+        'strings' => [
+            'loading' => __('messages.weather_loading'),
+            'error' => __('messages.weather_error'),
+            'forecast' => __('messages.weather_forecast_title'),
+            'weather' => __('messages.weather_short'),
+            'districts' => __('messages.weather_districts_label'),
+        ],
+    ];
 @endphp
 
 @section('content')
@@ -60,7 +87,7 @@
         @if(count($slides) === 0)
             <div
                 class="absolute inset-0 min-h-full bg-center bg-cover"
-                style="background-image: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1920&q=80');"
+                style="background-image: url('{{ asset('images/hero/hero-01-drip-seedlings.png') }}');"
             ></div>
         @endif
         <div class="irdc-hero__veil absolute inset-0 min-h-full" aria-hidden="true"></div>
@@ -143,6 +170,69 @@
     </p>
 </div>
 
+{{-- Key leaders — first content after hero (always visible; no scroll-reveal fade) --}}
+@if(count($keyLeaders) > 0)
+    <section id="key-leaders" class="irdc-scroll-mt-header border-b border-stone-200/80 bg-white py-14 sm:py-16 md:py-20" aria-labelledby="key-leaders-heading">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <header class="irdc-leaders-head">
+                <h2 id="key-leaders-heading" class="irdc-leaders-title">
+                    {{ __('messages.home_leaders_title') }}
+                </h2>
+                <span class="irdc-leaders-leaf" aria-hidden="true">
+                    <svg class="h-8 w-8 text-emerald-600 sm:h-9 sm:w-9" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 22c-2-6 2-14 10-16 2 8-2 14-10 16Z" fill="currentColor" opacity="0.35"/>
+                        <path d="M14 24c8-2 12-10 10-18-8 2-12 10-10 18Z" fill="currentColor"/>
+                    </svg>
+                </span>
+            </header>
+            <div class="irdc-leaders-grid">
+                @foreach ($keyLeaders as $leader)
+                    @php
+                        if ($leader instanceof \App\Models\KeyLeader) {
+                            $portrait = $leader->image
+                                ? asset('storage/'.$leader->image)
+                                : asset('images/hero/hero-05-farmer-tiller.png');
+                            $roleLabel = $leader->label('role', $tLoc);
+                            $orgLabel = $leader->label('org', $tLoc);
+                        } else {
+                            $imgPath = ltrim($leader['image'] ?? '', '/');
+                            $portraitPath = isset($leader['image']) && is_file(public_path($imgPath))
+                                ? $leader['image']
+                                : ($leader['fallback'] ?? '/images/hero/hero-01-drip-seedlings.png');
+                            $portrait = str_starts_with($portraitPath, 'http')
+                                ? $portraitPath
+                                : asset(ltrim($portraitPath, '/'));
+                            $roleKey = $leader['role'] ?? '';
+                            $orgKey = $leader['org'] ?? '';
+                            $roleLabel = $roleKey ? __('messages.'.$roleKey) : '';
+                            $orgLabel = $orgKey ? __('messages.'.$orgKey) : '';
+                        }
+                    @endphp
+                    <article class="irdc-leader-card">
+                        <div class="irdc-leader-card__photo">
+                            <img
+                                src="{{ $portrait }}"
+                                alt="{{ __('messages.leader_photo_alt', ['role' => $roleLabel]) }}"
+                                width="280"
+                                height="280"
+                                loading="lazy"
+                                decoding="async"
+                                class="irdc-leader-card__img"
+                            >
+                        </div>
+                        @if(filled($roleLabel))
+                            <h3 class="irdc-leader-card__role">{{ $roleLabel }}</h3>
+                        @endif
+                        @if(filled($orgLabel))
+                            <p class="irdc-leader-card__org">{{ $orgLabel }}</p>
+                        @endif
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </section>
+@endif
+
 {{-- 2. Project identity: Sinhala / Tamil / English + short lead --}}
 <section id="about-project" class="irdc-reveal-on-scroll irdc-scroll-mt-header border-b border-stone-200/80 bg-white py-20 sm:py-28">
     <div class="mx-auto max-w-4xl px-4 text-center sm:px-6">
@@ -190,6 +280,133 @@
                 <p class="font-display text-3xl font-extrabold tabular-nums text-emerald-800 sm:text-4xl md:text-5xl lg:text-6xl">{{ $stats['duration'] ?? '—' }}</p>
                 <p class="mt-2 text-xs font-bold uppercase tracking-wider text-slate-500 sm:text-sm">{{ __('messages.stat_duration') }}</p>
             </article>
+        </div>
+    </div>
+</section>
+
+{{-- 3b. Weather — single modern card (image + district picker + forecast) --}}
+<section
+    id="weather-areas"
+    class="irdc-scroll-mt-header irdc-weather-section relative border-b border-stone-200/80 bg-gradient-to-b from-emerald-50/70 via-[#f8faf8] to-white py-16 sm:py-20 md:py-24"
+    x-data="irdcWeather(@js($weatherWidget))"
+>
+    <span class="irdc-weather-section__blob irdc-weather-section__blob--1" aria-hidden="true"></span>
+    <span class="irdc-weather-section__blob irdc-weather-section__blob--2" aria-hidden="true"></span>
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <header class="mx-auto mb-10 max-w-4xl text-center sm:mb-12">
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800/80 sm:text-sm">{{ __('messages.home_weather_eyebrow') }}</p>
+            <h2 class="mt-3 font-display text-2xl font-extrabold leading-snug tracking-tight text-[#3d2f1f] sm:text-3xl md:text-[1.75rem] lg:text-4xl">
+                {{ __('messages.home_weather_title') }}
+            </h2>
+            <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">{{ __('messages.home_weather_sub') }}</p>
+        </header>
+
+        <div class="irdc-weather-mega">
+            <div class="irdc-weather-mega__grid">
+                {{-- Left: hero photo + organic backdrop --}}
+                <div class="irdc-weather-mega__visual">
+                    <div class="irdc-weather-mega__visual-blob" aria-hidden="true"></div>
+                    <figure class="irdc-weather-deckle irdc-weather-deckle--hero relative z-[1] mx-auto max-w-md lg:mx-0">
+                        <img
+                            :src="areaImage()"
+                            alt="{{ __('messages.home_weather_image_alt') }}"
+                            width="520"
+                            height="900"
+                            loading="lazy"
+                            decoding="async"
+                            class="min-h-[12rem] w-full bg-stone-100"
+                        >
+                    </figure>
+                </div>
+
+                {{-- Right: embedded widget (districts | forecast) --}}
+                <div class="irdc-weather-mega__widget">
+                    <div class="irdc-weather-widget-shell">
+                        {{-- District list --}}
+                        <div class="irdc-weather-widget-shell__districts">
+                            <p class="irdc-weather-widget-label" x-text="strings.districts"></p>
+                            <div
+                                class="irdc-weather-district-list"
+                                role="listbox"
+                                aria-label="{{ __('messages.weather_districts_label') }}"
+                            >
+                                <template x-for="(a, idx) in areas" :key="a.id">
+                                    <button
+                                        type="button"
+                                        class="irdc-weather-district-btn"
+                                        :class="{ 'irdc-weather-district-btn--active': selected === idx }"
+                                        role="option"
+                                        :aria-selected="selected === idx ? 'true' : 'false'"
+                                        @click="select(idx)"
+                                    >
+                                        <span x-text="a.name[locale] || a.name.en"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        {{-- Forecast --}}
+                        <div class="irdc-weather-widget-shell__forecast">
+                            <p class="irdc-weather-panel-head">
+                                <span class="text-slate-500" x-text="districtLabel()"></span>
+                                <span class="text-slate-300">·</span>
+                                <span x-text="strings.weather"></span>
+                            </p>
+
+                            <div x-show="loading" x-cloak class="irdc-weather-state irdc-weather-state--loading">
+                                <span class="h-9 w-9 animate-spin rounded-full border-2 border-[#5a4a1f] border-t-transparent" aria-hidden="true"></span>
+                                <span class="mt-3 text-sm text-slate-600" x-text="strings.loading"></span>
+                            </div>
+
+                            <div x-show="!loading && error" x-cloak class="irdc-weather-state text-sm text-amber-900/95" role="alert">
+                                <span x-text="strings.error"></span>
+                            </div>
+
+                            <div x-show="!loading && !error && payload" x-cloak class="irdc-weather-forecast-body">
+                                <div class="irdc-weather-current">
+                                    <div class="irdc-weather-current__icon" aria-hidden="true">
+                                        <svg x-show="iconKind(currentCode()) === 'sun'" class="absolute inset-0 h-full w-full text-amber-500" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><circle cx="32" cy="32" r="14"/><path d="M32 6v6M32 52v6M6 32h6M52 32h6M13.6 13.6l4.2 4.2M46.2 46.2l4.2 4.2M13.6 50.4l4.2-4.2M46.2 17.8l4.2-4.2"/></svg>
+                                        <svg x-show="iconKind(currentCode()) === 'cloud'" class="absolute inset-0 h-full w-full text-slate-500" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 40h36a10 10 0 0 0 0-20 13 13 0 0 0-25-4 10 10 0 0 0-19 6" fill="currentColor" fill-opacity="0.12"/></svg>
+                                        <svg x-show="iconKind(currentCode()) === 'rain' || iconKind(currentCode()) === 'drizzle' || iconKind(currentCode()) === 'thunder'" class="absolute inset-0 h-full w-full text-sky-600" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 36h36a9 9 0 0 0 0-18 12 12 0 0 0-23-3 9 9 0 0 0-17 5" fill="currentColor" fill-opacity="0.1"/><path d="M22 46v8M32 44v10M42 46v8" stroke="currentColor"/></svg>
+                                        <svg x-show="iconKind(currentCode()) === 'snow'" class="absolute inset-0 h-full w-full text-sky-400" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 34h30a8 8 0 0 0 0-16 11 11 0 0 0-21-2 8 8 0 0 0-15 4" fill="currentColor" fill-opacity="0.1"/><path d="m32 42-4 4m4-4 4 4m-4-4v8"/></svg>
+                                        <svg x-show="iconKind(currentCode()) === 'fog'" class="absolute inset-0 h-full w-full text-slate-400" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 28h40M10 36h44M14 44h36" stroke-linecap="round"/></svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-display text-4xl font-extrabold tabular-nums text-[#3d2f1f] sm:text-5xl">
+                                            <span x-text="currentTemp() !== null ? currentTemp() + '°C' : '—'"></span>
+                                        </p>
+                                        <p class="mt-1.5 text-sm font-medium capitalize text-slate-600" x-text="condLabel(currentCode())"></p>
+                                    </div>
+                                </div>
+
+                                <div class="irdc-weather-week">
+                                    <p class="irdc-weather-week__title" x-text="strings.forecast"></p>
+                                    <ul class="irdc-weather-week__list">
+                                        <template x-for="row in dailyRows()" :key="row.date">
+                                            <li class="irdc-weather-week__row">
+                                                <span class="irdc-weather-week__day" x-text="formatDayShort(row.date)"></span>
+                                                <span class="irdc-weather-week__ico relative inline-flex h-5 w-5 shrink-0 items-center justify-center" aria-hidden="true">
+                                                    <svg x-show="iconKind(row.code) === 'sun'" class="absolute inset-0 m-auto h-5 w-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+                                                    <svg x-show="iconKind(row.code) === 'cloud'" class="absolute inset-0 m-auto h-5 w-5 text-slate-500" viewBox="0 0 24 24" fill="currentColor" opacity="0.45"><path d="M5 16h12a4 4 0 0 0 0-8 6 6 0 0 0-11-2 4 4 0 0 0-7 3"/></svg>
+                                                    <svg x-show="iconKind(row.code) === 'rain' || iconKind(row.code) === 'thunder' || iconKind(row.code) === 'drizzle'" class="absolute inset-0 m-auto h-5 w-5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 14h11a3.5 3.5 0 0 0 0-7 5 5 0 0 0-9.5-1.5A3.5 3.5 0 0 0 5 14Z" fill="currentColor" fill-opacity="0.15"/><path d="M9 18v3M12 17v4M15 18v3"/></svg>
+                                                    <svg x-show="iconKind(row.code) === 'snow'" class="absolute inset-0 m-auto h-5 w-5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 13h10a3 3 0 0 0 0-6 4 4 0 0 0-8-.5A3 3 0 0 0 6 13Z" fill="currentColor" fill-opacity="0.15"/></svg>
+                                                    <svg x-show="iconKind(row.code) === 'fog'" class="absolute inset-0 m-auto h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 10h16M3 14h18M5 18h14" stroke-linecap="round"/></svg>
+                                                </span>
+                                                <span class="irdc-weather-week__hi" x-text="Math.round(row.max) + '°'"></span>
+                                                <span class="irdc-weather-week__lo" x-text="Math.round(row.min) + '°'"></span>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+
+                                <p class="irdc-weather-attrib">
+                                    <a href="https://open-meteo.com/" rel="noopener noreferrer" target="_blank" class="transition hover:text-slate-700">{{ __('messages.weather_attribution') }}</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

@@ -1,8 +1,8 @@
 @php
     $onHome = request()->is('/');
-    $navLink = 'irdc-nav-link relative inline-flex items-center px-1.5 py-2 text-xs font-semibold tracking-wide font-display border-b-[3px] transition sm:px-2 sm:text-sm md:px-2.5 md:text-base lg:px-3';
-    $active = 'border-emerald-300 text-white font-bold [text-shadow:0_1px_2px_rgba(0,0,0,0.12)] after:pointer-events-none after:absolute after:bottom-1.5 after:left-1/2 after:h-1.5 after:w-1.5 after:-translate-x-1/2 after:rounded-full after:bg-emerald-200 after:ring-2 after:ring-emerald-500/20 sm:after:bottom-2';
-    $inactive = 'border-transparent text-white/90 hover:text-white hover:border-white/20';
+    $navLink = 'irdc-nav-link relative inline-flex items-center rounded-md px-2 py-2.5 text-sm font-semibold tracking-wide font-display border-b-[3px] transition-colors duration-200 sm:px-2.5 sm:text-base md:px-3 md:text-lg lg:px-3.5 lg:text-[1.0625rem]';
+    $active = 'border-emerald-300 bg-white/10 text-white font-bold shadow-sm [text-shadow:0_1px_2px_rgba(0,0,0,0.12)] after:pointer-events-none after:absolute after:bottom-1.5 after:left-1/2 after:h-1.5 after:w-1.5 after:-translate-x-1/2 after:rounded-full after:bg-emerald-200 after:ring-2 after:ring-emerald-500/25 sm:after:bottom-2';
+    $inactive = 'border-transparent text-white/90 hover:border-white/25 hover:bg-white/10 hover:text-white';
 @endphp
 
 <header
@@ -24,7 +24,7 @@
             class="irdc-top-bar irdc-top-bar--slim border-b border-slate-200/80 bg-white/95"
         @endif
     >
-        <div class="relative z-10 mx-auto max-w-7xl px-3 sm:px-5 lg:px-8 py-1.5 sm:py-2">
+        <div class="relative z-10 mx-auto max-w-7xl px-3 py-2 sm:px-5 sm:py-2.5 lg:px-8">
             <div
                 class="irdc-top-bar__row flex w-full min-w-0 items-center justify-between gap-2 sm:gap-4"
             >
@@ -35,7 +35,7 @@
                         role="group"
                         aria-label="{{ __('messages.logos_aria') }}"
                     >
-                        <div class="irdc-header-logo-cell" title="{{ __('messages.logo_emblem_alt') }}">
+                        <div class="irdc-header-logo-cell irdc-header-logo-cell--emblem" title="{{ __('messages.logo_emblem_alt') }}">
                             <img
                                 src="{{ asset(config('irdcrp.logos.emblem')) }}"
                                 alt="{{ __('messages.logo_emblem_alt') }}"
@@ -43,17 +43,17 @@
                                 decoding="async"
                             >
                         </div>
-                        <a href="{{ url('/') }}" class="irdc-header-logo-cell" title="{{ config('app.name', 'IRDCRP') }}">
+                        <a href="{{ url('/') }}" class="irdc-header-logo-cell irdc-header-logo-cell--irdcrp" title="{{ config('app.name', 'IRDCRP') }}">
                             <img
                                 src="{{ asset(config('irdcrp.logos.irdcrp')) }}"
                                 alt="{{ __('messages.logo_irdcrp_alt') }}"
-                                width="220"
-                                height="80"
+                                width="200"
+                                height="256"
                                 loading="eager"
                                 decoding="async"
                             >
                         </a>
-                        <div class="irdc-header-logo-cell" title="{{ __('messages.logo_world_bank_alt') }}">
+                        <div class="irdc-header-logo-cell irdc-header-logo-cell--worldbank" title="{{ __('messages.logo_world_bank_alt') }}">
                             <img
                                 src="{{ asset(config('irdcrp.logos.world_bank')) }}"
                                 alt="{{ __('messages.logo_world_bank_alt') }}"
@@ -144,10 +144,10 @@
         </div>
     </div>
 
-    <div class="irdc-main-nav border-b border-emerald-950/25 bg-irdc-green shadow-sm">
+    <div class="irdc-main-nav border-b border-emerald-950/30 bg-irdc-green shadow-md shadow-emerald-950/20 ring-1 ring-white/10">
         <div class="mx-auto max-w-7xl px-3 sm:px-5 lg:px-8">
-            <div class="flex w-full min-h-11 items-center justify-end md:min-h-12 md:justify-center">
-                <nav class="irdc-main-nav__links hidden w-full flex-1 flex-wrap items-center justify-center gap-x-0 gap-y-0.5 py-1 sm:gap-x-0.5 md:flex lg:gap-y-1">
+            <div class="flex w-full min-h-[3.25rem] items-center justify-end md:min-h-14 md:justify-center">
+                <nav id="main-nav-desktop" class="irdc-main-nav__links hidden w-full flex-1 flex-wrap items-center justify-center gap-x-0.5 gap-y-1.5 py-2 sm:gap-x-1 md:flex" aria-label="{{ __('messages.nav_primary_aria') }}">
                     <a href="{{ url('/') }}" class="{{ $navLink }} {{ request()->is('/') ? $active : $inactive }}">{{ __('messages.home') }}</a>
                     <a href="/about" class="{{ $navLink }} {{ request()->is('about') ? $active : $inactive }}">{{ __('messages.about') }}</a>
                     <a href="{{ url('/#programmes') }}" class="{{ $navLink }} {{ $inactive }}">{{ __('messages.nav_programmes') }}</a>
@@ -164,28 +164,54 @@
                         <a href="{{ route('admin.home') }}" class="{{ $navLink }} {{ request()->is('admin*') ? $active : $inactive }}">Admin</a>
                     @endauth
                 </nav>
-                <button type="button" @click="mobile = ! mobile" class="shrink-0 p-2 text-white/95 md:hidden" aria-label="Menu">
-                    <span x-show="!mobile" class="text-2xl leading-none">☰</span>
-                    <span x-show="mobile" x-cloak class="text-2xl leading-none">×</span>
+                <button
+                    type="button"
+                    id="main-nav-toggle"
+                    @click="mobile = ! mobile"
+                    class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-white transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200/80 md:hidden"
+                    :aria-expanded="mobile"
+                    aria-controls="main-nav-mobile"
+                    aria-label="{{ __('messages.nav_menu_toggle') }}"
+                >
+                    <svg x-show="!mobile" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg x-show="mobile" x-cloak class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
         </div>
-        <div x-show="mobile" x-cloak @click.away="mobile = false" x-transition class="md:hidden max-h-[min(70vh,28rem)] overflow-y-auto border-t border-white/15 bg-irdc-green">
-            <div class="mx-auto max-w-7xl space-y-0 px-3 pb-4 text-sm font-semibold font-display sm:px-5 sm:text-base lg:px-8">
-                <a class="block border-b border-white/10 py-3 text-white/95" href="{{ url('/') }}">{{ __('messages.home') }}</a>
-                <a class="block border-b border-white/10 py-3 text-white/95" href="/about">{{ __('messages.about') }}</a>
-                <a class="block border-b border-white/10 py-3 text-white/95" href="{{ url('/#programmes') }}">{{ __('messages.nav_programmes') }}</a>
-                <a class="block border-b border-white/10 py-3 text-white/95" href="/areas">{{ __('messages.nav_areas') }}</a>
-                <a class="block border-b border-white/10 py-3 text-white/95" href="/components">{{ __('messages.nav_components') }}</a>
-                <a class="block border-b border-white/10 py-3 text-white/95" href="/news">{{ __('messages.nav_news') }}</a>
-                <a class="block border-b border-white/10 py-3 text-white/95" href="/procurement">{{ __('messages.nav_procurement') }}</a>
-                <a class="block border-b border-white/10 py-3 text-white/95" href="/downloads">{{ __('messages.nav_downloads') }}</a>
-                <a class="block border-b border-white/10 py-3 text-white/95" href="/gallery">{{ __('messages.nav_gallery') }}</a>
-                <a class="block border-b border-white/10 py-3 text-white/95" href="/vacancies">{{ __('messages.nav_vacancies') }}</a>
-                <a class="block border-b border-white/10 py-3 text-white/95" href="/grm">{{ __('messages.nav_grm') }}</a>
-                <a class="block border-b border-white/10 py-3 text-white/95" href="/contact">{{ __('messages.contact') }}</a>
+        <div
+            id="main-nav-mobile"
+            x-show="mobile"
+            x-cloak
+            @click.away="mobile = false"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 -translate-y-1"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="md:hidden max-h-[min(75vh,32rem)] overflow-y-auto border-t border-white/20 bg-irdc-green/98 shadow-inner backdrop-blur-sm"
+            role="navigation"
+            aria-label="{{ __('messages.nav_primary_aria') }}"
+        >
+            <div class="mx-auto max-w-7xl space-y-0 px-3 pb-5 pt-1 text-base font-semibold font-display sm:px-5 sm:text-lg lg:px-8">
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="{{ url('/') }}" @click="mobile = false">{{ __('messages.home') }}</a>
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/about" @click="mobile = false">{{ __('messages.about') }}</a>
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="{{ url('/#programmes') }}" @click="mobile = false">{{ __('messages.nav_programmes') }}</a>
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/areas" @click="mobile = false">{{ __('messages.nav_areas') }}</a>
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/components" @click="mobile = false">{{ __('messages.nav_components') }}</a>
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/news" @click="mobile = false">{{ __('messages.nav_news') }}</a>
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/procurement" @click="mobile = false">{{ __('messages.nav_procurement') }}</a>
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/downloads" @click="mobile = false">{{ __('messages.nav_downloads') }}</a>
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/gallery" @click="mobile = false">{{ __('messages.nav_gallery') }}</a>
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/vacancies" @click="mobile = false">{{ __('messages.nav_vacancies') }}</a>
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/grm" @click="mobile = false">{{ __('messages.nav_grm') }}</a>
+                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/contact" @click="mobile = false">{{ __('messages.contact') }}</a>
                 @auth
-                    <a class="block py-3 text-amber-200" href="{{ route('admin.home') }}">Admin</a>
+                    <a class="mt-2 block rounded-lg py-3.5 pl-1 text-amber-200 transition hover:bg-white/10" href="{{ route('admin.home') }}" @click="mobile = false">Admin</a>
                 @endauth
             </div>
         </div>

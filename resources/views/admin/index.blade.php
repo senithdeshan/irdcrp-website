@@ -51,6 +51,13 @@
                 <a href="{{ route('admin.pages.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Key leaders</h2>
+                <p class="text-muted small mb-3">Home page portraits, roles (EN/SI/TA), and organisations.</p>
+                <a href="{{ route('admin.key-leaders.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
     </div>
 </section>
 @endsection

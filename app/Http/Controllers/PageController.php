@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Download;
 use App\Models\Gallery;
+use App\Models\KeyLeader;
 use App\Models\News;
 use App\Models\Page;
 use App\Models\Vacancy;
@@ -41,11 +42,22 @@ class PageController extends Controller
             ->take(3)
             ->get();
 
+        $keyLeaders = KeyLeader::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        if ($keyLeaders->isEmpty()) {
+            $keyLeaders = collect(config('irdcrp.key_leaders', []));
+        }
+
         return view('home', compact(
             'latestNews',
             'homeNews',
             'galleryPreview',
             'vacanciesPreview',
+            'keyLeaders',
         ));
     }
 

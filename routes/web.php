@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CmsPageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DownloadController;
 use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\KeyLeaderController;
 use App\Http\Controllers\Admin\VacancyController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PageController;
@@ -43,6 +44,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('vacancies', VacancyController::class)->except(['show']);
     Route::resource('downloads', DownloadController::class)->except(['show']);
     Route::resource('pages', CmsPageController::class)->except(['show']);
+    Route::resource('key-leaders', KeyLeaderController::class)->except(['show']);
 });
 
 Route::get('/lang/{locale}', function ($locale) {

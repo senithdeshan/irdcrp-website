@@ -7,8 +7,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-sm font-semibold uppercase tracking-[0.15em] text-slate-500 mb-8">{{ __('messages.partners_title') }}</h2>
         <div class="irdc-partner-strip mx-auto" role="group" aria-label="Partner logos">
-            <div class="irdc-partner-strip__cell">
-                <img src="{{ asset(config('irdcrp.logos.irdcrp')) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" loading="lazy" decoding="async">
+            <div class="irdc-partner-strip__cell irdc-partner-strip__cell--irdcrp">
+                <img src="{{ asset(config('irdcrp.logos.irdcrp')) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" width="200" height="256" loading="lazy" decoding="async">
             </div>
             <div class="irdc-partner-strip__cell irdc-partner-strip__cell--emblem">
                 <img src="{{ asset(config('irdcrp.logos.emblem')) }}" alt="{{ __('messages.logo_emblem_alt') }}" loading="lazy" decoding="async">

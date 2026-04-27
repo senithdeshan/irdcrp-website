@@ -90,7 +90,7 @@
                 style="background-image: url('{{ asset('images/hero/hero-01-drip-seedlings.png') }}');"
             ></div>
         @endif
-        <div class="irdc-hero__veil absolute inset-0 min-h-full" aria-hidden="true"></div>
+        <div class="irdc-hero__veil absolute inset-0 min-h-full" aria-hidden="true">hi</div>
     </div>
 
     <div class="relative z-10 flex min-h-[100svh] min-h-screen flex-col">

@@ -118,7 +118,7 @@
                 <a href="/about" class="irdc-hero__btn-primary">
                     {{ __('messages.home_hero_learn') }} <span aria-hidden="true">→</span>
                 </a>
-                <a href="{{ url('/#contact-block') }}" class="irdc-hero__btn-secondary">
+                <a href="{{ url('/contact') }}" class="irdc-hero__btn-secondary">
                     {{ __('messages.home_get_involved') }}
                 </a>
             </div>

@@ -148,24 +148,25 @@
         <div class="mx-auto max-w-7xl px-3 sm:px-5 lg:px-8">
             <div class="flex w-full min-h-[3.25rem] items-center justify-end gap-2 md:min-h-14 md:justify-between">
                 <nav id="main-nav-desktop" class="irdc-main-nav__links hidden w-full flex-1 flex-wrap items-center justify-center gap-x-0.5 gap-y-1.5 py-2 sm:gap-x-1 md:flex" aria-label="{{ __('messages.nav_primary_aria') }}">
-                    <a href="{{ url('/') }}" class="{{ $navLink }} {{ request()->is('/') ? $active : $inactive }}">{{ __('messages.home') }}</a>
-                    <a href="/about" class="{{ $navLink }} {{ request()->is('about') ? $active : $inactive }}">{{ __('messages.about') }}</a>
-                    <a href="{{ url('/#programmes') }}" class="{{ $navLink }} {{ $inactive }}">{{ __('messages.nav_programmes') }}</a>
-                    <a href="/areas" class="{{ $navLink }} {{ request()->is('areas') ? $active : $inactive }}">{{ __('messages.nav_areas') }}</a>
-                    <a href="/components" class="{{ $navLink }} {{ request()->is('components') ? $active : $inactive }}">{{ __('messages.nav_components') }}</a>
-                    <a href="/news" class="{{ $navLink }} {{ request()->is('news*') ? $active : $inactive }}">{{ __('messages.nav_news') }}</a>
-                    <a href="/procurement" class="{{ $navLink }} {{ request()->is('procurement*') ? $active : $inactive }}">{{ __('messages.nav_procurement') }}</a>
-                    <a href="/downloads" class="{{ $navLink }} {{ request()->is('downloads') ? $active : $inactive }}">{{ __('messages.nav_downloads') }}</a>
-                    <a href="/gallery" class="{{ $navLink }} {{ request()->is('gallery*') ? $active : $inactive }}">{{ __('messages.nav_gallery') }}</a>
-                    <a href="/vacancies" class="{{ $navLink }} {{ request()->is('vacancies*') ? $active : $inactive }}">{{ __('messages.nav_vacancies') }}</a>
-                    <a href="/grm" class="{{ $navLink }} {{ request()->is('grm') ? $active : $inactive }}">{{ __('messages.nav_grm') }}</a>
-                    <a href="/contact" class="{{ $navLink }} {{ request()->is('contact') ? $active : $inactive }}">{{ __('messages.contact') }}</a>
+                    <a data-nav-direct href="{{ url('/') }}" class="{{ $navLink }} {{ request()->is('/') ? $active : $inactive }}">{{ __('messages.home') }}</a>
+                    <a data-nav-direct href="/about" class="{{ $navLink }} {{ request()->is('about') ? $active : $inactive }}">{{ __('messages.about') }}</a>
+                    <a data-nav-direct href="{{ url('/components') }}" class="{{ $navLink }} {{ request()->is('components') ? $active : $inactive }}">{{ __('messages.nav_programmes') }}</a>
+                    <a data-nav-direct href="/areas" class="{{ $navLink }} {{ request()->is('areas') ? $active : $inactive }}">{{ __('messages.nav_areas') }}</a>
+                    <a data-nav-direct href="/components" class="{{ $navLink }} {{ request()->is('components') ? $active : $inactive }}">{{ __('messages.nav_components') }}</a>
+                    <a data-nav-direct href="/news" class="{{ $navLink }} {{ request()->is('news*') ? $active : $inactive }}">{{ __('messages.nav_news') }}</a>
+                    <a data-nav-direct href="/procurement" class="{{ $navLink }} {{ request()->is('procurement*') ? $active : $inactive }}">{{ __('messages.nav_procurement') }}</a>
+                    <a data-nav-direct href="/downloads" class="{{ $navLink }} {{ request()->is('downloads') ? $active : $inactive }}">{{ __('messages.nav_downloads') }}</a>
+                    <a data-nav-direct href="/gallery" class="{{ $navLink }} {{ request()->is('gallery*') ? $active : $inactive }}">{{ __('messages.nav_gallery') }}</a>
+                    <a data-nav-direct href="/vacancies" class="{{ $navLink }} {{ request()->is('vacancies*') ? $active : $inactive }}">{{ __('messages.nav_vacancies') }}</a>
+                    <a data-nav-direct href="/grm" class="{{ $navLink }} {{ request()->is('grm') ? $active : $inactive }}">{{ __('messages.nav_grm') }}</a>
+                    <a data-nav-direct href="/contact" class="{{ $navLink }} {{ request()->is('contact') ? $active : $inactive }}">{{ __('messages.contact') }}</a>
                     @auth
-                        <a href="{{ route('admin.home') }}" class="{{ $navLink }} {{ request()->is('admin*') ? $active : $inactive }}">Admin</a>
+                        <a data-nav-direct href="{{ route('admin.home') }}" class="{{ $navLink }} {{ request()->is('admin*') ? $active : $inactive }}">Admin</a>
                     @endauth
                 </nav>
                 <a
-                    href="{{ url('/#contact-block') }}"
+                    data-nav-direct
+                    href="{{ url('/contact') }}"
                     class="irdc-nav-cta hidden md:inline-flex"
                 >
                     {{ __('messages.home_get_involved') }}
@@ -204,24 +205,37 @@
             aria-label="{{ __('messages.nav_primary_aria') }}"
         >
             <div class="mx-auto max-w-7xl space-y-0 px-3 pb-5 pt-1 text-base font-semibold font-display sm:px-5 sm:text-lg lg:px-8">
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="{{ url('/') }}" @click="mobile = false">{{ __('messages.home') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/about" @click="mobile = false">{{ __('messages.about') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="{{ url('/#programmes') }}" @click="mobile = false">{{ __('messages.nav_programmes') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/areas" @click="mobile = false">{{ __('messages.nav_areas') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/components" @click="mobile = false">{{ __('messages.nav_components') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/news" @click="mobile = false">{{ __('messages.nav_news') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/procurement" @click="mobile = false">{{ __('messages.nav_procurement') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/downloads" @click="mobile = false">{{ __('messages.nav_downloads') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/gallery" @click="mobile = false">{{ __('messages.nav_gallery') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/vacancies" @click="mobile = false">{{ __('messages.nav_vacancies') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/grm" @click="mobile = false">{{ __('messages.nav_grm') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/contact" @click="mobile = false">{{ __('messages.contact') }}</a>
-                <a class="mt-2 inline-flex w-full items-center justify-center rounded-full bg-amber-500 px-4 py-2.5 font-bold text-slate-900 shadow-sm transition hover:bg-amber-400" href="{{ url('/#contact-block') }}" @click="mobile = false">{{ __('messages.home_get_involved') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="{{ url('/') }}" @click="mobile = false">{{ __('messages.home') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/about" @click="mobile = false">{{ __('messages.about') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/components" @click="mobile = false">{{ __('messages.nav_programmes') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/areas" @click="mobile = false">{{ __('messages.nav_areas') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/components" @click="mobile = false">{{ __('messages.nav_components') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/news" @click="mobile = false">{{ __('messages.nav_news') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/procurement" @click="mobile = false">{{ __('messages.nav_procurement') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/downloads" @click="mobile = false">{{ __('messages.nav_downloads') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/gallery" @click="mobile = false">{{ __('messages.nav_gallery') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/vacancies" @click="mobile = false">{{ __('messages.nav_vacancies') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/grm" @click="mobile = false">{{ __('messages.nav_grm') }}</a>
+                <a data-nav-direct class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/contact" @click="mobile = false">{{ __('messages.contact') }}</a>
+                <a data-nav-direct class="mt-2 inline-flex w-full items-center justify-center rounded-full bg-amber-500 px-4 py-2.5 font-bold text-slate-900 shadow-sm transition hover:bg-amber-400" href="/contact" @click="mobile = false">{{ __('messages.home_get_involved') }}</a>
                 @auth
-                    <a class="mt-2 block rounded-lg py-3.5 pl-1 text-amber-200 transition hover:bg-white/10" href="{{ route('admin.home') }}" @click="mobile = false">Admin</a>
+                    <a data-nav-direct class="mt-2 block rounded-lg py-3.5 pl-1 text-amber-200 transition hover:bg-white/10" href="{{ route('admin.home') }}" @click="mobile = false">Admin</a>
                 @endauth
             </div>
         </div>
     </div>
 </header>
+
+@once
+    <script>
+        document.addEventListener('click', function (event) {
+            const link = event.target.closest('a[data-nav-direct]');
+            if (!link) return;
+            if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            if (link.target && link.target !== '_self') return;
+            event.preventDefault();
+            window.location.assign(link.href);
+        }, true);
+    </script>
+@endonce
 

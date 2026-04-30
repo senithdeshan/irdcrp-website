@@ -537,7 +537,7 @@
                                     <img
                                         src="{{ asset('storage/'.$story->photo) }}"
                                         alt="{{ $story->name }}"
-                                        class="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-white"
+                                        class="h-16 w-16 shrink-0 rounded-full object-cover ring-2 ring-white sm:h-20 sm:w-20"
                                         loading="lazy"
                                         decoding="async"
                                     >

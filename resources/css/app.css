@@ -641,7 +641,7 @@
     }
 
     .irdc-success-card {
-        @apply min-h-[13.5rem] rounded-3xl border border-white/80 bg-white/90 p-4 shadow-[0_20px_40px_-20px_rgba(0,0,0,0.45)] backdrop-blur-sm ring-1 ring-white/70 transition duration-300 sm:p-5;
+        @apply min-h-[15rem] rounded-3xl border border-white/80 bg-white/90 p-4 shadow-[0_20px_40px_-20px_rgba(0,0,0,0.45)] backdrop-blur-sm ring-1 ring-white/70 transition duration-300 sm:p-5;
     }
 
     .irdc-success-card:hover {

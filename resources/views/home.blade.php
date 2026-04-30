@@ -666,14 +666,11 @@
                 <p class="irdc-section-head__lead">{{ __('messages.home_news_sub') }}</p>
             </header>
             <div class="row g-4 g-lg-4">
-                @foreach($homeNews as $article)
-                    @php
-                        $nt = $article->{'title_'.$tLoc} ?? $article->title_en;
-                    @endphp
+                @foreach ($homeNews as $article)
                     <div class="col-12 col-md-4">
                         <a href="{{ route('news.show', $article) }}" class="group block h-full">
                             <article class="irdc-home-card flex h-full flex-col bg-slate-50/50">
-                                @if($article->image)
+                                @if ($article->image)
                                     <div class="aspect-[16/10] w-full overflow-hidden rounded-t-3xl bg-slate-200">
                                         <img src="{{ asset('storage/'.$article->image) }}" alt="" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
                                     </div>
@@ -681,8 +678,10 @@
                                     <div class="flex aspect-[16/10] w-full items-center justify-center rounded-t-3xl bg-gradient-to-br from-[#0A3D62]/8 to-emerald-600/10 text-4xl text-[#0A3D62]/30">📰</div>
                                 @endif
                                 <div class="flex flex-1 flex-col p-5 sm:p-6">
-                                    <h3 class="font-display text-lg font-bold text-slate-900 line-clamp-2 group-hover:text-[#0A3D62] sm:text-xl">{{ $nt }}</h3>
-                                    @if($article->published_date)
+                                    <h3 class="font-display text-lg font-bold text-slate-900 line-clamp-2 group-hover:text-[#0A3D62] sm:text-xl">
+                                        {{ $article->{'title_'.$tLoc} ?? $article->title_en }}
+                                    </h3>
+                                    @if ($article->published_date)
                                         <p class="mt-2 text-sm text-slate-500">{{ $article->published_date->format('M j, Y') }}</p>
                                     @endif
                                     <p class="mt-3 text-sm font-semibold text-emerald-800">{{ __('messages.read_more') }} →</p>

@@ -30,6 +30,36 @@
     $tLoc = in_array(app()->getLocale(), ['en', 'si', 'ta'], true) ? app()->getLocale() : 'en';
     $stats = config('irdcrp.home_stats', []);
     $mapEmbedUrl = config('irdcrp.map_embed_url');
+    $successStories = [
+        [
+            'name' => 'L. Rasalingam',
+            'location' => 'Iththimoddai - Northern Province',
+            'story' => 'We achieved a higher yield this season with the support received through seeds, sprinklers and technical guidance.',
+            'photo' => asset('images/hero/hero-05-farmer-tiller.png'),
+            'rating' => 5,
+        ],
+        [
+            'name' => 'K. Pushparani',
+            'location' => 'Batticaloa - Eastern Province',
+            'story' => 'New irrigation support and climate-smart farming practices improved our harvest quality and reduced losses.',
+            'photo' => asset('images/hero/hero-01-drip-seedlings.png'),
+            'rating' => 5,
+        ],
+        [
+            'name' => 'S. Suresh',
+            'location' => 'Anuradhapura - North Central Province',
+            'story' => 'With project training and timely field guidance, we planned better and increased productivity across the season.',
+            'photo' => asset('images/hero/hero-05-farmer-tiller.png'),
+            'rating' => 5,
+        ],
+        [
+            'name' => 'M. Nirosha',
+            'location' => 'Monaragala - Uva Province',
+            'story' => 'Access to improved inputs and extension support helped our family farm become more resilient to dry spells.',
+            'photo' => asset('images/hero/hero-01-drip-seedlings.png'),
+            'rating' => 5,
+        ],
+    ];
     $weatherAreas = config('irdcrp.weather_areas', []);
     if (! is_array($weatherAreas) || $weatherAreas === []) {
         $weatherAreas = [
@@ -444,6 +474,134 @@
                     </div>
                 </a>
             @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- 5. Success stories slider --}}
+<section
+    class="irdc-success relative overflow-hidden py-20 sm:py-24"
+    x-data="{
+        stories: @js($successStories),
+        i: 0,
+        timer: null,
+        viewportWidth: 0,
+        cardStep() {
+            if (window.innerWidth < 640) return 272;
+            if (window.innerWidth < 1024) return 304;
+            return 320;
+        },
+        get visible() {
+            return Math.max(1, Math.floor(this.viewportWidth / this.cardStep()));
+        },
+        get pages() {
+            return Math.max(this.stories.length - this.visible + 1, 1);
+        },
+        next() { this.i = (this.i + 1) % this.pages; },
+        prev() { this.i = (this.i - 1 + this.pages) % this.pages; },
+        goTo(idx) { this.i = idx; },
+        cardWidth() { return Math.max(this.cardStep() - 16, 224); },
+        start() {
+            this.stop();
+            if (this.pages > 1) {
+                this.timer = setInterval(() => this.next(), 5500);
+            }
+        },
+        stop() {
+            if (this.timer) {
+                clearInterval(this.timer);
+                this.timer = null;
+            }
+        },
+        syncLayout() {
+            this.viewportWidth = this.$refs.viewport ? this.$refs.viewport.clientWidth : window.innerWidth;
+            this.i = Math.min(this.i, this.pages - 1);
+            this.start();
+        }
+    }"
+    x-init="syncLayout(); window.addEventListener('resize', () => syncLayout())"
+    @mouseenter="stop()"
+    @mouseleave="start()"
+>
+    <div class="irdc-success__bg absolute inset-0" aria-hidden="true"></div>
+    <div class="irdc-success__overlay absolute inset-0" aria-hidden="true"></div>
+    <div class="irdc-success__wave irdc-success__wave--top" aria-hidden="true">
+        <svg viewBox="0 0 1200 72" preserveAspectRatio="none" class="h-10 w-full sm:h-12">
+            <path fill="currentColor" d="M0,48 C150,8 300,64 450,32 C600,0 750,40 900,24 C1050,8 1100,32 1200,16 L1200,72 L0,72 Z"/>
+        </svg>
+    </div>
+    <div class="irdc-success__wave irdc-success__wave--bottom" aria-hidden="true">
+        <svg viewBox="0 0 1200 72" preserveAspectRatio="none" class="h-10 w-full sm:h-12">
+            <path fill="currentColor" d="M0,48 C150,8 300,64 450,32 C600,0 750,40 900,24 C1050,8 1100,32 1200,16 L1200,72 L0,72 Z"/>
+        </svg>
+    </div>
+
+    <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <header class="mx-auto mb-10 max-w-3xl text-center sm:mb-12">
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-100/90 sm:text-sm">Success Stories</p>
+            <h2 class="mt-3 font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl">Farmer Success Stories</h2>
+            <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-100/90 sm:text-base">
+                Real experiences from farming communities supported through climate-resilient livelihoods.
+            </p>
+        </header>
+
+        <div x-ref="viewport" class="relative overflow-hidden">
+            <div
+                class="flex gap-4 transition-transform duration-700 ease-out"
+                :style="`transform: translateX(-${i * cardStep()}px);`"
+            >
+                @foreach ($successStories as $story)
+                    <article class="shrink-0 pb-2" :style="`width: ${cardWidth()}px`">
+                        <div class="irdc-success-card">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex min-w-0 items-center gap-3">
+                                    <img
+                                        src="{{ $story['photo'] }}"
+                                        alt="{{ $story['name'] }}"
+                                        class="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-white/80"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+                                    <div class="min-w-0">
+                                        <h3 class="truncate text-base font-extrabold text-[#1B5E20] sm:text-lg">{{ $story['name'] }}</h3>
+                                        <p class="truncate text-sm font-semibold text-[#8B4A1F]">{{ $story['location'] }}</p>
+                                    </div>
+                                </div>
+                                <div class="rounded-full bg-emerald-100/90 px-2.5 py-1 text-xs font-bold text-emerald-900">{{ str_repeat('★', max(1, (int) ($story['rating'] ?? 5))) }}</div>
+                            </div>
+                            <p class="mt-4 text-sm leading-relaxed text-slate-700 sm:text-[0.95rem]">{{ $story['story'] }}</p>
+                            <div class="mt-5 flex items-center justify-end">
+                                <span class="text-2xl text-[#43A047]" aria-hidden="true">❝</span>
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+
+            <button
+                type="button"
+                @click="prev()"
+                class="irdc-success-nav irdc-success-nav--left"
+                aria-label="Previous success story"
+            >‹</button>
+            <button
+                type="button"
+                @click="next()"
+                class="irdc-success-nav irdc-success-nav--right"
+                aria-label="Next success story"
+            >›</button>
+        </div>
+
+        <div class="mt-7 flex items-center justify-center gap-2.5">
+            <template x-for="dot in pages" :key="'dot-' + dot">
+                <button
+                    type="button"
+                    @click="goTo(dot - 1)"
+                    class="h-2.5 rounded-full transition-all duration-300"
+                    :class="i === (dot - 1) ? 'w-8 bg-[#43A047]' : 'w-2.5 bg-white/65 hover:bg-white/90'"
+                    aria-label="Go to success story page"
+                ></button>
+            </template>
         </div>
     </div>
 </section>

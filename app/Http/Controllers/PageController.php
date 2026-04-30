@@ -7,6 +7,7 @@ use App\Models\Gallery;
 use App\Models\KeyLeader;
 use App\Models\News;
 use App\Models\Page;
+use App\Models\SuccessStory;
 use App\Models\Vacancy;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
@@ -48,6 +49,12 @@ class PageController extends Controller
             ->orderBy('id')
             ->get();
 
+        $successStories = SuccessStory::query()
+            ->where('status', 'active')
+            ->latest()
+            ->take(6)
+            ->get();
+
         if ($keyLeaders->isEmpty()) {
             $keyLeaders = collect(config('irdcrp.key_leaders', []));
         }
@@ -58,6 +65,7 @@ class PageController extends Controller
             'galleryPreview',
             'vacanciesPreview',
             'keyLeaders',
+            'successStories',
         ));
     }
 

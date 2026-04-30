@@ -58,6 +58,13 @@
                 <a href="{{ route('admin.key-leaders.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Success stories</h2>
+                <p class="text-muted small mb-3">Farmer testimonials for the home page slider.</p>
+                <a href="{{ route('admin.success-stories.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
     </div>
 </section>
 @endsection

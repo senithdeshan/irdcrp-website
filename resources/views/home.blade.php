@@ -30,36 +30,7 @@
     $tLoc = in_array(app()->getLocale(), ['en', 'si', 'ta'], true) ? app()->getLocale() : 'en';
     $stats = config('irdcrp.home_stats', []);
     $mapEmbedUrl = config('irdcrp.map_embed_url');
-    $successStories = [
-        [
-            'name' => 'L. Rasalingam',
-            'location' => 'Iththimoddai - Northern Province',
-            'story' => 'We achieved a higher yield this season with the support received through seeds, sprinklers and technical guidance.',
-            'photo' => asset('images/hero/hero-05-farmer-tiller.png'),
-            'rating' => 5,
-        ],
-        [
-            'name' => 'K. Pushparani',
-            'location' => 'Batticaloa - Eastern Province',
-            'story' => 'New irrigation support and climate-smart farming practices improved our harvest quality and reduced losses.',
-            'photo' => asset('images/hero/hero-01-drip-seedlings.png'),
-            'rating' => 5,
-        ],
-        [
-            'name' => 'S. Suresh',
-            'location' => 'Anuradhapura - North Central Province',
-            'story' => 'With project training and timely field guidance, we planned better and increased productivity across the season.',
-            'photo' => asset('images/hero/hero-05-farmer-tiller.png'),
-            'rating' => 5,
-        ],
-        [
-            'name' => 'M. Nirosha',
-            'location' => 'Monaragala - Uva Province',
-            'story' => 'Access to improved inputs and extension support helped our family farm become more resilient to dry spells.',
-            'photo' => asset('images/hero/hero-01-drip-seedlings.png'),
-            'rating' => 5,
-        ],
-    ];
+    $successStories = $successStories ?? collect();
     $weatherAreas = config('irdcrp.weather_areas', []);
     if (! is_array($weatherAreas) || $weatherAreas === []) {
         $weatherAreas = [
@@ -550,32 +521,39 @@
                 class="flex gap-4 transition-transform duration-700 ease-out"
                 :style="`transform: translateX(-${i * cardStep()}px);`"
             >
-                @foreach ($successStories as $story)
+                @forelse ($successStories as $story)
                     <article class="shrink-0 pb-2" :style="`width: ${cardWidth()}px`">
                         <div class="irdc-success-card">
                             <div class="flex items-start justify-between gap-3">
                                 <div class="flex min-w-0 items-center gap-3">
                                     <img
-                                        src="{{ $story['photo'] }}"
-                                        alt="{{ $story['name'] }}"
+                                        src="{{ asset('storage/'.$story->photo) }}"
+                                        alt="{{ $story->name }}"
                                         class="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-white/80"
                                         loading="lazy"
                                         decoding="async"
                                     >
                                     <div class="min-w-0">
-                                        <h3 class="truncate text-base font-extrabold text-[#1B5E20] sm:text-lg">{{ $story['name'] }}</h3>
-                                        <p class="truncate text-sm font-semibold text-[#8B4A1F]">{{ $story['location'] }}</p>
+                                        <h3 class="truncate text-base font-extrabold text-[#1B5E20] sm:text-lg">{{ $story->name }}</h3>
+                                        <p class="truncate text-sm font-semibold text-[#8B4A1F]">{{ $story->location }} - {{ $story->province }}</p>
                                     </div>
                                 </div>
-                                <div class="rounded-full bg-emerald-100/90 px-2.5 py-1 text-xs font-bold text-emerald-900">{{ str_repeat('★', max(1, (int) ($story['rating'] ?? 5))) }}</div>
+                                <div class="rounded-full bg-emerald-100/90 px-2.5 py-1 text-xs font-bold text-emerald-900">{{ str_repeat('★', max(1, (int) ($story->rating ?? 5))) }}</div>
                             </div>
-                            <p class="mt-4 text-sm leading-relaxed text-slate-700 sm:text-[0.95rem]">{{ $story['story'] }}</p>
+                            <p class="mt-4 text-sm leading-relaxed text-slate-700 sm:text-[0.95rem]">{{ $story->story }}</p>
                             <div class="mt-5 flex items-center justify-end">
                                 <span class="text-2xl text-[#43A047]" aria-hidden="true">❝</span>
                             </div>
                         </div>
                     </article>
-                @endforeach
+                @empty
+                    <article class="shrink-0 pb-2" :style="`width: ${cardWidth()}px`">
+                        <div class="irdc-success-card">
+                            <h3 class="text-base font-extrabold text-[#1B5E20] sm:text-lg">No success stories yet</h3>
+                            <p class="mt-3 text-sm leading-relaxed text-slate-700">Add active stories from the admin panel to display them here.</p>
+                        </div>
+                    </article>
+                @endforelse
             </div>
 
             <button

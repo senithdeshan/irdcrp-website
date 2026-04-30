@@ -192,20 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const setupHeroParallax = () => {
         const layers = document.querySelectorAll('.irdc-hero-bg-layer');
-        const genericParallax = document.querySelectorAll('.irdc-parallax-bg');
-        if (layers.length === 0 && genericParallax.length === 0) return;
+        if (layers.length === 0) return;
         const onScroll = () => {
             const y = Math.min(window.scrollY, 500);
             const shift = y * 0.08;
             layers.forEach((layer) => {
                 if (layer instanceof HTMLElement) {
                     layer.style.transform = `translateY(${shift}px) scale(1.04)`;
-                }
-            });
-            const gShift = y * 0.045;
-            genericParallax.forEach((layer) => {
-                if (layer instanceof HTMLElement) {
-                    layer.style.transform = `translateY(${gShift}px) scale(1.02)`;
                 }
             });
         };

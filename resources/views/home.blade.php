@@ -509,8 +509,8 @@
 
     <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <header class="mx-auto mb-10 max-w-3xl text-center sm:mb-12">
-            <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-100/90 sm:text-sm">Success Stories</p>
-            <h2 class="mt-3 font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl">Farmer Success Stories</h2>
+            <p class="text-xs font-bold uppercase tracking-[0.22em] text-emerald-100/90 sm:text-sm">Success Stories</p>
+            <h2 class="mt-3 font-display text-3xl font-extrabold tracking-tight text-white drop-shadow sm:text-4xl">Farmer Success Stories</h2>
             <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-100/90 sm:text-base">
                 Real experiences from farming communities supported through climate-resilient livelihoods.
             </p>
@@ -523,26 +523,29 @@
             >
                 @forelse ($successStories as $story)
                     <article class="shrink-0 pb-2" :style="`width: ${cardWidth()}px`">
-                        <div class="irdc-success-card">
-                            <div class="flex items-start justify-between gap-3">
-                                <div class="flex min-w-0 items-center gap-3">
+                        <div class="irdc-success-card group">
+                            <div class="flex min-w-0 items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <h3 class="truncate text-base font-extrabold text-[#1B5E20] sm:text-lg">{{ $story->name }}</h3>
+                                    <p class="truncate text-xs font-bold uppercase tracking-wide text-[#8B4A1F]/95 sm:text-sm">{{ $story->location }} - {{ $story->province }}</p>
+                                </div>
+                                <span class="irdc-success-quote-top" aria-hidden="true">❝</span>
+                            </div>
+                            <p class="irdc-success-story-text mt-3 text-sm leading-relaxed text-slate-700 sm:text-[0.95rem]">{{ $story->story }}</p>
+                            <div class="mt-4 flex items-center justify-between">
+                                <div class="flex items-center gap-2.5">
                                     <img
                                         src="{{ asset('storage/'.$story->photo) }}"
                                         alt="{{ $story->name }}"
-                                        class="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-white/80"
+                                        class="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-white"
                                         loading="lazy"
                                         decoding="async"
                                     >
-                                    <div class="min-w-0">
-                                        <h3 class="truncate text-base font-extrabold text-[#1B5E20] sm:text-lg">{{ $story->name }}</h3>
-                                        <p class="truncate text-sm font-semibold text-[#8B4A1F]">{{ $story->location }} - {{ $story->province }}</p>
+                                    <div class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-600 shadow-sm ring-1 ring-amber-200/80">
+                                        {{ str_repeat('★', max(1, (int) ($story->rating ?? 5))) }}
                                     </div>
                                 </div>
-                                <div class="rounded-full bg-emerald-100/90 px-2.5 py-1 text-xs font-bold text-emerald-900">{{ str_repeat('★', max(1, (int) ($story->rating ?? 5))) }}</div>
-                            </div>
-                            <p class="mt-4 text-sm leading-relaxed text-slate-700 sm:text-[0.95rem]">{{ $story->story }}</p>
-                            <div class="mt-5 flex items-center justify-end">
-                                <span class="text-2xl text-[#43A047]" aria-hidden="true">❝</span>
+                                <span class="text-xl text-[#43A047]" aria-hidden="true">❝</span>
                             </div>
                         </div>
                     </article>

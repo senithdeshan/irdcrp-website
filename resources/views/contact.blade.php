@@ -2,7 +2,12 @@
 
 @section('content')
 
-<section class="py-5 text-white" style="background: linear-gradient(120deg, #0A3D62, #27AE60);">
+<section
+    class="py-5 text-white"
+    style="background:
+        linear-gradient(120deg, rgba(10,61,98,0.72), rgba(39,174,96,0.55)),
+        url('{{ asset('images/hero/about-modern-bg.png') }}') center/cover no-repeat;"
+>
     <div class="container py-4">
         <h1 class="fw-bold">Contact Us</h1>
         <p class="lead mb-0">Get in touch with IRDCRP</p>

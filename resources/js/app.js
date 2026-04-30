@@ -134,6 +134,90 @@ Alpine.start();
 
 /* Fade in sections on scroll (home page) */
 document.addEventListener('DOMContentLoaded', () => {
+    const setStaggerDelays = () => {
+        document.querySelectorAll('[data-reveal-stagger]').forEach((parent) => {
+            Array.from(parent.children).forEach((child, idx) => {
+                child.style.transitionDelay = `${Math.min(idx * 90, 540)}ms`;
+            });
+        });
+    };
+
+    const setupTyping = () => {
+        document.querySelectorAll('[data-typing]').forEach((el) => {
+            const fullText = (el.textContent || '').trim();
+            if (!fullText) return;
+            el.dataset.typingDone = 'false';
+            el.textContent = '';
+            let i = 0;
+            const tick = () => {
+                if (i <= fullText.length) {
+                    el.textContent = fullText.slice(0, i);
+                    i += 1;
+                    window.setTimeout(tick, 28);
+                } else {
+                    el.dataset.typingDone = 'true';
+                }
+            };
+            tick();
+        });
+    };
+
+    const setupCountUp = () => {
+        const counters = document.querySelectorAll('[data-countup][data-target]');
+        if (counters.length === 0) return;
+        const animate = (el) => {
+            const target = Number(el.getAttribute('data-target') || 0);
+            if (!Number.isFinite(target) || target <= 0) return;
+            const startAt = performance.now();
+            const duration = 1200;
+            const step = (now) => {
+                const p = Math.min((now - startAt) / duration, 1);
+                const eased = 1 - Math.pow(1 - p, 3);
+                const value = Math.round(target * eased);
+                el.textContent = value.toLocaleString();
+                if (p < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        };
+        const obs = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting && entry.target instanceof HTMLElement) {
+                    animate(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.35 });
+        counters.forEach((counter) => obs.observe(counter));
+    };
+
+    const setupHeroParallax = () => {
+        const layers = document.querySelectorAll('.irdc-hero-bg-layer');
+        const genericParallax = document.querySelectorAll('.irdc-parallax-bg');
+        if (layers.length === 0 && genericParallax.length === 0) return;
+        const onScroll = () => {
+            const y = Math.min(window.scrollY, 500);
+            const shift = y * 0.08;
+            layers.forEach((layer) => {
+                if (layer instanceof HTMLElement) {
+                    layer.style.transform = `translateY(${shift}px) scale(1.04)`;
+                }
+            });
+            const gShift = y * 0.045;
+            genericParallax.forEach((layer) => {
+                if (layer instanceof HTMLElement) {
+                    layer.style.transform = `translateY(${gShift}px) scale(1.02)`;
+                }
+            });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    };
+
+    setStaggerDelays();
+    setupTyping();
+    setupCountUp();
+    setupHeroParallax();
+
     const nodes = document.querySelectorAll('.irdc-reveal-on-scroll');
     if (nodes.length === 0) {
         return;

@@ -81,13 +81,13 @@
                 x-transition:enter="transition ease-out duration-1000"
                 x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100"
-                class="absolute inset-0 min-h-full bg-center bg-cover"
+                class="irdc-hero-bg-layer absolute inset-0 min-h-full bg-center bg-cover"
                 :style="`background-image: url('${s.image}')`"
             ></div>
         </template>
         @if(count($slides) === 0)
             <div
-                class="absolute inset-0 min-h-full bg-center bg-cover"
+                class="irdc-hero-bg-layer absolute inset-0 min-h-full bg-center bg-cover"
                 style="background-image: url('{{ asset('images/hero/hero-01-drip-seedlings.png') }}');"
             ></div>
         @endif
@@ -95,26 +95,26 @@
     </div>
 
     <div class="relative z-10 flex min-h-[100svh] min-h-screen flex-col">
-        <div class="irdc-hero-anim mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-3 pb-44 pt-[var(--irdc-header-offset)] text-center sm:px-5 sm:pb-48 lg:px-8">
-            <p class="irdc-hero__eyebrow">{{ __('messages.hero_eyebrow') }}</p>
-            <h1 class="irdc-hero__title mt-6 sm:mt-7">
+        <div class="irdc-hero-anim irdc-hero-stagger mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-3 pb-44 pt-[var(--irdc-header-offset)] text-center sm:px-5 sm:pb-48 lg:px-8">
+            <p class="irdc-hero__eyebrow irdc-hero-stagger__item">{{ __('messages.hero_eyebrow') }}</p>
+            <h1 class="irdc-hero__title irdc-hero-stagger__item mt-6 sm:mt-7">
                 {{ $heroTitle }}
             </h1>
-            <p class="irdc-hero__pill-lead">
+            <p class="irdc-hero__pill-lead irdc-hero-stagger__item" data-typing>
                 {{ __('messages.home_hero_subtitle') }}
             </p>
             <p
                 x-show="slides && slides.length"
                 x-text="slides && slides[i] && (slides[i].caption_en || '')"
                 x-cloak
-                class="irdc-hero__lead"
+                class="irdc-hero__lead irdc-hero-stagger__item"
             ></p>
             <p
                 x-show="! slides || slides.length === 0"
                 x-cloak
-                class="irdc-hero__lead"
+                class="irdc-hero__lead irdc-hero-stagger__item"
             >{{ e($firstCaption) ?: __('messages.hero_caption') }}</p>
-            <div class="irdc-hero__actions">
+            <div class="irdc-hero__actions irdc-hero-stagger__item">
                 <a href="/about" class="irdc-hero__btn-primary">
                     {{ __('messages.home_hero_learn') }} <span aria-hidden="true">→</span>
                 </a>
@@ -122,7 +122,7 @@
                     {{ __('messages.home_get_involved') }}
                 </a>
             </div>
-            <a href="#about-project" class="irdc-hero__scroll">
+            <a href="#about-project" class="irdc-hero__scroll irdc-hero-stagger__item">
                 <span>{{ __('messages.hero_scroll') }}</span>
                 <span class="irdc-hero__scroll-icon" aria-hidden="true"><span></span></span>
             </a>
@@ -275,17 +275,20 @@
             <h2 class="irdc-section-head__title">{{ __('messages.home_stats_title') }}</h2>
             <p class="irdc-section-head__lead">{{ __('messages.home_stats_sub') }}</p>
         </header>
-        <div class="mt-10 grid grid-cols-2 gap-4 sm:mt-12 lg:grid-cols-4 lg:gap-6">
+        <div class="mt-10 grid grid-cols-2 gap-4 sm:mt-12 lg:grid-cols-4 lg:gap-6" data-reveal-stagger>
             <article class="irdc-stat-tile">
-                <p class="font-display text-4xl font-extrabold tabular-nums text-[#0A3D62] sm:text-5xl md:text-6xl lg:text-6xl">{{ $stats['districts'] ?? '00' }}</p>
+                @php($districts = (string) ($stats['districts'] ?? '00'))
+                <p class="font-display text-4xl font-extrabold tabular-nums text-[#0A3D62] sm:text-5xl md:text-6xl lg:text-6xl" data-countup data-target="{{ (int) preg_replace('/\D+/', '', $districts) }}">{{ $districts }}</p>
                 <p class="mt-2 text-xs font-bold uppercase tracking-wider text-slate-500 sm:text-sm">{{ __('messages.stat_districts') }}</p>
             </article>
             <article class="irdc-stat-tile">
-                <p class="font-display text-4xl font-extrabold tabular-nums text-emerald-800 sm:text-5xl md:text-6xl lg:text-6xl">{{ $stats['beneficiaries'] ?? '00' }}</p>
+                @php($beneficiaries = (string) ($stats['beneficiaries'] ?? '00'))
+                <p class="font-display text-4xl font-extrabold tabular-nums text-emerald-800 sm:text-5xl md:text-6xl lg:text-6xl" data-countup data-target="{{ (int) preg_replace('/\D+/', '', $beneficiaries) }}">{{ $beneficiaries }}</p>
                 <p class="mt-2 text-xs font-bold uppercase tracking-wider text-slate-500 sm:text-sm">{{ __('messages.stat_beneficiaries') }}</p>
             </article>
             <article class="irdc-stat-tile">
-                <p class="font-display text-4xl font-extrabold tabular-nums text-[#0A3D62] sm:text-5xl md:text-6xl lg:text-6xl">{{ $stats['farmers'] ?? '00' }}</p>
+                @php($farmers = (string) ($stats['farmers'] ?? '00'))
+                <p class="font-display text-4xl font-extrabold tabular-nums text-[#0A3D62] sm:text-5xl md:text-6xl lg:text-6xl" data-countup data-target="{{ (int) preg_replace('/\D+/', '', $farmers) }}">{{ $farmers }}</p>
                 <p class="mt-2 text-xs font-bold uppercase tracking-wider text-slate-500 sm:text-sm">{{ __('messages.stat_farmers') }}</p>
             </article>
             <article class="irdc-stat-tile">

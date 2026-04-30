@@ -146,7 +146,7 @@
 
     <div class="irdc-main-nav border-b border-emerald-950/30 bg-irdc-green shadow-md shadow-emerald-950/20 ring-1 ring-white/10">
         <div class="mx-auto max-w-7xl px-3 sm:px-5 lg:px-8">
-            <div class="flex w-full min-h-[3.25rem] items-center justify-end md:min-h-14 md:justify-center">
+            <div class="flex w-full min-h-[3.25rem] items-center justify-end gap-2 md:min-h-14 md:justify-between">
                 <nav id="main-nav-desktop" class="irdc-main-nav__links hidden w-full flex-1 flex-wrap items-center justify-center gap-x-0.5 gap-y-1.5 py-2 sm:gap-x-1 md:flex" aria-label="{{ __('messages.nav_primary_aria') }}">
                     <a href="{{ url('/') }}" class="{{ $navLink }} {{ request()->is('/') ? $active : $inactive }}">{{ __('messages.home') }}</a>
                     <a href="/about" class="{{ $navLink }} {{ request()->is('about') ? $active : $inactive }}">{{ __('messages.about') }}</a>
@@ -164,6 +164,12 @@
                         <a href="{{ route('admin.home') }}" class="{{ $navLink }} {{ request()->is('admin*') ? $active : $inactive }}">Admin</a>
                     @endauth
                 </nav>
+                <a
+                    href="{{ url('/#contact-block') }}"
+                    class="irdc-nav-cta hidden md:inline-flex"
+                >
+                    {{ __('messages.home_get_involved') }}
+                </a>
                 <button
                     type="button"
                     id="main-nav-toggle"
@@ -210,6 +216,7 @@
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/vacancies" @click="mobile = false">{{ __('messages.nav_vacancies') }}</a>
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/grm" @click="mobile = false">{{ __('messages.nav_grm') }}</a>
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white/95 transition hover:bg-white/10 hover:text-white" href="/contact" @click="mobile = false">{{ __('messages.contact') }}</a>
+                <a class="mt-2 inline-flex w-full items-center justify-center rounded-full bg-amber-500 px-4 py-2.5 font-bold text-slate-900 shadow-sm transition hover:bg-amber-400" href="{{ url('/#contact-block') }}" @click="mobile = false">{{ __('messages.home_get_involved') }}</a>
                 @auth
                     <a class="mt-2 block rounded-lg py-3.5 pl-1 text-amber-200 transition hover:bg-white/10" href="{{ route('admin.home') }}" @click="mobile = false">Admin</a>
                 @endauth

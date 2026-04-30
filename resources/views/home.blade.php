@@ -100,6 +100,9 @@
             <h1 class="irdc-hero__title mt-6 sm:mt-7">
                 {{ $heroTitle }}
             </h1>
+            <p class="irdc-hero__pill-lead">
+                {{ __('messages.home_hero_subtitle') }}
+            </p>
             <p
                 x-show="slides && slides.length"
                 x-text="slides && slides[i] && (slides[i].caption_en || '')"
@@ -115,8 +118,8 @@
                 <a href="/about" class="irdc-hero__btn-primary">
                     {{ __('messages.home_hero_learn') }} <span aria-hidden="true">→</span>
                 </a>
-                <a href="{{ url('/#programmes') }}" class="irdc-hero__btn-secondary">
-                    {{ __('messages.home_hero_view_programmes') }}
+                <a href="{{ url('/#contact-block') }}" class="irdc-hero__btn-secondary">
+                    {{ __('messages.home_get_involved') }}
                 </a>
             </div>
             <a href="#about-project" class="irdc-hero__scroll">
@@ -124,6 +127,14 @@
                 <span class="irdc-hero__scroll-icon" aria-hidden="true"><span></span></span>
             </a>
         </div>
+
+        <aside class="irdc-hero-social" aria-label="{{ __('messages.header_social_aria') }}">
+            <a href="{{ config('irdcrp.social.youtube') }}" target="_blank" rel="noopener noreferrer" title="YouTube" class="irdc-hero-social__btn">▶</a>
+            <a href="{{ config('irdcrp.social.facebook') }}" target="_blank" rel="noopener noreferrer" title="Facebook" class="irdc-hero-social__btn">f</a>
+            <a href="{{ config('irdcrp.social.twitter') }}" target="_blank" rel="noopener noreferrer" title="Twitter / X" class="irdc-hero-social__btn">x</a>
+            <a href="{{ config('irdcrp.social.linkedin') }}" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="irdc-hero-social__btn">in</a>
+            <a href="{{ config('irdcrp.social.instagram', '#') }}" target="_blank" rel="noopener noreferrer" title="Instagram" class="irdc-hero-social__btn">ig</a>
+        </aside>
 
         @if($latestTitle)
             <a

@@ -2,71 +2,74 @@
 
 @section('content')
 
-<section class="py-5 text-white" style="background: linear-gradient(120deg, #0A3D62, #27AE60);">
-    <div class="container py-4">
-        <h1 class="fw-bold">About IRDCRP</h1>
-        <p class="lead mb-0">Integrated Rurban Development and Climate Resilience Project</p>
-    </div>
-</section>
+<section class="irdc-about-modern relative overflow-hidden py-16 sm:py-20">
+    <div class="irdc-about-modern__bg absolute inset-0" aria-hidden="true"></div>
+    <div class="irdc-about-modern__overlay absolute inset-0" aria-hidden="true"></div>
+    <div class="irdc-about-modern__wave-top" aria-hidden="true"></div>
+    <div class="irdc-about-modern__wave-bottom" aria-hidden="true"></div>
 
-<section class="container py-5">
-    <div class="row align-items-center g-4">
-        <div class="col-lg-6">
-            <h2 class="section-title">Project Overview</h2>
-            <p>
-                The Integrated Rurban Development and Climate Resilience Project aims to strengthen
-                climate-resilient development, improve livelihoods, and support sustainable agriculture
-                and livestock-based economic opportunities in selected project areas.
+    <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <header class="text-center">
+            <h1 class="irdc-about-modern__title">About Us</h1>
+            <p class="irdc-about-modern__subtitle">Learn More About Our Mission &amp; Goals</p>
+        </header>
+
+        <div class="mt-10 grid gap-4 sm:gap-5 md:grid-cols-2">
+            <article class="irdc-about-glass-card">
+                <h2 class="irdc-about-glass-card__title">Our Mission</h2>
+                <p class="irdc-about-glass-card__text">
+                    To enhance the resilience and livelihoods of rural communities through sustainable development,
+                    water resource management, and climate adaptation.
+                </p>
+            </article>
+            <article class="irdc-about-glass-card">
+                <h2 class="irdc-about-glass-card__title">Our Objectives</h2>
+                <p class="irdc-about-glass-card__text">
+                    To resolve rural challenges, improve infrastructure, and foster inclusive growth through
+                    practical and climate-smart project interventions.
+                </p>
+            </article>
+        </div>
+
+        <section class="irdc-about-panel mt-7 sm:mt-8">
+            <h2 class="irdc-about-panel__heading">Conflicts Mediation &amp; Grievance Redressal</h2>
+            <p class="irdc-about-panel__lead">
+                We provide a transparent and systematic approach to addressing grievances and resolving conflicts
+                within project areas.
             </p>
-            <p>
-                The project promotes inclusive development by linking rural communities with improved
-                services, markets, infrastructure and climate-smart practices.
-            </p>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="card feature-card p-4">
-                <h5 class="fw-bold text-success">Project Identity</h5>
-                <p><strong>Project Name:</strong> Integrated Rurban Development and Climate Resilience Project</p>
-                <p><strong>Acronym:</strong> IRDCRP</p>
-                <p><strong>Funding:</strong> World Bank funded project</p>
-                <p><strong>Sector:</strong> Agriculture, Livestock, Climate Resilience and Rural Development</p>
+            <div class="mt-5 grid gap-4 sm:grid-cols-3">
+                <article class="irdc-about-mini-card">
+                    <h3>Fair Process</h3>
+                    <p>Ensuring impartial and timely redress for all stakeholders.</p>
+                </article>
+                <article class="irdc-about-mini-card">
+                    <h3>Safe &amp; Secure</h3>
+                    <p>Protecting the rights and confidentiality of all participants.</p>
+                </article>
+                <article class="irdc-about-mini-card">
+                    <h3>Community Trust</h3>
+                    <p>Building confidence and cooperation through responsive grievance handling.</p>
+                </article>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
-<section class="py-5" style="background:#F7FAFC;">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Project Objectives</h2>
-            <p class="section-subtitle">
-                IRDCRP supports sustainable development through resilience, productivity and inclusion.
-            </p>
-        </div>
-
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card feature-card p-4">
-                    <h5 class="fw-bold">Climate Resilience</h5>
-                    <p>Enhance community capacity to adapt to climate-related risks and challenges.</p>
-                </div>
+        <section class="irdc-about-panel mt-7 sm:mt-8">
+            <h2 class="irdc-about-panel__heading">Why Choose Us?</h2>
+            <div class="mt-5 grid gap-4 sm:grid-cols-3">
+                <article class="irdc-about-mini-card">
+                    <h3>Experienced Team</h3>
+                    <p>Expertise you can trust across agriculture and climate resilience.</p>
+                </article>
+                <article class="irdc-about-mini-card">
+                    <h3>Proven Results</h3>
+                    <p>Positive impact and measurable outcomes in partner communities.</p>
+                </article>
+                <article class="irdc-about-mini-card">
+                    <h3>Sustainable Approach</h3>
+                    <p>Long-term, inclusive development with strong local ownership.</p>
+                </article>
             </div>
-
-            <div class="col-md-4">
-                <div class="card feature-card p-4">
-                    <h5 class="fw-bold">Livelihood Development</h5>
-                    <p>Improve income-generation opportunities through agriculture and livestock interventions.</p>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card feature-card p-4">
-                    <h5 class="fw-bold">Inclusive Growth</h5>
-                    <p>Support rural and urban-linked communities through sustainable development solutions.</p>
-                </div>
-            </div>
-        </div>
+        </section>
     </div>
 </section>
 

@@ -738,4 +738,87 @@
     .irdc-star-rating label:active {
         transform: scale(0.95);
     }
+
+    /* About page: modern visual style */
+    .irdc-about-modern {
+        background: #edf5ee;
+    }
+
+    .irdc-about-modern__bg {
+        background-image: url('/images/hero/about-modern-bg.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: saturate(1.03) contrast(1.02);
+    }
+
+    .irdc-about-modern__overlay {
+        background:
+            radial-gradient(ellipse 75% 50% at 50% 0%, rgba(255, 255, 255, 0.4), transparent 58%),
+            linear-gradient(180deg, rgba(12, 45, 34, 0.28) 0%, rgba(14, 54, 30, 0.14) 48%, rgba(12, 40, 28, 0.32) 100%);
+    }
+
+    .irdc-about-modern__wave-top,
+    .irdc-about-modern__wave-bottom {
+        @apply pointer-events-none absolute left-0 right-0 z-[1];
+        height: 5.5rem;
+        background: rgba(255, 255, 255, 0.78);
+        filter: blur(0.4px);
+        clip-path: ellipse(70% 75% at 50% 0%);
+    }
+
+    .irdc-about-modern__wave-top {
+        top: -2.6rem;
+        transform: rotate(180deg);
+    }
+
+    .irdc-about-modern__wave-bottom {
+        bottom: -2.7rem;
+    }
+
+    .irdc-about-modern__title {
+        @apply font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl;
+        text-shadow: 0 3px 20px rgba(0, 0, 0, 0.32);
+    }
+
+    .irdc-about-modern__subtitle {
+        @apply mx-auto mt-4 inline-flex rounded-full border border-emerald-200/50 bg-emerald-700/70 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-900/25 backdrop-blur-sm;
+    }
+
+    .irdc-about-glass-card {
+        @apply rounded-[1.65rem] border border-white/75 bg-white/78 p-5 shadow-[0_14px_36px_-16px_rgba(0,0,0,0.38)] ring-1 ring-white/70 backdrop-blur-sm sm:p-6;
+    }
+
+    .irdc-about-glass-card__title {
+        @apply text-2xl font-extrabold text-[#244c37] sm:text-[1.75rem];
+    }
+
+    .irdc-about-glass-card__text {
+        @apply mt-3 text-base leading-relaxed text-slate-700;
+    }
+
+    .irdc-about-panel {
+        @apply rounded-[1.75rem] border border-white/75 bg-white/72 p-5 shadow-[0_14px_34px_-16px_rgba(0,0,0,0.34)] ring-1 ring-white/70 backdrop-blur-sm sm:p-6;
+    }
+
+    .irdc-about-panel__heading {
+        @apply text-center font-display text-2xl font-extrabold text-[#254f39] sm:text-3xl;
+    }
+
+    .irdc-about-panel__lead {
+        @apply mx-auto mt-3 max-w-3xl text-center text-base leading-relaxed text-slate-700;
+    }
+
+    .irdc-about-mini-card {
+        @apply rounded-3xl border border-white/80 bg-white/84 p-4 text-center shadow-md shadow-slate-900/10 ring-1 ring-white/70 backdrop-blur-sm transition duration-300;
+        @apply hover:-translate-y-1 hover:shadow-lg;
+    }
+
+    .irdc-about-mini-card h3 {
+        @apply font-display text-xl font-extrabold text-[#214736];
+    }
+
+    .irdc-about-mini-card p {
+        @apply mt-2 text-sm leading-relaxed text-slate-700;
+    }
 }

@@ -643,4 +643,54 @@
     .irdc-success-nav--right {
         @apply right-1;
     }
+
+    /* Admin: success story form */
+    .irdc-admin-form-card {
+        @apply rounded-3xl border border-emerald-100/80 bg-white/95 p-4 shadow-lg shadow-emerald-900/5 ring-1 ring-slate-900/[0.03] sm:p-5;
+    }
+
+    .irdc-admin-form-card .form-label {
+        @apply mb-1.5 text-sm font-semibold text-slate-700;
+    }
+
+    .irdc-admin-form-card .form-control,
+    .irdc-admin-form-card .form-select {
+        border-radius: 0.8rem;
+        border-color: #dbe7d9;
+    }
+
+    .irdc-admin-form-card .form-control:focus,
+    .irdc-admin-form-card .form-select:focus {
+        border-color: #43a047;
+        box-shadow: 0 0 0 0.2rem rgba(67, 160, 71, 0.15);
+    }
+
+    .irdc-star-rating {
+        @apply inline-flex items-center gap-1;
+        direction: rtl;
+        unicode-bidi: bidi-override;
+    }
+
+    .irdc-star-rating input[type="radio"] {
+        @apply sr-only;
+    }
+
+    .irdc-star-rating label {
+        color: #d1d5db;
+        cursor: pointer;
+        font-size: 1.8rem;
+        line-height: 1;
+        transition: transform 0.15s ease, color 0.2s ease, text-shadow 0.2s ease;
+    }
+
+    .irdc-star-rating label:hover,
+    .irdc-star-rating label:hover ~ label,
+    .irdc-star-rating input[type="radio"]:checked ~ label {
+        color: #f59e0b;
+        text-shadow: 0 4px 10px rgba(245, 158, 11, 0.35);
+    }
+
+    .irdc-star-rating label:active {
+        transform: scale(0.95);
+    }
 }

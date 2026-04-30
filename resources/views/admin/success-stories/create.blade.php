@@ -2,7 +2,7 @@
 @section('content')
 <section class="container py-5">
     <h2 class="section-title mb-4">Add success story</h2>
-    <div class="card feature-card p-4" style="max-width: 680px;">
+    <div class="irdc-admin-form-card" style="max-width: 680px;">
         <form method="POST" action="{{ route('admin.success-stories.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="row g-3">
@@ -18,15 +18,26 @@
                     <label class="form-label">Province</label>
                     <input type="text" name="province" class="form-control" value="{{ old('province') }}" required>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <label class="form-label">Rating</label>
-                    <select name="rating" class="form-select" required>
-                        @for($i = 5; $i >= 1; $i--)
-                            <option value="{{ $i }}" @selected(old('rating', 5) == $i)>{{ $i }}</option>
-                        @endfor
-                    </select>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="irdc-star-rating" role="radiogroup" aria-label="Story rating">
+                            @for($i = 5; $i >= 1; $i--)
+                                <input
+                                    type="radio"
+                                    id="rating-create-{{ $i }}"
+                                    name="rating"
+                                    value="{{ $i }}"
+                                    @checked(old('rating', 5) == $i)
+                                    required
+                                >
+                                <label for="rating-create-{{ $i }}" title="{{ $i }} star{{ $i > 1 ? 's' : '' }}">★</label>
+                            @endfor
+                        </div>
+                        <span class="small text-muted">Click stars to rate</span>
+                    </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <label class="form-label">Status</label>
                     <select name="status" class="form-select" required>
                         <option value="active" @selected(old('status', 'active') === 'active')>Active</option>

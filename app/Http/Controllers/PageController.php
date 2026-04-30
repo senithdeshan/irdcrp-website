@@ -11,6 +11,7 @@ use App\Models\SuccessStory;
 use App\Models\Vacancy;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -49,11 +50,13 @@ class PageController extends Controller
             ->orderBy('id')
             ->get();
 
-        $successStories = SuccessStory::query()
-            ->where('status', 'active')
-            ->latest()
-            ->take(6)
-            ->get();
+        $successStories = Schema::hasTable('success_stories')
+            ? SuccessStory::query()
+                ->where('status', 'active')
+                ->latest()
+                ->take(6)
+                ->get()
+            : collect();
 
         if ($keyLeaders->isEmpty()) {
             $keyLeaders = collect(config('irdcrp.key_leaders', []));

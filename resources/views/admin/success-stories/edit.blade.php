@@ -2,7 +2,7 @@
 @section('content')
 <section class="container py-5">
     <h2 class="section-title mb-4">Edit success story</h2>
-    <div class="card feature-card p-4" style="max-width: 680px;">
+    <div class="irdc-admin-form-card" style="max-width: 680px;">
         <div class="mb-3">
             <img src="{{ asset('storage/'.$successStory->photo) }}" alt="{{ $successStory->name }}" class="img-fluid rounded" style="max-height: 220px;">
         </div>
@@ -21,15 +21,26 @@
                     <label class="form-label">Province</label>
                     <input type="text" name="province" class="form-control" value="{{ old('province', $successStory->province) }}" required>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <label class="form-label">Rating</label>
-                    <select name="rating" class="form-select" required>
-                        @for($i = 5; $i >= 1; $i--)
-                            <option value="{{ $i }}" @selected(old('rating', $successStory->rating) == $i)>{{ $i }}</option>
-                        @endfor
-                    </select>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="irdc-star-rating" role="radiogroup" aria-label="Story rating">
+                            @for($i = 5; $i >= 1; $i--)
+                                <input
+                                    type="radio"
+                                    id="rating-edit-{{ $i }}"
+                                    name="rating"
+                                    value="{{ $i }}"
+                                    @checked(old('rating', $successStory->rating) == $i)
+                                    required
+                                >
+                                <label for="rating-edit-{{ $i }}" title="{{ $i }} star{{ $i > 1 ? 's' : '' }}">★</label>
+                            @endfor
+                        </div>
+                        <span class="small text-muted">Click stars to rate</span>
+                    </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <label class="form-label">Status</label>
                     <select name="status" class="form-select" required>
                         <option value="active" @selected(old('status', $successStory->status) === 'active')>Active</option>

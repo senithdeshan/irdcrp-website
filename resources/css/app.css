@@ -607,12 +607,24 @@
     .irdc-success__bg {
         background-image: url('/images/hero/success-stories-bg.png');
         background-size: cover;
-        background-position: center;
+        background-position: center 38%;
         background-repeat: no-repeat;
+        transform: scale(1.03);
+        filter: saturate(1.06) contrast(1.04);
     }
 
     .irdc-success__overlay {
-        background: linear-gradient(135deg, rgba(27, 94, 32, 0.8), rgba(10, 61, 28, 0.75));
+        background:
+            radial-gradient(ellipse 85% 60% at 50% -12%, rgba(255, 255, 255, 0.2), transparent 60%),
+            radial-gradient(ellipse 58% 44% at 14% 100%, rgba(86, 72, 196, 0.22), transparent 65%),
+            radial-gradient(ellipse 66% 48% at 86% 100%, rgba(30, 64, 175, 0.24), transparent 70%),
+            linear-gradient(160deg, rgba(6, 20, 44, 0.56) 8%, rgba(53, 24, 80, 0.46) 46%, rgba(8, 25, 56, 0.68) 100%);
+    }
+
+    @media (min-width: 1024px) {
+        .irdc-success__bg {
+            background-attachment: fixed;
+        }
     }
 
     .irdc-success__wave {

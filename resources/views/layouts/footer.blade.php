@@ -3,70 +3,81 @@
 @endphp
 
 @if($showPublicFooter)
-<section class="border-t border-slate-200/90 bg-slate-100/90 py-14 sm:py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-sm font-semibold uppercase tracking-[0.15em] text-slate-500 mb-8">{{ __('messages.partners_title') }}</h2>
-        <div class="irdc-partner-strip mx-auto" role="group" aria-label="Partner logos">
-            <div class="irdc-partner-strip__cell irdc-partner-strip__cell--irdcrp">
-                <img src="{{ asset(config('irdcrp.logos.irdcrp')) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" width="200" height="256" loading="lazy" decoding="async">
-            </div>
-            <div class="irdc-partner-strip__cell irdc-partner-strip__cell--emblem">
-                <img src="{{ asset(config('irdcrp.logos.emblem')) }}" alt="{{ __('messages.logo_emblem_alt') }}" loading="lazy" decoding="async">
-            </div>
-            <div class="irdc-partner-strip__cell irdc-partner-strip__cell--bank">
-                <img src="{{ asset(config('irdcrp.logos.world_bank')) }}" alt="{{ __('messages.logo_world_bank_alt') }}" loading="lazy" decoding="async">
-            </div>
-        </div>
+<section class="irdc-footer-cta">
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-4 text-center sm:flex-row sm:px-6 sm:text-left lg:px-8">
+        <p class="text-sm font-semibold text-white sm:text-base">Join us in building climate-resilient rural communities.</p>
+        <a href="/contact" class="irdc-footer-cta__btn">Contact Us</a>
     </div>
 </section>
 
-<footer class="bg-[#0A3D62] text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+<footer class="irdc-footer-modern">
+    <div class="irdc-footer-modern__wave" aria-hidden="true">
+        <svg viewBox="0 0 1200 90" preserveAspectRatio="none" class="h-10 w-full sm:h-12">
+            <path fill="currentColor" d="M0,60 C160,18 330,88 500,44 C650,4 860,72 1020,36 C1110,16 1160,28 1200,18 L1200,90 L0,90 Z"></path>
+        </svg>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-4 pb-6 pt-12 sm:px-6 sm:pt-14 lg:px-8">
         <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
             <div>
-                <h3 class="text-xs font-bold uppercase tracking-widest text-white/90 border-b border-white/20 pb-2 mb-3">{{ __('messages.footer_overview') }}</h3>
-                <p class="text-sm text-white/80 leading-relaxed">{{ __('messages.footer_overview_text') }}</p>
-                <p class="mt-4 text-xs text-white/60 leading-relaxed border-t border-white/10 pt-3">{{ config('irdcrp.ministry_line_en') }}</p>
+                <div class="mb-4 flex items-center gap-3">
+                    <img src="{{ asset(config('irdcrp.logos.irdcrp')) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" class="h-14 w-auto rounded-md bg-white/90 p-1">
+                    <p class="text-lg font-extrabold text-white">IRDCRP</p>
+                </div>
+                <p class="text-sm leading-relaxed text-white/80">
+                    Integrated Rurban Development and Climate Resilience Project supports climate-smart development and resilient livelihoods.
+                </p>
+                <p class="mt-3 text-xs text-emerald-100/80">{{ config('irdcrp.ministry_line_en') }}</p>
             </div>
+
             <div>
-                <h3 class="text-xs font-bold uppercase tracking-widest text-white/90 border-b border-white/20 pb-2 mb-4">{{ __('messages.footer_quick_links') }}</h3>
-                <ul class="space-y-2.5 text-sm text-white/85">
-                    <li><a class="hover:text-white hover:underline" href="{{ url('/') }}">{{ __('messages.home') }}</a></li>
-                    <li><a class="hover:text-white hover:underline" href="{{ url('/#programmes') }}">{{ __('messages.nav_programmes') }}</a></li>
-                    <li><a class="hover:text-white hover:underline" href="/about">{{ __('messages.about') }}</a></li>
-                    <li><a class="hover:text-white hover:underline" href="/news">{{ __('messages.nav_news') }}</a></li>
-                    <li><a class="hover:text-white hover:underline" href="/downloads">{{ __('messages.nav_downloads') }}</a></li>
-                    <li><a class="hover:text-white hover:underline" href="/gallery">{{ __('messages.nav_gallery') }}</a></li>
-                    <li><a class="hover:text-white hover:underline" href="/vacancies">{{ __('messages.nav_vacancies') }}</a></li>
-                    <li><a class="hover:text-white hover:underline" href="/contact">{{ __('messages.contact') }}</a></li>
+                <h3 class="irdc-footer-modern__head">Quick Links</h3>
+                <ul class="irdc-footer-modern__links">
+                    <li><a href="{{ url('/') }}">{{ __('messages.home') }}</a></li>
+                    <li><a href="/about">{{ __('messages.about') }}</a></li>
+                    <li><a href="/components">{{ __('messages.nav_programmes') }}</a></li>
+                    <li><a href="/news">{{ __('messages.nav_news') }}</a></li>
+                    <li><a href="/gallery">{{ __('messages.nav_gallery') }}</a></li>
+                    <li><a href="/contact">{{ __('messages.contact') }}</a></li>
                 </ul>
             </div>
+
             <div>
-                <h3 class="text-xs font-bold uppercase tracking-widest text-white/90 border-b border-white/20 pb-2 mb-4">{{ __('messages.footer_contact') }}</h3>
-                <p class="text-sm text-white/80 leading-relaxed">
-                    <span class="text-white font-medium">{{ __('messages.address_label') }}</span><br>
-                    {{ config('irdcrp.contact.address') }}
-                </p>
-                <p class="mt-4 text-sm text-white/80">
-                    <a class="hover:underline" href="tel:{{ preg_replace('/\s+/', '', config('irdcrp.contact.phone')) }}">{{ config('irdcrp.contact.phone') }}</a>
-                </p>
-                <p class="text-sm text-white/80">
-                    <a class="hover:underline" href="mailto:{{ config('irdcrp.contact.email') }}">{{ config('irdcrp.contact.email') }}</a>
-                </p>
+                <h3 class="irdc-footer-modern__head">Project Focus</h3>
+                <ul class="irdc-footer-modern__links">
+                    <li><a href="/components">Climate Resilience</a></li>
+                    <li><a href="/components">Water Management</a></li>
+                    <li><a href="/components">Sustainable Agriculture</a></li>
+                    <li><a href="/components">Livelihood Development</a></li>
+                </ul>
             </div>
+
             <div>
-                <h3 class="text-xs font-bold uppercase tracking-widest text-white/90 border-b border-white/20 pb-2 mb-3">{{ __('messages.footer_social') }}</h3>
-                <p class="text-sm text-white/70 mb-4">{{ __('messages.footer_social_hint') }}</p>
-                <div class="flex flex-wrap items-center gap-2.5">
-                    <a href="{{ config('irdcrp.social.facebook') }}" rel="noopener noreferrer" target="_blank" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-sm font-semibold text-white transition hover:bg-white/20" title="Facebook" aria-label="Facebook">f</a>
-                    <a href="{{ config('irdcrp.social.youtube') }}" rel="noopener noreferrer" target="_blank" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-xs text-white transition hover:bg-white/20" title="YouTube" aria-label="YouTube">▶</a>
-                    <a href="{{ config('irdcrp.social.twitter') }}" rel="noopener noreferrer" target="_blank" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-xs font-bold text-white transition hover:bg-white/20" title="X" aria-label="X">X</a>
+                <h3 class="irdc-footer-modern__head">{{ __('messages.footer_contact') }}</h3>
+                <p class="text-sm leading-relaxed text-white/80">{{ config('irdcrp.contact.address') }}</p>
+                <p class="mt-2 text-sm text-white/90"><a href="mailto:{{ config('irdcrp.contact.email') }}" class="hover:text-emerald-200">{{ config('irdcrp.contact.email') }}</a></p>
+                <p class="text-sm text-white/90"><a href="tel:{{ preg_replace('/\s+/', '', config('irdcrp.contact.phone')) }}" class="hover:text-emerald-200">{{ config('irdcrp.contact.phone') }}</a></p>
+
+                <div class="mt-4 flex items-center gap-2.5">
+                    <a href="{{ config('irdcrp.social.facebook') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="Facebook">f</a>
+                    <a href="{{ config('irdcrp.social.youtube') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="YouTube">▶</a>
+                    <a href="{{ config('irdcrp.social.twitter') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="X">X</a>
+                    <a href="{{ config('irdcrp.social.linkedin') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="LinkedIn">in</a>
                 </div>
+
+                <form class="mt-5">
+                    <label class="mb-2 block text-xs font-semibold uppercase tracking-wider text-emerald-100/90">Newsletter</label>
+                    <div class="flex gap-2">
+                        <input type="email" placeholder="Your email" class="w-full rounded-full border border-emerald-200/30 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/60 focus:border-emerald-200 focus:outline-none">
+                        <button type="button" class="rounded-full bg-amber-500 px-4 py-2 text-sm font-bold text-slate-900 transition hover:bg-amber-400">Join</button>
+                    </div>
+                </form>
             </div>
         </div>
-        <p class="mt-12 pt-8 border-t border-white/15 text-center text-xs text-white/50">
-            © {{ date('Y') }} {{ config('app.name') }} · {{ __('messages.rights') }}
-        </p>
+
+        <div class="mt-10 border-t border-white/15 pt-5 text-center text-xs text-white/60">
+            © {{ date('Y') }} {{ config('app.name') }}. {{ __('messages.rights') }} · Developed by IRDCRP Team
+        </div>
     </div>
 </footer>
 @endif

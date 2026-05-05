@@ -195,6 +195,13 @@
         @apply rounded-md outline-none ring-2 ring-emerald-200/90 ring-offset-2 ring-offset-[#14532d];
     }
 
+    .irdc-main-nav a,
+    #main-nav-mobile a {
+        pointer-events: auto;
+        position: relative;
+        z-index: 2;
+    }
+
     .irdc-top-bar__lang:focus-visible,
     .irdc-top-bar__auth-in:focus-visible,
     .irdc-top-bar__auth-out:focus-visible {
@@ -850,5 +857,108 @@
 
     .irdc-about-mini-card p {
         @apply mt-2 text-sm leading-relaxed text-slate-700;
+    }
+
+    /* Footer: modern redesign */
+    .irdc-footer-cta {
+        @apply border-t border-emerald-200/20 bg-gradient-to-r from-[#14532d] via-[#1B5E20] to-[#166534];
+    }
+
+    .irdc-footer-cta__btn {
+        @apply inline-flex items-center justify-center rounded-full border border-amber-300/70 bg-gradient-to-r from-amber-400 to-orange-500 px-5 py-2.5 text-sm font-bold text-slate-900 shadow-md transition hover:from-amber-300 hover:to-orange-400;
+    }
+
+    .irdc-footer-modern {
+        @apply relative overflow-hidden bg-[#0f3f29] text-white;
+        background-image:
+            radial-gradient(circle at 8% 85%, rgba(110, 231, 183, 0.14), transparent 36%),
+            radial-gradient(circle at 92% 20%, rgba(255, 255, 255, 0.06), transparent 30%);
+    }
+
+    .irdc-footer-modern__wave {
+        @apply pointer-events-none absolute left-0 right-0 top-0 text-[#1a5a38];
+    }
+
+    .irdc-footer-modern__head {
+        @apply mb-3 border-b border-emerald-200/20 pb-2 text-xs font-bold uppercase tracking-[0.16em] text-emerald-100;
+    }
+
+    .irdc-footer-modern__links {
+        @apply space-y-2 text-sm text-white/80;
+    }
+
+    .irdc-footer-modern__links a {
+        @apply inline-flex items-center transition duration-200 hover:translate-x-1 hover:text-emerald-200;
+    }
+
+    .irdc-footer-modern__social {
+        @apply inline-flex h-9 w-9 items-center justify-center rounded-full border border-emerald-200/25 bg-white/10 text-xs font-bold text-white transition hover:-translate-y-0.5 hover:bg-emerald-500/30;
+    }
+
+    /* Contact page: modern glass layout */
+    .irdc-contact-modern {
+        background: #e9f1ea;
+    }
+
+    .irdc-contact-modern__bg {
+        background-image: url('/images/hero/contact-modern-bg.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: saturate(1.03) contrast(1.02);
+    }
+
+    .irdc-contact-modern__overlay {
+        background:
+            radial-gradient(ellipse 76% 56% at 50% 0%, rgba(255, 255, 255, 0.28), transparent 62%),
+            linear-gradient(180deg, rgba(10, 40, 28, 0.15) 0%, rgba(11, 40, 30, 0.1) 50%, rgba(10, 40, 28, 0.2) 100%);
+    }
+
+    .irdc-contact-modern__wave-top,
+    .irdc-contact-modern__wave-bottom {
+        @apply pointer-events-none absolute left-0 right-0 z-[1];
+        height: 6rem;
+        background: rgba(255, 255, 255, 0.68);
+        clip-path: ellipse(72% 76% at 50% 0%);
+    }
+
+    .irdc-contact-modern__wave-top {
+        top: -2.7rem;
+        transform: rotate(180deg);
+    }
+
+    .irdc-contact-modern__wave-bottom {
+        bottom: -2.8rem;
+    }
+
+    .irdc-contact-modern__glass {
+        @apply mx-auto max-w-5xl rounded-[1.75rem] border border-white/70 p-5 shadow-[0_18px_45px_-20px_rgba(0,0,0,0.35)] ring-1 ring-white/70 backdrop-blur-sm sm:p-8;
+        background-image:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.62)),
+            url('/images/hero/contact-form-bg.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .irdc-contact-modern__title {
+        @apply font-display text-3xl font-extrabold tracking-tight text-[#244c37] sm:text-4xl;
+    }
+
+    .irdc-contact-modern__subtitle {
+        @apply mt-2 text-sm text-slate-700 sm:text-base;
+    }
+
+    .irdc-contact-input {
+        @apply w-full rounded-xl border border-slate-200/90 bg-white/90 px-4 py-3 text-sm text-slate-800 shadow-sm outline-none transition;
+    }
+
+    .irdc-contact-input:focus {
+        border-color: #43a047;
+        box-shadow: 0 0 0 0.2rem rgba(67, 160, 71, 0.14);
+    }
+
+    .irdc-contact-send-btn {
+        @apply inline-flex items-center justify-center rounded-full border border-emerald-500/50 bg-gradient-to-r from-emerald-700 to-green-600 px-8 py-3 text-base font-bold text-white shadow-md transition hover:from-emerald-600 hover:to-green-500;
     }
 }

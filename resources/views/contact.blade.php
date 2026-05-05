@@ -2,60 +2,30 @@
 
 @section('content')
 
-<section
-    class="py-5 text-white"
-    style="background:
-        linear-gradient(120deg, rgba(10,61,98,0.72), rgba(39,174,96,0.55)),
-        url('{{ asset('images/hero/about-modern-bg.png') }}') center/cover no-repeat;"
->
-    <div class="container py-4">
-        <h1 class="fw-bold">Contact Us</h1>
-        <p class="lead mb-0">Get in touch with IRDCRP</p>
-    </div>
-</section>
+<section class="irdc-contact-modern relative overflow-hidden py-16 sm:py-20">
+    <div class="irdc-contact-modern__bg absolute inset-0" aria-hidden="true"></div>
+    <div class="irdc-contact-modern__overlay absolute inset-0" aria-hidden="true"></div>
+    <div class="irdc-contact-modern__wave-top" aria-hidden="true"></div>
+    <div class="irdc-contact-modern__wave-bottom" aria-hidden="true"></div>
 
-<section class="container py-5">
-    <div class="row g-4">
+    <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="irdc-contact-modern__glass">
+            <header class="text-center">
+                <h1 class="irdc-contact-modern__title">Drop us a message for any query</h1>
+                <p class="irdc-contact-modern__subtitle">If you have an idea, we would love to hear about it.</p>
+            </header>
 
-        <div class="col-lg-6">
-            <div class="card feature-card p-4">
-                <h4 class="fw-bold">Send a Message</h4>
-
-                <form>
-                    <div class="mb-3">
-                        <label>Name</label>
-                        <input type="text" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Email</label>
-                        <input type="email" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Message</label>
-                        <textarea class="form-control" rows="4"></textarea>
-                    </div>
-
-                    <button class="btn btn-green">Send</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="card feature-card p-4">
-                <h4 class="fw-bold">Office Information</h4>
-                <p><strong>Address:</strong> Ministry of Agriculture, Sri Lanka</p>
-                <p><strong>Email:</strong> info@irdcrp.lk</p>
-                <p><strong>Phone:</strong> +94 XX XXX XXXX</p>
-
-                <div class="mt-3">
-                    <iframe src="https://maps.google.com/maps?q=colombo&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                        width="100%" height="200" style="border:0;"></iframe>
+            <form class="mt-6 grid gap-3 sm:grid-cols-2 sm:gap-4">
+                <input type="text" class="irdc-contact-input" placeholder="Name">
+                <input type="email" class="irdc-contact-input" placeholder="Email">
+                <input type="text" class="irdc-contact-input" placeholder="Phone">
+                <input type="text" class="irdc-contact-input" placeholder="Subject">
+                <textarea class="irdc-contact-input sm:col-span-2" rows="4" placeholder="Your Message"></textarea>
+                <div class="sm:col-span-2 mt-1 text-center">
+                    <button type="button" class="irdc-contact-send-btn">Send Message</button>
                 </div>
-            </div>
+            </form>
         </div>
-
     </div>
 </section>
 

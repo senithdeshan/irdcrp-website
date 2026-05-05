@@ -134,18 +134,6 @@ Alpine.start();
 
 /* Fade in sections on scroll (home page) */
 document.addEventListener('DOMContentLoaded', () => {
-    // Ensure navbar links navigate on first click (desktop/mobile).
-    document.addEventListener('click', (event) => {
-        const link = event.target.closest('.irdc-main-nav a, #main-nav-mobile a, .irdc-nav-cta');
-        if (!link) return;
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-        if (link.target && link.target !== '_self') return;
-        const href = link.getAttribute('href') || '';
-        if (!href || href.startsWith('#')) return;
-        event.preventDefault();
-        window.location.assign(link.href);
-    }, true);
-
     const setStaggerDelays = () => {
         document.querySelectorAll('[data-reveal-stagger]').forEach((parent) => {
             Array.from(parent.children).forEach((child, idx) => {

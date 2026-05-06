@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
+/**
+ * Admin CRUD for photo items shown on the public site at /gallery/photos.
+ */
 class GalleryController extends Controller
 {
     public function index(): View

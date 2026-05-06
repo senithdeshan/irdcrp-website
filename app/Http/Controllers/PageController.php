@@ -129,14 +129,25 @@ class PageController extends Controller
         return Storage::disk('public')->download($download->file_path, $name);
     }
 
-    public function gallery(): View
+    public function gallerySection(string $section): View
     {
-        $items = Gallery::query()
-            ->orderByDesc('item_date')
-            ->orderByDesc('id')
-            ->get();
+        if ($section === 'photos') {
+            $items = Gallery::query()
+                ->orderByDesc('item_date')
+                ->orderByDesc('id')
+                ->get();
 
-        return view('gallery', compact('items'));
+            return view('gallery.photos', compact('items'));
+        }
+
+        $titleKeys = [
+            'audio' => 'messages.nav_media_audio',
+            'videos' => 'messages.nav_media_videos',
+            'presentation' => 'messages.nav_media_presentation',
+            'voice' => 'messages.nav_media_voice',
+        ];
+
+        return view('gallery.placeholder', ['titleKey' => $titleKeys[$section]]);
     }
 
     public function vacancies(): View

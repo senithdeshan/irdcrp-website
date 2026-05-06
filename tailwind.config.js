@@ -24,6 +24,9 @@ export default {
                     green: '#14532d',
                     'green-light': '#166534',
                     cream: '#fef9e7',
+                    /* Main navbar (CSIAP-style) */
+                    'bar-green': '#0d5c2f',
+                    'nav-hover': '#c7ff95',
                 },
                 'irdc-burgundy': '#3d2319',
             },

@@ -43,32 +43,32 @@ return [
     */
     'hero_slides' => [
         [
-            'image' => '/images/hero/hero-07-solar-farm.png',
-            'caption_en' => 'Clean energy and climate-smart farming — linking productivity with sustainability across project areas.',
+            'image' => '/images/hero/hero-home-01.png',
+            'caption_en' => 'Climate-smart orchards — neat rows of fruit trees and resilient landscapes across project areas.',
         ],
         [
-            'image' => '/images/hero/hero-01-drip-seedlings.png',
-            'caption_en' => 'Efficient water use and good agricultural practices for resilient crops and soils.',
+            'image' => '/images/hero/hero-home-02.png',
+            'caption_en' => 'Quality harvests from the field — growers proudly showcase fresh, healthy produce.',
         ],
         [
-            'image' => '/images/hero/hero-05-farmer-tiller.png',
-            'caption_en' => 'Supporting smallholders with tools, training, and market links in the field.',
+            'image' => '/images/hero/hero-home-03.png',
+            'caption_en' => 'Vegetable farming and resilient livelihoods — vibrant fields and inclusive rural development.',
         ],
         [
-            'image' => '/images/hero/hero-06-aerial-paddies.png',
-            'caption_en' => 'Landscape-scale resilience — water, land, and communities working together.',
+            'image' => '/images/hero/hero-home-04.png',
+            'caption_en' => 'Organised plots from above — good agricultural practices and productive land use.',
         ],
         [
-            'image' => '/images/hero/hero-03-tractor-field.png',
-            'caption_en' => 'Strengthening agriculture and rural livelihoods where it matters most.',
+            'image' => '/images/hero/hero-home-05.png',
+            'caption_en' => 'Plantation and coconut livelihoods — carrying the harvest with pride.',
         ],
         [
-            'image' => '/images/hero/hero-02-rural-hut.png',
-            'caption_en' => 'Inclusive rural and rurban development rooted in local communities.',
+            'image' => '/images/hero/hero-home-06.png',
+            'caption_en' => 'Hands-on cultivation — high-value crops like chillies grown with care in the field.',
         ],
         [
-            'image' => '/images/hero/hero-04-smart-agriculture.png',
-            'caption_en' => 'Digital tools and innovation to monitor, learn, and scale climate-smart approaches.',
+            'image' => '/images/hero/hero-home-07.png',
+            'caption_en' => 'On-farm equipment and green practices — processing biomass for climate-smart agriculture.',
         ],
     ],
 
@@ -76,7 +76,7 @@ return [
     | Home: project overview (image + text uses resources/lang).
     */
     'home_overview' => [
-        'image' => '/images/hero/hero-07-solar-farm.png',
+        'image' => '/images/hero/hero-home-02.png',
     ],
 
     /*
@@ -97,28 +97,28 @@ return [
         [
             'id' => 'minister',
             'image' => '/images/leaders/minister.jpg',
-            'fallback' => '/images/hero/hero-05-farmer-tiller.png',
+            'fallback' => '/images/hero/hero-home-02.png',
             'role' => 'leader_role_minister',
             'org' => 'leader_org_malla',
         ],
         [
             'id' => 'secretary',
             'image' => '/images/leaders/secretary.jpg',
-            'fallback' => '/images/hero/hero-03-tractor-field.png',
+            'fallback' => '/images/hero/hero-home-03.png',
             'role' => 'leader_role_secretary',
             'org' => 'leader_org_malla',
         ],
         [
             'id' => 'project_director',
             'image' => '/images/leaders/project-director.jpg',
-            'fallback' => '/images/hero/hero-01-drip-seedlings.png',
+            'fallback' => '/images/hero/hero-home-04.png',
             'role' => 'leader_role_project_director',
             'org' => 'leader_org_irdcrp_pmu',
         ],
         [
             'id' => 'world_bank',
             'image' => '/images/leaders/world-bank-representative.jpg',
-            'fallback' => '/images/hero/hero-07-solar-farm.png',
+            'fallback' => '/images/hero/hero-home-05.png',
             'role' => 'leader_role_wb_representative',
             'org' => 'leader_org_world_bank',
         ],
@@ -153,12 +153,12 @@ return [
     | Home: programme cards (order = display order). Titles + descriptions: messages.prog_{id} / prog_{id}_desc.
     */
     'programme_cards' => [
-        ['id' => 'climate', 'image' => '/images/hero/hero-07-solar-farm.png'],
-        ['id' => 'agri', 'image' => '/images/hero/hero-01-drip-seedlings.png'],
-        ['id' => 'livestock', 'image' => '/images/hero/hero-05-farmer-tiller.png'],
-        ['id' => 'irrigation', 'image' => '/images/hero/hero-06-aerial-paddies.png'],
-        ['id' => 'market', 'image' => '/images/hero/hero-03-tractor-field.png'],
-        ['id' => 'community', 'image' => '/images/hero/hero-02-rural-hut.png'],
+        ['id' => 'climate', 'image' => '/images/hero/hero-home-01.png'],
+        ['id' => 'agri', 'image' => '/images/hero/hero-home-02.png'],
+        ['id' => 'livestock', 'image' => '/images/hero/hero-home-03.png'],
+        ['id' => 'irrigation', 'image' => '/images/hero/hero-home-04.png'],
+        ['id' => 'market', 'image' => '/images/hero/hero-home-05.png'],
+        ['id' => 'community', 'image' => '/images/hero/hero-home-06.png'],
     ],
 
     /*

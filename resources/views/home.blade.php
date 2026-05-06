@@ -88,14 +88,15 @@
         @if(count($slides) === 0)
             <div
                 class="irdc-hero-bg-layer absolute inset-0 min-h-full bg-center bg-cover"
-                style="background-image: url('{{ asset('images/hero/hero-01-drip-seedlings.png') }}');"
+                style="background-image: url('{{ asset('images/hero/hero-home-01.png') }}');"
             ></div>
         @endif
         <div class="irdc-hero__veil absolute inset-0 min-h-full" aria-hidden="true"></div>
     </div>
 
-    <div class="relative z-10 flex min-h-[100svh] min-h-screen flex-col">
-        <div class="irdc-hero-anim irdc-hero-stagger mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-3 pb-44 pt-[var(--irdc-header-offset)] text-center sm:px-5 sm:pb-48 lg:px-8">
+    {{-- Header offset on this wrapper (not the centered inner) so flex justify-center runs only in the band below the fixed nav --}}
+    <div class="relative z-10 box-border flex min-h-[100svh] min-h-screen flex-col pt-[var(--irdc-header-offset)]">
+        <div class="irdc-hero-anim irdc-hero-stagger mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-3 pb-44 text-center sm:px-5 sm:pb-48 lg:px-8">
             <p class="irdc-hero__eyebrow irdc-hero-stagger__item">{{ __('messages.hero_eyebrow') }}</p>
             <h1 class="irdc-hero__title irdc-hero-stagger__item mt-6 sm:mt-7">
                 {{ $heroTitle }}
@@ -127,14 +128,6 @@
                 <span class="irdc-hero__scroll-icon" aria-hidden="true"><span></span></span>
             </a>
         </div>
-
-        <aside class="irdc-hero-social" aria-label="{{ __('messages.header_social_aria') }}">
-            <a href="{{ config('irdcrp.social.youtube') }}" target="_blank" rel="noopener noreferrer" title="YouTube" class="irdc-hero-social__btn">▶</a>
-            <a href="{{ config('irdcrp.social.facebook') }}" target="_blank" rel="noopener noreferrer" title="Facebook" class="irdc-hero-social__btn">f</a>
-            <a href="{{ config('irdcrp.social.twitter') }}" target="_blank" rel="noopener noreferrer" title="Twitter / X" class="irdc-hero-social__btn">x</a>
-            <a href="{{ config('irdcrp.social.linkedin') }}" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="irdc-hero-social__btn">in</a>
-            <a href="{{ config('irdcrp.social.instagram', '#') }}" target="_blank" rel="noopener noreferrer" title="Instagram" class="irdc-hero-social__btn">ig</a>
-        </aside>
 
         @if($latestTitle)
             <a
@@ -173,6 +166,15 @@
     </div>
 </section>
 
+{{-- Outside hero: hero section uses overflow:hidden which clips position:fixed children --}}
+<aside class="irdc-hero-social" aria-label="{{ __('messages.header_social_aria') }}">
+    <a href="{{ config('irdcrp.social.youtube') }}" target="_blank" rel="noopener noreferrer" title="YouTube" class="irdc-hero-social__btn"><span class="irdc-hero-social__glyph" aria-hidden="true">▶</span></a>
+    <a href="{{ config('irdcrp.social.facebook') }}" target="_blank" rel="noopener noreferrer" title="Facebook" class="irdc-hero-social__btn"><span class="irdc-hero-social__glyph" aria-hidden="true">f</span></a>
+    <a href="{{ config('irdcrp.social.twitter') }}" target="_blank" rel="noopener noreferrer" title="X" class="irdc-hero-social__btn"><span class="irdc-hero-social__glyph" aria-hidden="true">x</span></a>
+    <a href="{{ config('irdcrp.social.linkedin') }}" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="irdc-hero-social__btn"><span class="irdc-hero-social__glyph irdc-hero-social__glyph--wide" aria-hidden="true">in</span></a>
+    <a href="{{ config('irdcrp.social.instagram', '#') }}" target="_blank" rel="noopener noreferrer" title="Instagram" class="irdc-hero-social__btn"><span class="irdc-hero-social__glyph irdc-hero-social__glyph--wide" aria-hidden="true">ig</span></a>
+</aside>
+
 {{-- Institutional context — clear for stakeholders & presentations --}}
 <div class="border-b border-t border-emerald-950/15 bg-gradient-to-r from-emerald-50 via-white to-cyan-50/80 py-3.5 text-center shadow-sm">
     <p class="mx-auto max-w-7xl px-3 text-xs font-medium leading-relaxed text-slate-700 sm:px-5 sm:text-sm lg:px-8">
@@ -203,14 +205,14 @@
                         if ($leader instanceof \App\Models\KeyLeader) {
                             $portrait = $leader->image
                                 ? asset('storage/'.$leader->image)
-                                : asset('images/hero/hero-05-farmer-tiller.png');
+                                : asset('images/hero/hero-home-02.png');
                             $roleLabel = $leader->label('role', $tLoc);
                             $orgLabel = $leader->label('org', $tLoc);
                         } else {
                             $imgPath = ltrim($leader['image'] ?? '', '/');
                             $portraitPath = isset($leader['image']) && is_file(public_path($imgPath))
                                 ? $leader['image']
-                                : ($leader['fallback'] ?? '/images/hero/hero-01-drip-seedlings.png');
+                                : ($leader['fallback'] ?? '/images/hero/hero-home-01.png');
                             $portrait = str_starts_with($portraitPath, 'http')
                                 ? $portraitPath
                                 : asset(ltrim($portraitPath, '/'));
@@ -709,7 +711,7 @@
         @if($galleryPreview->isNotEmpty())
             <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
                 @foreach($galleryPreview->take(6) as $g)
-                    <a href="{{ route('gallery.index') }}" class="group relative block aspect-[4/3] overflow-hidden rounded-xl border border-slate-200/90 bg-slate-200 shadow-sm sm:rounded-2xl">
+                    <a href="{{ route('gallery.section', 'photos') }}" class="group relative block aspect-[4/3] overflow-hidden rounded-xl border border-slate-200/90 bg-slate-200 shadow-sm sm:rounded-2xl">
                         <img
                             src="{{ asset('storage/'.$g->image) }}"
                             alt="{{ $g->title }}"
@@ -721,7 +723,7 @@
                 @endforeach
             </div>
             <div class="mt-12 text-center">
-                <a href="{{ route('gallery.index') }}" class="inline-flex items-center justify-center rounded-full border-2 border-emerald-800 bg-white px-8 py-3.5 text-sm font-bold text-emerald-900 shadow-sm transition hover:bg-emerald-800 hover:text-white sm:px-10 sm:py-4 sm:text-base">{{ __('messages.home_gallery_all') }}</a>
+                <a href="{{ route('gallery.section', 'photos') }}" class="inline-flex items-center justify-center rounded-full border-2 border-emerald-800 bg-white px-8 py-3.5 text-sm font-bold text-emerald-900 shadow-sm transition hover:bg-emerald-800 hover:text-white sm:px-10 sm:py-4 sm:text-base">{{ __('messages.home_gallery_all') }}</a>
             </div>
         @else
             <p class="text-center text-slate-500">{{ __('messages.home_gallery_empty') }}</p>

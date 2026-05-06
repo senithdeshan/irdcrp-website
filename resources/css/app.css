@@ -18,24 +18,44 @@
     /*
      * Fixed header = slim top bar + main nav (wraps on lg). Keeps hero & scroll targets aligned.
      */
+    /* Slim top bar + main nav (wraps to two rows on md–lg). Must clear fixed header on home hero. */
     :root {
-        --irdc-header-offset: 8rem;
+        --irdc-header-offset: 11rem;
     }
 
     @media (min-width: 640px) {
         :root {
-            --irdc-header-offset: 8.5rem;
+            --irdc-header-offset: 12rem;
         }
     }
 
     @media (min-width: 1024px) {
         :root {
-            --irdc-header-offset: 10rem;
+            --irdc-header-offset: 14.5rem;
+        }
+    }
+
+    @media (min-width: 1280px) {
+        :root {
+            --irdc-header-offset: 15rem;
         }
     }
 
     .irdc-scroll-mt-header {
         scroll-margin-top: var(--irdc-header-offset);
+    }
+
+    /*
+     * Fixed header: fill the scroll padding band with the same green as the nav (no harsh white strip).
+     */
+    .irdc-main--fixed-header {
+        padding-top: var(--irdc-header-offset);
+        background-image: linear-gradient(
+            to bottom,
+            #14532d 0,
+            #14532d var(--irdc-header-offset),
+            #ffffff var(--irdc-header-offset)
+        );
     }
 }
 
@@ -196,10 +216,46 @@
     }
 
     .irdc-main-nav a,
+    .irdc-main-nav button.irdc-nav-link,
     #main-nav-mobile a {
         pointer-events: auto;
         position: relative;
         z-index: 2;
+    }
+
+    /* Keep desktop nav on one row; allow horizontal scroll instead of wrapping */
+    #main-nav-desktop {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    #main-nav-desktop::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide horizontal scrollbars inside the two desktop nav rows (Windows shows arrow box) */
+    .irdc-main-nav__row {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .irdc-main-nav__row::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Gallery dropdown: force panel above trigger/nav links and open below button */
+    .irdc-main-nav .irdc-dropdown {
+        z-index: 5;
+    }
+
+    .irdc-main-nav .irdc-dropdown__trigger {
+        z-index: 6;
+    }
+
+    .irdc-main-nav .irdc-dropdown__panel {
+        z-index: 50 !important;
     }
 
     .irdc-top-bar__lang:focus-visible,
@@ -318,12 +374,29 @@
         animation-duration: 1.8s;
     }
 
+    /* Fixed rail: must live outside .irdc-hero (overflow:hidden) — see home.blade.php */
     .irdc-hero-social {
-        @apply fixed left-2 top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-2.5 lg:flex;
+        @apply pointer-events-auto fixed left-2 z-[100] flex flex-col gap-3 sm:left-3;
+        top: calc(var(--irdc-header-offset) + (100dvh - var(--irdc-header-offset)) * 0.5);
+        transform: translateY(-50%);
+    }
+
+    @media (max-width: 639px) {
+        .irdc-hero-social {
+            @apply gap-2;
+        }
     }
 
     .irdc-hero-social__btn {
-        @apply inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/35 bg-white/85 text-xs font-bold uppercase text-[#0A3D62] shadow-md ring-1 ring-slate-900/[0.08] transition hover:-translate-y-0.5 hover:bg-white;
+        @apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200/90 bg-white text-[#0A3D62] shadow-md shadow-slate-900/15 ring-1 ring-slate-900/10 transition hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-lg;
+    }
+
+    .irdc-hero-social__glyph {
+        @apply text-sm font-bold leading-none;
+    }
+
+    .irdc-hero-social__glyph--wide {
+        @apply text-[11px] font-extrabold tracking-tight;
     }
 
     .irdc-nav-cta {

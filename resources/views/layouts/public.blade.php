@@ -42,7 +42,11 @@
                         <li class="nav-item"><a class="nav-link" href="/news">{{ __('messages.nav_news') }}</a></li>
                         <li class="nav-item"><a class="nav-link" href="/procurement">{{ __('messages.nav_procurement') }}</a></li>
                         <li class="nav-item"><a class="nav-link" href="/downloads">{{ __('messages.nav_downloads') }}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/gallery">{{ __('messages.nav_gallery') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('gallery.section', 'audio') }}">{{ __('messages.nav_media_audio') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('gallery.section', 'photos') }}">{{ __('messages.nav_media_photos') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('gallery.section', 'videos') }}">{{ __('messages.nav_media_videos') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('gallery.section', 'presentation') }}">{{ __('messages.nav_media_presentation') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('gallery.section', 'voice') }}">{{ __('messages.nav_media_voice') }}</a></li>
                         <li class="nav-item"><a class="nav-link" href="/vacancies">{{ __('messages.nav_vacancies') }}</a></li>
                         <li class="nav-item"><a class="nav-link" href="/grm">{{ __('messages.nav_grm') }}</a></li>
                         <li class="nav-item"><a class="nav-link" href="/contact">{{ __('messages.contact') }}</a></li>

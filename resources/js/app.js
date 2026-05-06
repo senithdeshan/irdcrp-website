@@ -195,10 +195,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (layers.length === 0) return;
         const onScroll = () => {
             const y = Math.min(window.scrollY, 500);
-            const shift = y * 0.08;
+            const shift = y * 0.05;
             layers.forEach((layer) => {
                 if (layer instanceof HTMLElement) {
-                    layer.style.transform = `translateY(${shift}px) scale(1.04)`;
+                    /* No scale — scale() crops background images (especially with contain/cover) */
+                    layer.style.transform = `translateY(${shift}px)`;
                 }
             });
         };

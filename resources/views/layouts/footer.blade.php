@@ -37,7 +37,11 @@
                     <li><a href="/about">{{ __('messages.about') }}</a></li>
                     <li><a href="/components">{{ __('messages.nav_programmes') }}</a></li>
                     <li><a href="/news">{{ __('messages.nav_news') }}</a></li>
-                    <li><a href="/gallery">{{ __('messages.nav_gallery') }}</a></li>
+                    <li><a href="{{ route('gallery.section', 'audio') }}">{{ __('messages.nav_media_audio') }}</a></li>
+                    <li><a href="{{ route('gallery.section', 'photos') }}">{{ __('messages.nav_media_photos') }}</a></li>
+                    <li><a href="{{ route('gallery.section', 'videos') }}">{{ __('messages.nav_media_videos') }}</a></li>
+                    <li><a href="{{ route('gallery.section', 'presentation') }}">{{ __('messages.nav_media_presentation') }}</a></li>
+                    <li><a href="{{ route('gallery.section', 'voice') }}">{{ __('messages.nav_media_voice') }}</a></li>
                     <li><a href="/contact">{{ __('messages.contact') }}</a></li>
                 </ul>
             </div>

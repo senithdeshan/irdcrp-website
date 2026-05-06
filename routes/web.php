@@ -20,7 +20,12 @@ Route::get('/news/{news}', [PageController::class, 'showNews'])->name('news.show
 Route::get('/procurement', [PageController::class, 'procurement']);
 Route::get('/downloads', [PageController::class, 'downloads'])->name('downloads.index');
 Route::get('/downloads/file/{download}', [PageController::class, 'downloadFile'])->name('download.file');
-Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery.index');
+Route::get('/gallery', function () {
+    return redirect()->route('gallery.section', ['section' => 'photos']);
+})->name('gallery.index');
+Route::get('/gallery/{section}', [PageController::class, 'gallerySection'])
+    ->whereIn('section', ['audio', 'photos', 'videos', 'presentation', 'voice'])
+    ->name('gallery.section');
 Route::get('/vacancies', [PageController::class, 'vacancies'])->name('vacancies.index');
 Route::get('/vacancies/{vacancy}', [PageController::class, 'showVacancy'])->name('vacancies.show');
 Route::get('/grm', [PageController::class, 'grm']);

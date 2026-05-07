@@ -6,11 +6,14 @@ use App\Http\Controllers\Admin\DownloadController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\GrmComplaintController as AdminGrmComplaintController;
 use App\Http\Controllers\Admin\KeyLeaderController;
+use App\Http\Controllers\Admin\ProjectComponentController;
+use App\Http\Controllers\Admin\SupportMessageController as AdminSupportMessageController;
 use App\Http\Controllers\Admin\SuccessStoryController;
 use App\Http\Controllers\Admin\VacancyController;
 use App\Http\Controllers\GrmComplaintController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SupportMessageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'home']);
@@ -33,6 +36,7 @@ Route::get('/vacancies/{vacancy}', [PageController::class, 'showVacancy'])->name
 Route::get('/grm', [PageController::class, 'grm']);
 Route::post('/grm/complaints', [GrmComplaintController::class, 'store'])->name('grm.complaints.store');
 Route::get('/contact', [PageController::class, 'contact']);
+Route::post('/contact/support', [SupportMessageController::class, 'store'])->name('support-messages.store');
 Route::get('/p/{page:slug}', [PageController::class, 'showCmsPage'])->name('page.show');
 
 Route::get('/dashboard', function () {
@@ -53,11 +57,15 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('vacancies', VacancyController::class)->except(['show']);
     Route::resource('downloads', DownloadController::class)->except(['show']);
     Route::resource('pages', CmsPageController::class)->except(['show']);
+    Route::resource('project-components', ProjectComponentController::class)->except(['show']);
     Route::resource('key-leaders', KeyLeaderController::class)->except(['show']);
     Route::resource('success-stories', SuccessStoryController::class)->except(['show']);
     Route::get('grm-complaints', [AdminGrmComplaintController::class, 'index'])->name('grm-complaints.index');
     Route::get('grm-complaints/{grmComplaint}/edit', [AdminGrmComplaintController::class, 'edit'])->name('grm-complaints.edit');
     Route::put('grm-complaints/{grmComplaint}', [AdminGrmComplaintController::class, 'update'])->name('grm-complaints.update');
+    Route::get('support-messages', [AdminSupportMessageController::class, 'index'])->name('support-messages.index');
+    Route::get('support-messages/{supportMessage}/edit', [AdminSupportMessageController::class, 'edit'])->name('support-messages.edit');
+    Route::put('support-messages/{supportMessage}', [AdminSupportMessageController::class, 'update'])->name('support-messages.update');
 });
 
 Route::get('/lang/{locale}', function ($locale) {

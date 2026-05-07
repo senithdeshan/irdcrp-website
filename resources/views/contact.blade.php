@@ -52,15 +52,30 @@
                 <p class="irdc-contact-modern__subtitle">If you have an idea, we would love to hear about it.</p>
             </header>
 
+            @if (session('success'))
+                <div class="alert alert-success mt-4 mb-0">{{ session('success') }}</div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger mt-4 mb-0">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="irdc-contact-modern__form-shell mt-6">
-                <form class="grid gap-3 sm:grid-cols-2 sm:gap-4">
-                    <input type="text" class="irdc-contact-input" placeholder="Name">
-                    <input type="email" class="irdc-contact-input" placeholder="Email">
-                    <input type="text" class="irdc-contact-input" placeholder="Phone">
-                    <input type="text" class="irdc-contact-input" placeholder="Subject">
-                    <textarea class="irdc-contact-input sm:col-span-2" rows="4" placeholder="Your Message"></textarea>
+                <form method="POST" action="{{ route('support-messages.store') }}" class="grid gap-3 sm:grid-cols-2 sm:gap-4">
+                    @csrf
+                    <input type="text" name="name" value="{{ old('name') }}" class="irdc-contact-input" placeholder="Name" required>
+                    <input type="email" name="email" value="{{ old('email') }}" class="irdc-contact-input" placeholder="Email" required>
+                    <input type="text" name="phone" value="{{ old('phone') }}" class="irdc-contact-input" placeholder="Phone">
+                    <input type="text" name="subject" value="{{ old('subject') }}" class="irdc-contact-input" placeholder="Subject" required>
+                    <textarea name="message" class="irdc-contact-input sm:col-span-2" rows="4" placeholder="Your Message" required>{{ old('message') }}</textarea>
                     <div class="sm:col-span-2 mt-1 text-center">
-                        <button type="button" class="irdc-contact-send-btn">Send Message</button>
+                        <button type="submit" class="irdc-contact-send-btn">Send Message</button>
                     </div>
                 </form>
             </div>

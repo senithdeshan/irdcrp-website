@@ -2,68 +2,53 @@
 
 @section('content')
 
-<section class="py-5 text-white" style="background: linear-gradient(120deg, #0A3D62, #27AE60);">
-    <div class="container py-4">
-        <h1 class="fw-bold">Project Components</h1>
-        <p class="lead mb-0">Main implementation areas of IRDCRP</p>
+<section class="irdc-components-hero">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <div class="max-w-3xl">
+            <p class="irdc-components-eyebrow">Implementation Framework</p>
+            <h1 class="irdc-components-title">Project Components</h1>
+            <p class="irdc-components-lead">
+                Five coordinated investment areas guide IRDCRP support for climate-smart production, resilient natural resources, sector services, project learning, and emergency response readiness.
+            </p>
+        </div>
     </div>
 </section>
 
-<section class="container py-5">
-    <div class="text-center mb-5">
-        <h2 class="section-title">Core Components</h2>
-        <p class="section-subtitle">
-            The project components will be updated based on the official project design document.
-        </p>
-    </div>
-
-    <div class="row g-4">
-        <div class="col-md-6">
-            <div class="card feature-card p-4">
-                <div class="icon-circle">🌱</div>
-                <h4 class="fw-bold">Component 01</h4>
-                <h6 class="text-success">Climate Resilience and Natural Resource Management</h6>
-                <p>
-                    Activities may include climate-smart planning, resilient infrastructure,
-                    watershed management and community-based adaptation measures.
-                </p>
+<section class="irdc-components-section">
+    <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
+        <div class="irdc-components-summary">
+            <div>
+                <p class="irdc-components-summary__label">Core Components</p>
+                <h2 class="irdc-components-summary__title">From production support to emergency readiness</h2>
             </div>
+            <p class="irdc-components-summary__copy">
+                Each component connects field-level benefits with stronger systems, inclusive participation, and improved climate resilience.
+            </p>
         </div>
 
-        <div class="col-md-6">
-            <div class="card feature-card p-4">
-                <div class="icon-circle">🚜</div>
-                <h4 class="fw-bold">Component 02</h4>
-                <h6 class="text-success">Agriculture and Livestock Development</h6>
-                <p>
-                    Support for improved farming practices, livestock productivity, value chains,
-                    technology adoption and market-oriented production.
-                </p>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card feature-card p-4">
-                <div class="icon-circle">🤝</div>
-                <h4 class="fw-bold">Component 03</h4>
-                <h6 class="text-success">Community and Institutional Development</h6>
-                <p>
-                    Strengthening producer groups, community organizations, stakeholder coordination
-                    and capacity-building mechanisms.
-                </p>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card feature-card p-4">
-                <div class="icon-circle">📊</div>
-                <h4 class="fw-bold">Component 04</h4>
-                <h6 class="text-success">Project Management, Monitoring and Evaluation</h6>
-                <p>
-                    Coordination, reporting, procurement, financial management, safeguards,
-                    communication and results monitoring.
-                </p>
-            </div>
+        <div class="irdc-components-grid">
+            @forelse($components as $component)
+                <article class="irdc-component-card">
+                    <div class="irdc-component-card__number">
+                        {{ str_pad((string) $component->component_number, 2, '0', STR_PAD_LEFT) }}
+                    </div>
+                    <div class="irdc-component-card__body">
+                        <p class="irdc-component-card__kicker">Component {{ $component->component_number }}</p>
+                        <h3 class="irdc-component-card__title">{{ $component->title }}</h3>
+                        @if($component->budget)
+                            <p class="irdc-component-card__budget">{{ $component->budget }}</p>
+                        @endif
+                        @if($component->beneficiaries)
+                            <p class="irdc-component-card__beneficiaries">{{ $component->beneficiaries }}</p>
+                        @endif
+                        <p class="irdc-component-card__description">{{ $component->description }}</p>
+                    </div>
+                </article>
+            @empty
+                <div class="irdc-components-empty">
+                    Project components are being updated.
+                </div>
+            @endforelse
         </div>
     </div>
 </section>

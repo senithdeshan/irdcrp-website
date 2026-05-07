@@ -2,6 +2,7 @@
     $onHome = request()->is('/');
     $inGallery = request()->is('gallery*');
     $inGrm = request()->is('grm*') || request()->is('admin/grm-complaints*');
+    $inSupport = request()->is('contact') || request()->is('admin/support-messages*');
     $navLink = 'irdc-nav-link relative inline-flex items-center whitespace-nowrap rounded-md px-2 py-2.5 text-sm font-semibold tracking-wide font-display border-b-[3px] transition-colors duration-300 sm:px-2.5 sm:text-base md:px-3 md:text-lg lg:px-3.5 lg:text-[1.0625rem]';
     $active = 'border-emerald-300 bg-white/10 text-white font-bold shadow-sm [text-shadow:0_1px_2px_rgba(0,0,0,0.12)] after:pointer-events-none after:absolute after:bottom-1.5 after:left-1/2 after:h-1.5 after:w-1.5 after:-translate-x-1/2 after:rounded-full after:bg-emerald-200 after:ring-2 after:ring-emerald-500/25 hover:text-irdc-nav-hover sm:after:bottom-2';
     /* No ::after dot: avoids overlap with the dropdown panel; chevron marks the control */
@@ -172,7 +173,7 @@
                                 @endauth
                             </x-slot>
                         </x-dropdown>
-                        <a href="/contact" class="{{ $navLink }} {{ request()->is('contact') ? $active : $inactive }}">{{ __('messages.contact') }}</a>
+                        <a href="/contact" class="{{ $navLink }} {{ $inSupport ? $active : $inactive }}">{{ __('messages.contact') }}</a>
 
                         @auth
                             <a href="{{ route('admin.home') }}" class="{{ $navLink }} {{ request()->is('admin*') ? $active : $inactive }}">Admin</a>
@@ -262,6 +263,7 @@
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/grm" @click="mobile = false">{{ __('messages.nav_grm') }}</a>
                 @auth
                     <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="{{ route('admin.grm-complaints.index') }}" @click="mobile = false">Admin GRM inbox</a>
+                    <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="{{ route('admin.support-messages.index') }}" @click="mobile = false">Support inbox</a>
                 @endauth
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/contact" @click="mobile = false">{{ __('messages.contact') }}</a>
 

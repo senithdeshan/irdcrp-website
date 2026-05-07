@@ -53,6 +53,13 @@
         </div>
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Project components</h2>
+                <p class="text-muted small mb-3">Edit component titles, budgets, descriptions, order, and visibility.</p>
+                <a href="{{ route('admin.project-components.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Key leaders</h2>
                 <p class="text-muted small mb-3">Home page portraits, roles (EN/SI/TA), and organisations.</p>
                 <a href="{{ route('admin.key-leaders.index') }}" class="btn btn-green btn-sm">Manage</a>
@@ -70,6 +77,13 @@
                 <h2 class="h5 fw-bold">GRM complaints</h2>
                 <p class="text-muted small mb-3">Track complaints, set status, and write answers.</p>
                 <a href="{{ route('admin.grm-complaints.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Support messages</h2>
+                <p class="text-muted small mb-3">Review contact form inquiries and record replies.</p>
+                <a href="{{ route('admin.support-messages.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
     </div>

@@ -7,6 +7,7 @@ use App\Models\Gallery;
 use App\Models\KeyLeader;
 use App\Models\News;
 use App\Models\Page;
+use App\Models\ProjectComponent;
 use App\Models\SuccessStory;
 use App\Models\Vacancy;
 use Illuminate\Http\RedirectResponse;
@@ -79,7 +80,13 @@ class PageController extends Controller
 
     public function components(): View
     {
-        return view('components');
+        $components = ProjectComponent::query()
+            ->where('status', 'published')
+            ->orderBy('sort_order')
+            ->orderBy('component_number')
+            ->get();
+
+        return view('components', compact('components'));
     }
 
     public function areas(): View

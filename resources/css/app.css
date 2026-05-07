@@ -916,6 +916,100 @@
         @apply mt-2 text-sm leading-relaxed text-slate-700;
     }
 
+    /* Components page */
+    .irdc-components-hero {
+        @apply relative overflow-hidden bg-[#0A3D62] text-white;
+        background-image:
+            linear-gradient(135deg, rgba(10, 61, 98, 0.96), rgba(22, 101, 52, 0.88)),
+            url('/images/hero-agriculture.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .irdc-components-hero::after {
+        content: "";
+        @apply pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent;
+    }
+
+    .irdc-components-eyebrow {
+        @apply mb-4 inline-flex rounded-full border border-white/30 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-50 backdrop-blur-sm;
+    }
+
+    .irdc-components-title {
+        @apply font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl;
+        text-shadow: 0 3px 20px rgba(0, 0, 0, 0.28);
+    }
+
+    .irdc-components-lead {
+        @apply mt-5 max-w-2xl text-base leading-relaxed text-white/90 sm:text-lg;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.22);
+    }
+
+    .irdc-components-section {
+        @apply bg-white;
+    }
+
+    .irdc-components-summary {
+        @apply mb-8 grid gap-5 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-5 shadow-sm ring-1 ring-slate-900/[0.03] md:grid-cols-[1fr_1.1fr] md:items-end md:p-6;
+    }
+
+    .irdc-components-summary__label {
+        @apply mb-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-700;
+    }
+
+    .irdc-components-summary__title {
+        @apply font-display text-2xl font-extrabold tracking-tight text-[#0A3D62] sm:text-3xl;
+    }
+
+    .irdc-components-summary__copy {
+        @apply text-sm leading-relaxed text-slate-600 sm:text-base;
+    }
+
+    .irdc-components-grid {
+        @apply grid grid-cols-1 gap-5 lg:grid-cols-2;
+    }
+
+    .irdc-component-card {
+        @apply relative grid min-h-[19rem] overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-lg shadow-slate-900/5 ring-1 ring-slate-900/[0.03] transition duration-300 sm:grid-cols-[6rem_1fr];
+    }
+
+    .irdc-component-card:hover {
+        @apply -translate-y-1 border-emerald-700/20 shadow-xl shadow-emerald-900/10;
+    }
+
+    .irdc-component-card__number {
+        @apply flex items-center justify-center bg-gradient-to-br from-[#0A3D62] to-emerald-700 px-5 py-5 font-display text-4xl font-extrabold text-white sm:min-h-full sm:[writing-mode:vertical-rl];
+        letter-spacing: 0;
+    }
+
+    .irdc-component-card__body {
+        @apply p-5 sm:p-6;
+    }
+
+    .irdc-component-card__kicker {
+        @apply mb-2 text-xs font-bold uppercase tracking-[0.16em] text-emerald-700;
+    }
+
+    .irdc-component-card__title {
+        @apply font-display text-xl font-extrabold leading-tight text-slate-950 sm:text-2xl;
+    }
+
+    .irdc-component-card__budget {
+        @apply mt-4 inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-bold text-amber-900 sm:text-sm;
+    }
+
+    .irdc-component-card__beneficiaries {
+        @apply mt-3 rounded-xl border border-emerald-100 bg-emerald-50/80 px-3 py-2 text-sm font-semibold leading-relaxed text-emerald-900;
+    }
+
+    .irdc-component-card__description {
+        @apply mt-4 text-sm leading-relaxed text-slate-600 sm:text-[0.95rem];
+    }
+
+    .irdc-components-empty {
+        @apply rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500 lg:col-span-2;
+    }
+
     /* Footer: modern redesign */
     .irdc-footer-cta {
         @apply border-t border-emerald-200/20 bg-gradient-to-r from-[#14532d] via-[#1B5E20] to-[#166534];

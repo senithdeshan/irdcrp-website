@@ -1109,4 +1109,96 @@
     .irdc-contact-send-btn {
         @apply inline-flex items-center justify-center rounded-full border border-emerald-500/50 bg-gradient-to-r from-emerald-700 to-green-600 px-8 py-3 text-base font-bold text-white shadow-md transition hover:from-emerald-600 hover:to-green-500;
     }
+
+    /* GRM page: modern contact + form cards */
+    .grm-modern-grid {
+        display: grid;
+        grid-template-columns: minmax(16rem, 24rem) minmax(0, 1fr);
+        gap: 1.25rem;
+        align-items: start;
+    }
+
+    .grm-modern-card,
+    .grm-modern-form {
+        background: linear-gradient(180deg, #ffffff, #fbfefb);
+        border: 1px solid #dfe9e2;
+        border-radius: 1rem;
+        box-shadow: 0 16px 36px -28px rgba(15, 23, 42, 0.5);
+        padding: 1.75rem;
+    }
+
+    .grm-modern-card__eyebrow {
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #1f7a36;
+        margin-bottom: 0.45rem;
+    }
+
+    .grm-modern-card__title,
+    .grm-modern-form__title {
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1.1rem;
+    }
+
+    .grm-modern-card__block {
+        margin-top: 1.2rem;
+    }
+
+    .grm-modern-card__label {
+        font-size: 0.9rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #4b5563;
+        margin-bottom: 0.45rem;
+    }
+
+    .grm-modern-card__link {
+        display: block;
+        color: #0a3d62;
+        font-weight: 700;
+        font-size: 1.05rem;
+        text-decoration: none;
+        margin-bottom: 0.45rem;
+        word-break: break-word;
+        line-height: 1.45;
+    }
+
+    .grm-modern-card__link:hover {
+        color: #1f7a36;
+        text-decoration: underline;
+    }
+
+    .grm-modern-card__text {
+        color: #4b5563;
+        font-size: 1.03rem;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .grm-modern-form .form-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .grm-modern-form__input {
+        border-radius: 0.7rem;
+        border-color: #dbe7d9;
+    }
+
+    .grm-modern-form__input:focus {
+        border-color: #43a047;
+        box-shadow: 0 0 0 0.2rem rgba(67, 160, 71, 0.12);
+    }
+
+    @media (max-width: 991px) {
+        .grm-modern-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 }

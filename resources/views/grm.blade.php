@@ -10,48 +10,42 @@
 </section>
 
 <section class="container py-5">
-    <div class="grm-modern-grid">
-        <aside class="grm-modern-card">
-            <p class="grm-modern-card__eyebrow">Contact for GRM</p>
-            <h3 class="grm-modern-card__title">Project Help Desk</h3>
+    <div class="irdc-helpdesk-section">
+        <aside class="irdc-helpdesk-card">
+            <p class="irdc-helpdesk-label">CONTACT FOR GRM</p>
+            <h2>Project Help Desk</h2>
 
-            <div class="grm-modern-card__block">
-                <p class="grm-modern-card__label">Email</p>
-                <a href="mailto:pmuirdcrp@gmail.com" class="grm-modern-card__link">pmuirdcrp@gmail.com</a>
-                <a href="mailto:irdcrp_moa@agrimin.gov.lk" class="grm-modern-card__link">irdcrp_moa@agrimin.gov.lk</a>
+            <div class="irdc-helpdesk-item">
+                <h4>Email</h4>
+                <a href="mailto:pmuirdcrp@gmail.com">pmuirdcrp@gmail.com</a>
+                <a href="mailto:irdcrp_moa@agrimin.gov.lk">irdcrp_moa@agrimin.gov.lk</a>
             </div>
 
-            <div class="grm-modern-card__block">
-                <p class="grm-modern-card__label">Phone</p>
-                <a href="tel:0112877550" class="grm-modern-card__link">011 2877 550</a>
-                <a href="tel:0112073044" class="grm-modern-card__link">011 2073 044</a>
+            <div class="irdc-helpdesk-item">
+                <h4>Phone</h4>
+                <a href="tel:0112877550">011 2877 550</a>
+                <a href="tel:0112073044">011 2073 044</a>
             </div>
 
-            <div class="grm-modern-card__block">
-                <p class="grm-modern-card__label">Address</p>
-                <p class="grm-modern-card__text">No 123/2, Pannipitiya Road, Battaramulla, Sri Lanka</p>
+            <div class="irdc-helpdesk-item">
+                <h4>Address</h4>
+                <p>No 123/2, Pannipitiya Road, Battaramulla, Sri Lanka</p>
             </div>
         </aside>
 
-        <div class="grm-modern-form">
-            <h4 class="grm-modern-form__title">Submit a Complaint</h4>
+        <div class="irdc-complaint-card">
+            <h2>Submit a Complaint</h2>
             <form>
-                <div class="mb-3">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-control grm-modern-form__input">
-                </div>
+                <label>Name</label>
+                <input type="text">
 
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-control grm-modern-form__input">
-                </div>
+                <label>Email</label>
+                <input type="email">
 
-                <div class="mb-3">
-                    <label class="form-label">Message</label>
-                    <textarea class="form-control grm-modern-form__input" rows="4"></textarea>
-                </div>
+                <label>Message</label>
+                <textarea rows="5"></textarea>
 
-                <button class="btn btn-green">Submit</button>
+                <button type="button">Submit</button>
             </form>
         </div>
     </div>

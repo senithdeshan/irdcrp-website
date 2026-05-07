@@ -223,26 +223,10 @@
         z-index: 2;
     }
 
-    /* Keep desktop nav on one row; allow horizontal scroll instead of wrapping */
-    #main-nav-desktop {
-        overflow-x: auto;
-        overflow-y: visible;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-    }
-
-    #main-nav-desktop::-webkit-scrollbar {
-        display: none;
-    }
-
-    /* Hide horizontal scrollbars inside the two desktop nav rows (Windows shows arrow box) */
+    /* Desktop nav is 2 rows; avoid scrollbars that can block clicks (Windows shows arrow box). */
+    #main-nav-desktop,
     .irdc-main-nav__row {
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    .irdc-main-nav__row::-webkit-scrollbar {
-        display: none;
+        overflow: visible;
     }
 
     /* Gallery dropdown: force panel above trigger/nav links and open below button */
@@ -970,48 +954,139 @@
 
     /* Contact page: modern glass layout */
     .irdc-contact-modern {
-        background: #e9f1ea;
+        background: linear-gradient(180deg, #eef5ef 0%, #f7faf7 45%, #ffffff 100%);
     }
 
-    .irdc-contact-modern__bg {
-        background-image: url('/images/hero/contact-modern-bg.png');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        filter: saturate(1.03) contrast(1.02);
+    .irdc-contact-modern__details {
+        margin-bottom: 60px;
     }
 
-    .irdc-contact-modern__overlay {
-        background:
-            radial-gradient(ellipse 76% 56% at 50% 0%, rgba(255, 255, 255, 0.28), transparent 62%),
-            linear-gradient(180deg, rgba(10, 40, 28, 0.15) 0%, rgba(11, 40, 30, 0.1) 50%, rgba(10, 40, 28, 0.2) 100%);
+    .irdc-contact-modern__top-card {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 28px;
     }
 
-    .irdc-contact-modern__wave-top,
-    .irdc-contact-modern__wave-bottom {
-        @apply pointer-events-none absolute left-0 right-0 z-[1];
-        height: 6rem;
-        background: rgba(255, 255, 255, 0.68);
-        clip-path: ellipse(72% 76% at 50% 0%);
+    .irdc-contact-modern__hero-card {
+        width: 100%;
+        max-width: 920px;
+        background: linear-gradient(180deg, #ffffff, #fbfefb);
+        padding: 48px 42px;
+        text-align: center;
+        border-radius: 16px;
+        border: 1px solid #dff0e3;
+        box-shadow: 0 14px 34px -24px rgba(18, 40, 24, 0.35);
     }
 
-    .irdc-contact-modern__wave-top {
-        top: -2.7rem;
-        transform: rotate(180deg);
+    .irdc-contact-modern__mini-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        max-width: 980px;
+        margin: 0 auto;
     }
 
-    .irdc-contact-modern__wave-bottom {
-        bottom: -2.8rem;
+    .irdc-contact-modern__mini-card {
+        background: linear-gradient(180deg, #ffffff, #fcfdfc);
+        padding: 35px 20px;
+        border-radius: 14px;
+        text-align: center;
+        border: 1px solid #e7ece8;
+        box-shadow: 0 12px 24px -22px rgba(15, 23, 42, 0.55);
+        transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    .irdc-contact-modern__mini-card:hover {
+        transform: translateY(-4px);
+        border-color: #cce8d3;
+        box-shadow: 0 20px 30px -22px rgba(31, 122, 54, 0.35);
+    }
+
+    .irdc-contact-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 20px;
+        border: 2px dashed #1fa12e;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1fa12e;
+        font-size: 22px;
+        background: #f7fff8;
+    }
+
+    .irdc-contact-modern__hero-title {
+        font-size: 34px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #1f2937;
+    }
+
+    .irdc-contact-modern__hero-line {
+        margin-bottom: 8px;
+        color: #4b5563;
+        line-height: 1.55;
+    }
+
+    .irdc-contact-modern__address-block {
+        margin-top: 12px;
+        color: #4b5563;
+        font-size: 0.98rem;
+        line-height: 1.65;
+    }
+
+    .irdc-contact-modern__mini-head {
+        font-size: 30px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #1f2937;
+    }
+
+    .irdc-contact-modern__mini-link {
+        display: block;
+        color: #666;
+        margin-bottom: 8px;
+        text-decoration: none;
+        word-break: break-word;
+    }
+
+    .irdc-contact-modern__mini-link:hover {
+        color: #1f7a36;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 991px) {
+        .irdc-contact-modern__mini-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .irdc-contact-modern__hero-card {
+            padding: 30px 18px;
+        }
+
+        .irdc-contact-modern__hero-title {
+            font-size: 28px;
+        }
+
+        .irdc-contact-modern__mini-head {
+            font-size: 22px;
+        }
+
+        .irdc-contact-modern__mini-grid {
+            grid-template-columns: 1fr;
+        }
     }
 
     .irdc-contact-modern__glass {
-        @apply mx-auto max-w-5xl rounded-[1.75rem] border border-white/70 p-5 shadow-[0_18px_45px_-20px_rgba(0,0,0,0.35)] ring-1 ring-white/70 backdrop-blur-sm sm:p-8;
-        background-image:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.62)),
-            url('/images/hero/contact-form-bg.png');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+        @apply relative mx-auto max-w-5xl rounded-[1.75rem] border border-white/70 p-5 shadow-[0_14px_34px_-20px_rgba(0,0,0,0.28)] ring-1 ring-white/70 backdrop-blur-sm sm:p-8;
+        background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.9));
+    }
+
+    .irdc-contact-modern__form-shell {
+        @apply rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm ring-1 ring-slate-900/[0.04] sm:p-5;
     }
 
     .irdc-contact-modern__title {

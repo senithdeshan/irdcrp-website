@@ -122,6 +122,13 @@ return [
             'role' => 'leader_role_wb_representative',
             'org' => 'leader_org_world_bank',
         ],
+        [
+            'id' => 'additional_key_leader',
+            'image' => '/images/leaders/additional-key-leader.jpg',
+            'fallback' => '/images/hero/hero-home-06.png',
+            'role' => 'leader_role_additional_key_leader',
+            'org' => 'leader_org_irdcrp_pmu',
+        ],
     ],
 
     /*

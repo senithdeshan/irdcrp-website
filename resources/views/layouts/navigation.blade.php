@@ -99,7 +99,7 @@
             <div class="flex w-full min-h-[3.25rem] items-center justify-end gap-2 overflow-visible md:min-h-14 md:justify-between">
 
                 <nav id="main-nav-desktop" class="irdc-main-nav__links hidden w-full flex-1 flex-col items-center justify-center gap-y-0.5 overflow-visible py-0 md:flex" aria-label="{{ __('messages.nav_primary_aria') }}">
-                    <div class="irdc-main-nav__row flex w-full flex-nowrap items-center justify-center gap-x-0.5 overflow-x-auto overflow-y-visible sm:gap-x-1">
+                    <div class="irdc-main-nav__row flex w-full flex-wrap items-center justify-center gap-x-0.5 gap-y-1 overflow-visible sm:gap-x-1">
                         <a href="{{ url('/') }}" class="{{ $navLink }} {{ request()->is('/') ? $active : $inactive }}">{{ __('messages.home') }}</a>
                         <a href="/about" class="{{ $navLink }} {{ request()->is('about') ? $active : $inactive }}">{{ __('messages.about') }}</a>
                         <a href="/components" class="{{ $navLink }} {{ request()->is('components') ? $active : $inactive }}">{{ __('messages.nav_programmes') }}</a>
@@ -140,7 +140,7 @@
                         </x-dropdown>
                     </div>
 
-                    <div class="irdc-main-nav__row flex w-full flex-nowrap items-center justify-center gap-x-0.5 overflow-x-auto overflow-y-visible sm:gap-x-1">
+                    <div class="irdc-main-nav__row flex w-full flex-wrap items-center justify-center gap-x-0.5 gap-y-1 overflow-visible sm:gap-x-1">
                         <a href="/vacancies" class="{{ $navLink }} {{ request()->is('vacancies*') ? $active : $inactive }}">{{ __('messages.nav_vacancies') }}</a>
                         <a href="/grm" class="{{ $navLink }} {{ request()->is('grm') ? $active : $inactive }}">{{ __('messages.nav_grm') }}</a>
                         <a href="/contact" class="{{ $navLink }} {{ request()->is('contact') ? $active : $inactive }}">{{ __('messages.contact') }}</a>

@@ -2,7 +2,11 @@
 
 @section('content')
 
-<section class="irdc-about-modern py-16 sm:py-20">
+<section class="irdc-about-modern relative isolate overflow-hidden py-16 sm:py-20">
+    <div class="irdc-about-modern__bg absolute inset-0" aria-hidden="true"></div>
+    <div class="irdc-about-modern__overlay absolute inset-0" aria-hidden="true"></div>
+    <div class="irdc-about-modern__wave-top" aria-hidden="true"></div>
+    <div class="irdc-about-modern__wave-bottom" aria-hidden="true"></div>
 
     <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header class="text-center">

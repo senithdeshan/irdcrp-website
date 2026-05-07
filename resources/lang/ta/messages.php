@@ -93,6 +93,7 @@ return [
     'leader_role_secretary' => 'செயலர்',
     'leader_role_project_director' => 'திட்ட இயக்குநர்',
     'leader_role_wb_representative' => 'உலக வங்கி பிரதிநிதி',
+    'leader_role_additional_key_leader' => 'கூடுதல் முக்கிய தலைவர்',
     'leader_org_malla' => 'விவசாயம், கால்நடை, நிலம் மற்றும் நீர்ப்பாசன அமைச்சு',
     'leader_org_irdcrp_pmu' => 'ஒருங்கிணைந்த ஊரக-நகர்ப்புற வளர்ச்சி மற்றும் காலநிலை மீட்சித் திட்டம் (IRDCRP)',
     'leader_org_world_bank' => 'உலக வங்கி — இலங்கை',

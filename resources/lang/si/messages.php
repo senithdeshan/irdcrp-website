@@ -93,6 +93,7 @@ return [
     'leader_role_secretary' => 'ලේකම්',
     'leader_role_project_director' => 'ව්‍යාපෘති අධ්‍යක්ෂ',
     'leader_role_wb_representative' => 'ලොකු බැංකු නියෝජිත',
+    'leader_role_additional_key_leader' => 'අමතර ප්‍රධාන නායක',
     'leader_org_malla' => 'කෘෂිකර්ම, පශු සම්පත්, ඉඩම් සහ ජල සම්පාදන අමාත්‍යාංශය',
     'leader_org_irdcrp_pmu' => 'ඒකාබද්ධ ග්‍රාමීය-නාගරික සංවර්ධන සහ දේශගුණ ඔරොත්තුව ව්‍යාපෘතිය (IRDCRP)',
     'leader_org_world_bank' => 'ලොකු බැංකුව — ශ්‍රී ලංකාව',

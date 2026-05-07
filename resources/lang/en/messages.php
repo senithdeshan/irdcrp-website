@@ -95,6 +95,7 @@ return [
     'leader_role_secretary' => 'Secretary',
     'leader_role_project_director' => 'Project Director',
     'leader_role_wb_representative' => 'World Bank representative',
+    'leader_role_additional_key_leader' => 'Additional key leader',
     'leader_org_malla' => 'Ministry of Agriculture, Livestock, Land, and Irrigation',
     'leader_org_irdcrp_pmu' => 'Integrated Rurban Development and Climate Resilience Project (IRDCRP)',
     'leader_org_world_bank' => 'The World Bank — Sri Lanka',

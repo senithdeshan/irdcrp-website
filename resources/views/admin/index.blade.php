@@ -65,6 +65,13 @@
                 <a href="{{ route('admin.success-stories.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">GRM complaints</h2>
+                <p class="text-muted small mb-3">Track complaints, set status, and write answers.</p>
+                <a href="{{ route('admin.grm-complaints.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
     </div>
 </section>
 @endsection

@@ -4,9 +4,11 @@ use App\Http\Controllers\Admin\CmsPageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DownloadController;
 use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\GrmComplaintController as AdminGrmComplaintController;
 use App\Http\Controllers\Admin\KeyLeaderController;
 use App\Http\Controllers\Admin\SuccessStoryController;
 use App\Http\Controllers\Admin\VacancyController;
+use App\Http\Controllers\GrmComplaintController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +31,7 @@ Route::get('/gallery/{section}', [PageController::class, 'gallerySection'])
 Route::get('/vacancies', [PageController::class, 'vacancies'])->name('vacancies.index');
 Route::get('/vacancies/{vacancy}', [PageController::class, 'showVacancy'])->name('vacancies.show');
 Route::get('/grm', [PageController::class, 'grm']);
+Route::post('/grm/complaints', [GrmComplaintController::class, 'store'])->name('grm.complaints.store');
 Route::get('/contact', [PageController::class, 'contact']);
 Route::get('/p/{page:slug}', [PageController::class, 'showCmsPage'])->name('page.show');
 
@@ -52,6 +55,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('pages', CmsPageController::class)->except(['show']);
     Route::resource('key-leaders', KeyLeaderController::class)->except(['show']);
     Route::resource('success-stories', SuccessStoryController::class)->except(['show']);
+    Route::get('grm-complaints', [AdminGrmComplaintController::class, 'index'])->name('grm-complaints.index');
+    Route::get('grm-complaints/{grmComplaint}/edit', [AdminGrmComplaintController::class, 'edit'])->name('grm-complaints.edit');
+    Route::put('grm-complaints/{grmComplaint}', [AdminGrmComplaintController::class, 'update'])->name('grm-complaints.update');
 });
 
 Route::get('/lang/{locale}', function ($locale) {

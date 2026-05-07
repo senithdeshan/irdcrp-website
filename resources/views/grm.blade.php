@@ -10,6 +10,10 @@
 </section>
 
 <section class="container py-5">
+    @if (session('success'))
+        <div class="alert alert-success mb-4">{{ session('success') }}</div>
+    @endif
+
     <div class="irdc-helpdesk-section">
         <aside class="irdc-helpdesk-card">
             <p class="irdc-helpdesk-label">CONTACT FOR GRM</p>
@@ -35,17 +39,21 @@
 
         <div class="irdc-complaint-card">
             <h2>Submit a Complaint</h2>
-            <form>
+            <form method="POST" action="{{ route('grm.complaints.store') }}">
+                @csrf
                 <label>Name</label>
-                <input type="text">
+                <input type="text" name="name" value="{{ old('name') }}" required>
+                @error('name')<p class="text-danger small mt-1 mb-0">{{ $message }}</p>@enderror
 
                 <label>Email</label>
-                <input type="email">
+                <input type="email" name="email" value="{{ old('email') }}" required>
+                @error('email')<p class="text-danger small mt-1 mb-0">{{ $message }}</p>@enderror
 
                 <label>Message</label>
-                <textarea rows="5"></textarea>
+                <textarea rows="5" name="message" required>{{ old('message') }}</textarea>
+                @error('message')<p class="text-danger small mt-1 mb-0">{{ $message }}</p>@enderror
 
-                <button type="button">Submit</button>
+                <button type="submit">Submit</button>
             </form>
         </div>
     </div>

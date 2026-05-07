@@ -1,6 +1,7 @@
 @php
     $onHome = request()->is('/');
     $inGallery = request()->is('gallery*');
+    $inGrm = request()->is('grm*') || request()->is('admin/grm-complaints*');
     $navLink = 'irdc-nav-link relative inline-flex items-center whitespace-nowrap rounded-md px-2 py-2.5 text-sm font-semibold tracking-wide font-display border-b-[3px] transition-colors duration-300 sm:px-2.5 sm:text-base md:px-3 md:text-lg lg:px-3.5 lg:text-[1.0625rem]';
     $active = 'border-emerald-300 bg-white/10 text-white font-bold shadow-sm [text-shadow:0_1px_2px_rgba(0,0,0,0.12)] after:pointer-events-none after:absolute after:bottom-1.5 after:left-1/2 after:h-1.5 after:w-1.5 after:-translate-x-1/2 after:rounded-full after:bg-emerald-200 after:ring-2 after:ring-emerald-500/25 hover:text-irdc-nav-hover sm:after:bottom-2';
     /* No ::after dot: avoids overlap with the dropdown panel; chevron marks the control */
@@ -142,7 +143,35 @@
 
                     <div class="irdc-main-nav__row flex w-full flex-wrap items-center justify-center gap-x-0.5 gap-y-1 overflow-visible sm:gap-x-1">
                         <a href="/vacancies" class="{{ $navLink }} {{ request()->is('vacancies*') ? $active : $inactive }}">{{ __('messages.nav_vacancies') }}</a>
-                        <a href="/grm" class="{{ $navLink }} {{ request()->is('grm') ? $active : $inactive }}">{{ __('messages.nav_grm') }}</a>
+                        <x-dropdown
+                            align="left"
+                            width="w-max max-w-[13rem]"
+                            panelMinWidth=""
+                            panelRounded="rounded-lg"
+                            panelExtraClass="shadow-[0_6px_18px_rgba(0,0,0,0.12)]"
+                            contentClasses="bg-white py-1 [&>a]:!px-3 [&>a]:!py-2 [&>a]:!text-sm [&>a]:!leading-snug [&>a:hover]:!pl-4"
+                        >
+                            <x-slot name="trigger">
+                                <button
+                                    type="button"
+                                    class="group {{ $navLink }} {{ $inGrm ? $activeGalleryNav : $inactive }} !inline-flex max-w-max items-center gap-1"
+                                    aria-haspopup="true"
+                                >
+                                    <span class="whitespace-nowrap">{{ __('messages.nav_grm') }}</span>
+                                    <span class="inline-flex shrink-0 text-white/75 transition-colors duration-300 group-hover:text-irdc-nav-hover" aria-hidden="true">
+                                        <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-[11px] w-[11px] max-h-[11px] max-w-[11px]">
+                                            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </x-slot>
+                            <x-slot name="content">
+                                <x-dropdown-link href="/grm">Submit complaint</x-dropdown-link>
+                                @auth
+                                    <x-dropdown-link href="{{ route('admin.grm-complaints.index') }}">Admin GRM inbox</x-dropdown-link>
+                                @endauth
+                            </x-slot>
+                        </x-dropdown>
                         <a href="/contact" class="{{ $navLink }} {{ request()->is('contact') ? $active : $inactive }}">{{ __('messages.contact') }}</a>
 
                         @auth
@@ -231,6 +260,9 @@
                 </div>
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/vacancies" @click="mobile = false">{{ __('messages.nav_vacancies') }}</a>
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/grm" @click="mobile = false">{{ __('messages.nav_grm') }}</a>
+                @auth
+                    <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="{{ route('admin.grm-complaints.index') }}" @click="mobile = false">Admin GRM inbox</a>
+                @endauth
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/contact" @click="mobile = false">{{ __('messages.contact') }}</a>
 
                 <a class="mt-2 inline-flex w-full items-center justify-center rounded-full bg-amber-500 px-4 py-2.5 font-bold text-slate-900 shadow-sm transition hover:bg-amber-400" href="/contact" @click="mobile = false">

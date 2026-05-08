@@ -148,11 +148,11 @@
 
     /* World Bank: wide horizontal mark — extra width so it is not tiny */
     .irdc-top-bar--slim .irdc-header-logo-cell--worldbank {
-        @apply h-[3.5rem] w-[7.5rem] px-2 sm:h-16 sm:w-[11rem] md:h-[4.75rem] md:w-[13rem] lg:h-[5.25rem] lg:w-[15.5rem];
+        @apply h-[3.75rem] w-[12.5rem] px-2 sm:h-16 sm:w-[17rem] md:h-[4.75rem] md:w-[21rem] lg:h-[5.25rem] lg:w-[24rem];
     }
 
     .irdc-top-bar--slim .irdc-header-logo-cell--worldbank img {
-        @apply h-full max-h-full w-auto max-w-full min-w-[5.5rem] object-contain object-center sm:min-w-[7.5rem] md:min-w-[9rem] lg:min-w-[11rem];
+        @apply h-auto max-h-full w-full max-w-full object-contain object-center;
     }
 
     .irdc-top-bar--slim a.irdc-header-logo-cell:hover {

@@ -196,21 +196,21 @@ footer.public-footer {
 }
 
 .public-navbar-logos__item--bank {
-    min-width: 5.5rem;
-    max-width: 8.5rem;
+    min-width: 11rem;
+    max-width: 20rem;
     padding-left: 0.5rem;
     padding-right: 0.75rem;
 }
 
 .public-navbar-logos__item--bank img {
-    max-height: 1.75rem;
+    max-height: 2rem;
     width: 100%;
     object-fit: contain;
 }
 
 @media (min-width: 768px) {
     .public-navbar-logos__item--bank img {
-        max-height: 2rem;
+        max-height: 2.4rem;
     }
 }
 

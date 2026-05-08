@@ -1,20 +1,48 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 48" width="256" height="48" role="img" aria-labelledby="wbtitle">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 683" width="2048" height="683" role="img" aria-labelledby="wbtitle wbdesc">
   <title id="wbtitle">The World Bank</title>
-  <!-- High-contrast partner mark for light backgrounds; crisp at any size -->
-  <g fill="none" stroke="#0077C8" stroke-width="1.35" stroke-linecap="round" transform="translate(3,3)">
-    <circle cx="19" cy="19" r="17" fill="none"/>
-    <ellipse cx="19" cy="19" rx="6.5" ry="17"/>
-    <path d="M2 19h34"/>
-    <path d="M19 2c4 4 5 7 5 17s-1 15-5 20"/>
-    <path d="M19 2c-4 4-5 7-5 17s1 15 5 20"/>
+  <desc id="wbdesc">The World Bank IBRD IDA World Bank Group logo.</desc>
+  <defs>
+    <linearGradient id="wbGlobeBlue" x1="36" y1="522" x2="410" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#003763"/>
+      <stop offset="0.48" stop-color="#009FE3"/>
+      <stop offset="1" stop-color="#B7ECFF"/>
+    </linearGradient>
+    <linearGradient id="wbTextBlue" x1="460" y1="120" x2="2040" y2="260" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#003A63"/>
+      <stop offset="0.55" stop-color="#003A63"/>
+      <stop offset="1" stop-color="#063E73"/>
+    </linearGradient>
+    <linearGradient id="wbAccentBlue" x1="492" y1="390" x2="920" y2="455" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00AEEF"/>
+      <stop offset="1" stop-color="#008DCE"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="125%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#003A63" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+
+  <rect width="2048" height="683" fill="#ffffff"/>
+
+  <g filter="url(#softShadow)">
+    <g fill="none" stroke="url(#wbGlobeBlue)" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M37 392C31 239 138 96 300 51c134-38 267 2 343 95" stroke-width="34"/>
+      <path d="M99 489c94 88 237 117 364 69 126-48 212-166 225-294" stroke-width="34"/>
+      <path d="M180 116c127 31 252 115 353 241" stroke-width="25"/>
+      <path d="M109 423c133 55 283 57 444 8" stroke-width="25"/>
+      <path d="M365 54c-29 128-21 293 21 492" stroke-width="23"/>
+      <path d="M85 277c123-102 270-156 442-168" stroke-width="23"/>
+      <path d="M257 565c-59-149-59-306 0-472" stroke-width="22"/>
+      <path d="M565 173c53 94 74 188 68 285" stroke-width="23"/>
+      <path d="M78 480c72 63 164 96 267 100" stroke-width="28"/>
+    </g>
+
+    <g font-family="Arial, Helvetica, sans-serif">
+      <text x="455" y="352" fill="url(#wbTextBlue)" font-size="170" font-weight="800" letter-spacing="3">THE WORLD BANK</text>
+      <text x="492" y="463" font-size="82" font-weight="800" letter-spacing="2">
+        <tspan fill="url(#wbAccentBlue)">IBRD - IDA</tspan>
+        <tspan dx="22" fill="#003A63">|</tspan>
+        <tspan dx="22" fill="#003A63">WORLD BANK GROUP</tspan>
+      </text>
+    </g>
   </g>
-  <text
-    x="50"
-    y="30"
-    font-family="Segoe UI, system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
-    font-size="13.5"
-    font-weight="700"
-    fill="#002F6C"
-    letter-spacing="0.04em"
-  >THE WORLD BANK</text>
 </svg>

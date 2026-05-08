@@ -25,6 +25,13 @@
         </div>
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Programmes</h2>
+                <p class="text-muted small mb-3">Manage programme images, titles, descriptions, and nav dropdown items.</p>
+                <a href="{{ route('admin.programmes.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Gallery</h2>
                 <p class="text-muted small mb-3">Upload and delete gallery images.</p>
                 <a href="{{ route('admin.gallery.index') }}" class="btn btn-green btn-sm">Manage</a>
@@ -56,6 +63,13 @@
                 <h2 class="h5 fw-bold">Project components</h2>
                 <p class="text-muted small mb-3">Edit component titles, budgets, descriptions, order, and visibility.</p>
                 <a href="{{ route('admin.project-components.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Impact metrics</h2>
+                <p class="text-muted small mb-3">Edit home page numbers for districts, beneficiaries, investment, and projects.</p>
+                <a href="{{ route('admin.impact-metrics.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
         <div class="col-md-6 col-lg-4">

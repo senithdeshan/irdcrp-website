@@ -196,21 +196,35 @@ footer.public-footer {
 }
 
 .public-navbar-logos__item--bank {
-    min-width: 11rem;
-    max-width: 20rem;
-    padding-left: 0.5rem;
-    padding-right: 0.75rem;
+    aspect-ratio: 2600 / 683;
+    flex-shrink: 0;
+    width: 14rem;
+    padding-left: 0.55rem;
+    padding-right: 0.55rem;
 }
 
 .public-navbar-logos__item--bank img {
-    max-height: 2rem;
+    display: block;
+    height: auto;
+    max-height: 100%;
     width: 100%;
     object-fit: contain;
+    object-position: center;
 }
 
 @media (min-width: 768px) {
+    .public-navbar-logos__item--bank {
+        width: 18rem;
+    }
+
     .public-navbar-logos__item--bank img {
-        max-height: 2.4rem;
+        max-height: 100%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .public-navbar-logos__item--bank {
+        width: 19.75rem;
     }
 }
 

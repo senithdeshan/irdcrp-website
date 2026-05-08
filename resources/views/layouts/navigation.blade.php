@@ -1,8 +1,34 @@
 @php
     $onHome = request()->is('/');
     $inGallery = request()->is('gallery*');
+    $inProgrammes = request()->is('programmes*');
+    $inPages = request()->is('p/*');
     $inGrm = request()->is('grm*') || request()->is('admin/grm-complaints*');
     $inSupport = request()->is('contact') || request()->is('admin/support-messages*');
+    $navProgrammes = \Illuminate\Support\Facades\Schema::hasTable('programmes')
+        ? \App\Models\Programme::query()->where('status', 'published')->orderBy('sort_order')->orderBy('title')->get(['title', 'slug'])
+        : collect();
+    if (\Illuminate\Support\Facades\Schema::hasTable('pages')) {
+        $pagesQuery = \App\Models\Page::query()->where('status', 'published');
+
+        if (\Illuminate\Support\Facades\Schema::hasColumn('pages', 'show_in_nav')
+            && \Illuminate\Support\Facades\Schema::hasColumn('pages', 'nav_order')) {
+            $navCmsPages = (clone $pagesQuery)
+                ->where('show_in_nav', true)
+                ->orderBy('nav_order')
+                ->orderBy('title')
+                ->get(['title', 'slug']);
+
+            // Backward-friendly fallback: show published pages if nav flags were not set yet.
+            if ($navCmsPages->isEmpty()) {
+                $navCmsPages = $pagesQuery->orderBy('title')->get(['title', 'slug']);
+            }
+        } else {
+            $navCmsPages = $pagesQuery->orderBy('title')->get(['title', 'slug']);
+        }
+    } else {
+        $navCmsPages = collect();
+    }
     $navLink = 'irdc-nav-link relative inline-flex items-center whitespace-nowrap rounded-md px-2 py-2.5 text-sm font-semibold tracking-wide font-display border-b-[3px] transition-colors duration-300 sm:px-2.5 sm:text-base md:px-3 md:text-lg lg:px-3.5 lg:text-[1.0625rem]';
     $active = 'border-emerald-300 bg-white/10 text-white font-bold shadow-sm [text-shadow:0_1px_2px_rgba(0,0,0,0.12)] after:pointer-events-none after:absolute after:bottom-1.5 after:left-1/2 after:h-1.5 after:w-1.5 after:-translate-x-1/2 after:rounded-full after:bg-emerald-200 after:ring-2 after:ring-emerald-500/25 hover:text-irdc-nav-hover sm:after:bottom-2';
     /* No ::after dot: avoids overlap with the dropdown panel; chevron marks the control */
@@ -11,7 +37,7 @@
 @endphp
 
 <header
-    x-data="{ mobile: false, navSolid: false, galleryMobile: @js($inGallery) }"
+    x-data="{ mobile: false, navSolid: false, galleryMobile: @js($inGallery), programmesMobile: @js($inProgrammes), pagesMobile: @js($inPages) }"
     @if($onHome)
         @scroll.window="navSolid = (window.pageYOffset > 20)"
     @endif
@@ -52,9 +78,21 @@
                     <div class="irdc-header-tools__cluster flex min-w-0 max-w-full flex-nowrap items-center justify-end gap-1 sm:gap-1.5">
 
                         <div class="inline-flex items-center gap-0.5 rounded-full border border-emerald-200/80 bg-white p-0.5 shadow-sm" aria-label="{{ __('messages.header_social_aria') }}">
-                            <a class="irdc-header-social" href="{{ config('irdcrp.social.facebook') }}" rel="noopener noreferrer" target="_blank" title="Facebook">f</a>
-                            <a class="irdc-header-social" href="{{ config('irdcrp.social.youtube') }}" rel="noopener noreferrer" target="_blank" title="YouTube">▶</a>
-                            <a class="irdc-header-social" href="{{ config('irdcrp.social.linkedin') }}" rel="noopener noreferrer" target="_blank" title="LinkedIn">in</a>
+                            <a class="irdc-header-social" href="{{ config('irdcrp.social.facebook') }}" rel="noopener noreferrer" target="_blank" title="Facebook">
+                                <img src="{{ asset(config('irdcrp.social_icons.facebook')) }}" alt="Facebook" class="h-4 w-4 rounded-sm object-contain" loading="lazy" decoding="async">
+                            </a>
+                            <a class="irdc-header-social" href="{{ config('irdcrp.social.youtube') }}" rel="noopener noreferrer" target="_blank" title="YouTube">
+                                <img src="{{ asset(config('irdcrp.social_icons.youtube')) }}" alt="YouTube" class="h-4 w-4 rounded-sm object-contain" loading="lazy" decoding="async">
+                            </a>
+                            <a class="irdc-header-social" href="{{ config('irdcrp.social.twitter') }}" rel="noopener noreferrer" target="_blank" title="X">
+                                <img src="{{ asset(config('irdcrp.social_icons.twitter')) }}" alt="X" class="h-4 w-4 rounded-sm object-contain" loading="lazy" decoding="async">
+                            </a>
+                            <a class="irdc-header-social" href="{{ config('irdcrp.social.linkedin') }}" rel="noopener noreferrer" target="_blank" title="LinkedIn">
+                                <img src="{{ asset(config('irdcrp.social_icons.linkedin')) }}" alt="LinkedIn" class="h-4 w-4 rounded-sm object-contain" loading="lazy" decoding="async">
+                            </a>
+                            <a class="irdc-header-social" href="{{ config('irdcrp.social.instagram') }}" rel="noopener noreferrer" target="_blank" title="Instagram">
+                                <img src="{{ asset(config('irdcrp.social_icons.instagram')) }}" alt="Instagram" class="h-4 w-4 rounded-sm object-contain" loading="lazy" decoding="async">
+                            </a>
                         </div>
 
                         <x-dropdown align="right" width="48">
@@ -104,12 +142,70 @@
                     <div class="irdc-main-nav__row flex w-full flex-wrap items-center justify-center gap-x-0.5 gap-y-1 overflow-visible sm:gap-x-1">
                         <a href="{{ url('/') }}" class="{{ $navLink }} {{ request()->is('/') ? $active : $inactive }}">{{ __('messages.home') }}</a>
                         <a href="/about" class="{{ $navLink }} {{ request()->is('about') ? $active : $inactive }}">{{ __('messages.about') }}</a>
-                        <a href="/components" class="{{ $navLink }} {{ request()->is('components') ? $active : $inactive }}">{{ __('messages.nav_programmes') }}</a>
+                        <x-dropdown
+                            align="left"
+                            width="w-max max-w-[18rem]"
+                            panelMinWidth=""
+                            panelRounded="rounded-lg"
+                            panelExtraClass="shadow-[0_6px_18px_rgba(0,0,0,0.12)]"
+                            contentClasses="bg-white py-1 [&>a]:!px-3 [&>a]:!py-2 [&>a]:!text-sm [&>a]:!leading-snug [&>a:hover]:!pl-4"
+                        >
+                            <x-slot name="trigger">
+                                <button
+                                    type="button"
+                                    class="group {{ $navLink }} {{ $inProgrammes ? $activeGalleryNav : $inactive }} !inline-flex max-w-max items-center gap-1"
+                                    aria-haspopup="true"
+                                >
+                                    <span class="whitespace-nowrap">{{ __('messages.nav_programmes') }}</span>
+                                    <span class="inline-flex shrink-0 text-white/75 transition-colors duration-300 group-hover:text-irdc-nav-hover" aria-hidden="true">
+                                        <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-[11px] w-[11px] max-h-[11px] max-w-[11px]">
+                                            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </x-slot>
+                            <x-slot name="content">
+                                <x-dropdown-link href="{{ route('programmes.index') }}">All programmes</x-dropdown-link>
+                                @foreach($navProgrammes as $programme)
+                                    <x-dropdown-link href="{{ route('programmes.show', $programme) }}">{{ $programme->title }}</x-dropdown-link>
+                                @endforeach
+                            </x-slot>
+                        </x-dropdown>
                         <a href="/areas" class="{{ $navLink }} {{ request()->is('areas') ? $active : $inactive }}">{{ __('messages.nav_areas') }}</a>
                         <a href="/components" class="{{ $navLink }} {{ request()->is('components') ? $active : $inactive }}">{{ __('messages.nav_components') }}</a>
                         <a href="/news" class="{{ $navLink }} {{ request()->is('news*') ? $active : $inactive }}">{{ __('messages.nav_news') }}</a>
                         <a href="/procurement" class="{{ $navLink }} {{ request()->is('procurement*') ? $active : $inactive }}">{{ __('messages.nav_procurement') }}</a>
                         <a href="/downloads" class="{{ $navLink }} {{ request()->is('downloads') ? $active : $inactive }}">{{ __('messages.nav_downloads') }}</a>
+                        @if($navCmsPages->isNotEmpty())
+                            <x-dropdown
+                                align="left"
+                                width="w-max max-w-[16rem]"
+                                panelMinWidth=""
+                                panelRounded="rounded-lg"
+                                panelExtraClass="shadow-[0_6px_18px_rgba(0,0,0,0.12)]"
+                                contentClasses="bg-white py-1 [&>a]:!px-3 [&>a]:!py-2 [&>a]:!text-sm [&>a]:!leading-snug [&>a:hover]:!pl-4"
+                            >
+                                <x-slot name="trigger">
+                                    <button
+                                        type="button"
+                                        class="group {{ $navLink }} {{ $inPages ? $activeGalleryNav : $inactive }} !inline-flex max-w-max items-center gap-1"
+                                        aria-haspopup="true"
+                                    >
+                                        <span class="whitespace-nowrap">Information</span>
+                                        <span class="inline-flex shrink-0 text-white/75 transition-colors duration-300 group-hover:text-irdc-nav-hover" aria-hidden="true">
+                                            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-[11px] w-[11px] max-h-[11px] max-w-[11px]">
+                                                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </x-slot>
+                                <x-slot name="content">
+                                    @foreach($navCmsPages as $navPage)
+                                        <x-dropdown-link href="{{ route('page.show', $navPage) }}">{{ $navPage->title }}</x-dropdown-link>
+                                    @endforeach
+                                </x-slot>
+                            </x-dropdown>
+                        @endif
                         <x-dropdown
                             align="left"
                             width="w-max max-w-[13rem]"
@@ -224,12 +320,54 @@
             <div class="mx-auto max-w-7xl space-y-0 px-3 pb-5 pt-1 text-base font-semibold font-display sm:px-5 sm:text-lg lg:px-8">
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="{{ url('/') }}" @click="mobile = false">{{ __('messages.home') }}</a>
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/about" @click="mobile = false">{{ __('messages.about') }}</a>
-                <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/components" @click="mobile = false">{{ __('messages.nav_programmes') }}</a>
+                <div class="border-b border-white/10">
+                    <button
+                        type="button"
+                        class="flex w-full items-center justify-between rounded-lg py-3.5 pl-1 pr-1 text-start text-white/95 transition hover:bg-white/10 hover:text-white"
+                        @click="programmesMobile = ! programmesMobile"
+                        :aria-expanded="programmesMobile"
+                    >
+                        <span class="{{ $inProgrammes ? 'font-bold text-white' : '' }}">{{ __('messages.nav_programmes') }}</span>
+                        <span class="inline-flex shrink-0 text-white/70 transition-transform duration-200" :class="programmesMobile ? 'rotate-180' : ''" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-3.5 w-3.5 max-h-[14px] max-w-[14px]">
+                                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+                            </svg>
+                        </span>
+                    </button>
+                    <div x-show="programmesMobile" x-cloak class="space-y-0 border-t border-white/10 bg-emerald-950/25 py-1 pl-3">
+                        <a class="block rounded-md py-2.5 pl-2 text-sm text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="{{ route('programmes.index') }}" @click="mobile = false; programmesMobile = false">All programmes</a>
+                        @foreach($navProgrammes as $programme)
+                            <a class="block rounded-md py-2.5 pl-2 text-sm text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="{{ route('programmes.show', $programme) }}" @click="mobile = false; programmesMobile = false">{{ $programme->title }}</a>
+                        @endforeach
+                    </div>
+                </div>
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/areas" @click="mobile = false">{{ __('messages.nav_areas') }}</a>
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/components" @click="mobile = false">{{ __('messages.nav_components') }}</a>
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/news" @click="mobile = false">{{ __('messages.nav_news') }}</a>
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/procurement" @click="mobile = false">{{ __('messages.nav_procurement') }}</a>
                 <a class="block rounded-lg border-b border-white/10 py-3.5 pl-1 text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover" href="/downloads" @click="mobile = false">{{ __('messages.nav_downloads') }}</a>
+                @if($navCmsPages->isNotEmpty())
+                    <div class="border-b border-white/10">
+                        <button
+                            type="button"
+                            class="flex w-full items-center justify-between rounded-lg py-3.5 pl-1 pr-1 text-start text-white/95 transition hover:bg-white/10 hover:text-white"
+                            @click="pagesMobile = ! pagesMobile"
+                            :aria-expanded="pagesMobile"
+                        >
+                            <span class="{{ $inPages ? 'font-bold text-white' : '' }}">Information</span>
+                            <span class="inline-flex shrink-0 text-white/70 transition-transform duration-200" :class="pagesMobile ? 'rotate-180' : ''" aria-hidden="true">
+                                <svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-3.5 w-3.5 max-h-[14px] max-w-[14px]">
+                                    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+                                </svg>
+                            </span>
+                        </button>
+                        <div x-show="pagesMobile" x-cloak class="space-y-0 border-t border-white/10 bg-emerald-950/25 py-1 pl-3">
+                            @foreach($navCmsPages as $navPage)
+                                <a class="block rounded-md py-2.5 pl-2 text-sm text-white transition duration-300 hover:bg-white/10 hover:text-irdc-nav-hover {{ request()->is('p/'.$navPage->slug) ? 'font-bold text-white' : '' }}" href="{{ route('page.show', $navPage) }}" @click="mobile = false; pagesMobile = false">{{ $navPage->title }}</a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
                 <div class="border-b border-white/10">
                     <button
                         type="button"

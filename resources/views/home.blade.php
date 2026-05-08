@@ -22,15 +22,24 @@
         $latestTitle = null;
     }
     $firstCaption = (isset($slides[0]) ? ($slides[0]['caption_en'] ?? '') : '');
-    $programmeCards = config('irdcrp.programme_cards', []);
+    $programmes = $programmes ?? collect();
     $ytConfig = config('irdcrp.youtube', []);
     $ytChannel = $ytConfig['channel_url'] ?? 'https://www.youtube.com/';
     $ytIds = $ytConfig['embed_ids'] ?? [];
     $firstVideo = $ytIds[0] ?? null;
     $tLoc = in_array(app()->getLocale(), ['en', 'si', 'ta'], true) ? app()->getLocale() : 'en';
     $stats = config('irdcrp.home_stats', []);
+    $impactMetrics = ($impactMetrics ?? collect())->isNotEmpty()
+        ? $impactMetrics
+        : collect([
+            (object) ['key' => 'districts', 'label' => 'Districts', 'value' => '11', 'count_target' => 11, 'helper' => 'Implementation districts across Sri Lanka'],
+            (object) ['key' => 'beneficiaries', 'label' => 'Total Beneficiaries', 'value' => '57,500', 'count_target' => 57500, 'helper' => 'People expected to benefit from project interventions'],
+            (object) ['key' => 'investment', 'label' => 'Total Investment', 'value' => $stats['investment'] ?? 'USD 105 Million', 'count_target' => null, 'helper' => 'Financing envelope for resilient agriculture development'],
+            (object) ['key' => 'projects', 'label' => 'Total Projects', 'value' => $stats['projects'] ?? '34', 'count_target' => is_numeric($stats['projects'] ?? null) ? (int) $stats['projects'] : 34, 'helper' => 'Priority investments and field-level activities'],
+        ]);
     $mapEmbedUrl = config('irdcrp.map_embed_url');
     $successStories = $successStories ?? collect();
+    $programmeCards = collect(config('irdcrp.programme_cards', []));
     $weatherAreas = config('irdcrp.weather_areas', []);
     if (! is_array($weatherAreas) || $weatherAreas === []) {
         $weatherAreas = [
@@ -168,11 +177,21 @@
 
 {{-- Outside hero: hero section uses overflow:hidden which clips position:fixed children --}}
 <aside class="irdc-hero-social" aria-label="{{ __('messages.header_social_aria') }}">
-    <a href="{{ config('irdcrp.social.youtube') }}" target="_blank" rel="noopener noreferrer" title="YouTube" class="irdc-hero-social__btn"><span class="irdc-hero-social__glyph" aria-hidden="true">▶</span></a>
-    <a href="{{ config('irdcrp.social.facebook') }}" target="_blank" rel="noopener noreferrer" title="Facebook" class="irdc-hero-social__btn"><span class="irdc-hero-social__glyph" aria-hidden="true">f</span></a>
-    <a href="{{ config('irdcrp.social.twitter') }}" target="_blank" rel="noopener noreferrer" title="X" class="irdc-hero-social__btn"><span class="irdc-hero-social__glyph" aria-hidden="true">x</span></a>
-    <a href="{{ config('irdcrp.social.linkedin') }}" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="irdc-hero-social__btn"><span class="irdc-hero-social__glyph irdc-hero-social__glyph--wide" aria-hidden="true">in</span></a>
-    <a href="{{ config('irdcrp.social.instagram', '#') }}" target="_blank" rel="noopener noreferrer" title="Instagram" class="irdc-hero-social__btn"><span class="irdc-hero-social__glyph irdc-hero-social__glyph--wide" aria-hidden="true">ig</span></a>
+    <a href="{{ config('irdcrp.social.youtube') }}" target="_blank" rel="noopener noreferrer" title="YouTube" class="irdc-hero-social__btn">
+        <img src="{{ asset(config('irdcrp.social_icons.youtube')) }}" alt="YouTube" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+    </a>
+    <a href="{{ config('irdcrp.social.facebook') }}" target="_blank" rel="noopener noreferrer" title="Facebook" class="irdc-hero-social__btn">
+        <img src="{{ asset(config('irdcrp.social_icons.facebook')) }}" alt="Facebook" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+    </a>
+    <a href="{{ config('irdcrp.social.twitter') }}" target="_blank" rel="noopener noreferrer" title="X" class="irdc-hero-social__btn">
+        <img src="{{ asset(config('irdcrp.social_icons.twitter')) }}" alt="X" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+    </a>
+    <a href="{{ config('irdcrp.social.linkedin') }}" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="irdc-hero-social__btn">
+        <img src="{{ asset(config('irdcrp.social_icons.linkedin')) }}" alt="LinkedIn" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+    </a>
+    <a href="{{ config('irdcrp.social.instagram') }}" target="_blank" rel="noopener noreferrer" title="Instagram" class="irdc-hero-social__btn">
+        <img src="{{ asset(config('irdcrp.social_icons.instagram')) }}" alt="Instagram" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+    </a>
 </aside>
 
 {{-- Institutional context — clear for stakeholders & presentations --}}
@@ -256,30 +275,112 @@
     </section>
 @endif
 
-{{-- 2. Project identity: Sinhala / Tamil / English + short lead --}}
-<section id="about-project" class="irdc-reveal-on-scroll irdc-scroll-mt-header border-b border-stone-200/80 bg-white py-20 sm:py-28">
-    <div class="mx-auto max-w-4xl px-4 text-center sm:px-6">
-        <header class="irdc-section-head !mb-8 sm:!mb-10">
-            <p class="irdc-section-head__eyebrow">{{ __('messages.home_trilingual_eyebrow') }}</p>
+{{-- 2. Programmes --}}
+<section id="programmes" class="irdc-home-programmes irdc-reveal-on-scroll irdc-scroll-mt-header">
+    <div class="mx-auto max-w-[118rem] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <header class="irdc-home-programmes__head">
+            <p class="irdc-home-programmes__eyebrow">{{ __('messages.home_programmes_eyebrow') }}</p>
+            <h2 class="irdc-home-programmes__title">{{ __('messages.home_programmes_title') }}</h2>
+            <p class="irdc-home-programmes__lead">{{ __('messages.home_programmes_sub') }}</p>
         </header>
-        <div class="space-y-3 sm:space-y-4">
-            @foreach ($titleLines as $line)
-                <p
-                    @class([
-                        'font-display text-2xl font-extrabold leading-snug text-irdc-burgundy sm:text-3xl md:text-4xl' => $loop->last,
-                        'text-lg font-medium leading-relaxed text-slate-800 sm:text-xl md:text-2xl' => ! $loop->last,
-                    ])
-                >{{ $line }}</p>
-            @endforeach
+        <div class="irdc-programmes-grid irdc-programmes-grid--home">
+            @if($programmes->isNotEmpty())
+                @foreach($programmes as $programme)
+                    <a
+                        href="{{ route('programmes.show', $programme) }}"
+                        class="irdc-programme-card group"
+                    >
+                        <div class="irdc-programme-card__image">
+                            <img
+                                src="{{ str_starts_with($programme->image ?? '', 'images/') ? asset($programme->image) : asset('storage/'.$programme->image) }}"
+                                alt="{{ $programme->title }}"
+                                loading="lazy"
+                                decoding="async"
+                            >
+                        </div>
+                        <div class="irdc-programme-card__body">
+                            <h3 class="irdc-programme-card__title">{{ $programme->title }}</h3>
+                            @if($programme->summary)
+                                <p class="irdc-programme-card__summary">{{ $programme->summary }}</p>
+                            @endif
+                            <span class="irdc-programme-card__cta">Explore programme</span>
+                        </div>
+                    </a>
+                @endforeach
+            @elseif($programmeCards->isNotEmpty())
+                @foreach($programmeCards as $card)
+                    @php
+                        $cardId = (string) ($card['id'] ?? '');
+                        $cardSummaryKey = $cardId !== '' ? 'messages.prog_'.$cardId.'_desc' : '';
+                        $cardTitle = $cardId !== '' ? __('messages.prog_'.$cardId) : '';
+                        $cardSummary = $cardSummaryKey !== '' ? __($cardSummaryKey) : '';
+                        $cardImage = isset($card['image']) ? asset(ltrim((string) $card['image'], '/')) : asset('images/hero/hero-home-01.png');
+                    @endphp
+                    <article class="irdc-programme-card group">
+                        <div class="irdc-programme-card__image">
+                            <img
+                                src="{{ $cardImage }}"
+                                alt="{{ filled($cardTitle) ? $cardTitle : __('messages.nav_programmes') }}"
+                                loading="lazy"
+                                decoding="async"
+                            >
+                        </div>
+                        <div class="irdc-programme-card__body">
+                            @if(filled($cardTitle))
+                                <h3 class="irdc-programme-card__title">{{ $cardTitle }}</h3>
+                            @endif
+                            @if(filled($cardSummary) && lang()->has($cardSummaryKey))
+                                <p class="irdc-programme-card__summary">{{ $cardSummary }}</p>
+                            @endif
+                            <span class="irdc-programme-card__cta">Explore programme</span>
+                        </div>
+                    </article>
+                @endforeach
+            @else
+                <div class="irdc-programmes-empty">Programmes are being updated.</div>
+            @endif
         </div>
-        <p class="mx-auto mt-10 max-w-3xl text-base leading-relaxed text-slate-600 sm:mt-12 sm:text-lg md:text-xl">
-            {{ __('messages.home_identity_lead') }}
-        </p>
+        <div class="mt-12 text-center">
+            <a href="{{ route('programmes.index') }}" class="irdc-home-programmes__link">View all programmes</a>
+        </div>
+    </div>
+</section>
+
+{{-- 2. Project identity: Sinhala / Tamil / English + short lead --}}
+<section id="about-project" class="irdc-identity-section irdc-reveal-on-scroll irdc-scroll-mt-header">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <div class="irdc-identity-shell">
+            <div class="irdc-identity-copy">
+                <p class="irdc-identity-eyebrow">{{ __('messages.home_trilingual_eyebrow') }}</p>
+                <h2 class="irdc-identity-title">Integrated Rurban Development and Climate Resilience Project</h2>
+                <p class="irdc-identity-lead">
+                    A flagship initiative of the Government of Sri Lanka, implemented with the World Bank and partners, to scale climate-resilient "rurban" development - linking smallholders, value chains, and public services across the country. Official figures and results are published as they are validated.
+                </p>
+                <div class="irdc-identity-badges" aria-label="Project focus areas">
+                    <span>Climate resilience</span>
+                    <span>Rurban development</span>
+                    <span>Smallholder value chains</span>
+                </div>
+            </div>
+
+            <div class="irdc-identity-names" aria-label="Project name in Sinhala, Tamil, and English">
+                @foreach ($titleLines as $line)
+                    <article @class([
+                        'irdc-identity-name',
+                    ])>
+                        <span class="irdc-identity-name__lang">
+                            {{ $loop->iteration === 1 ? 'Sinhala' : ($loop->iteration === 2 ? 'Tamil' : 'English') }}
+                        </span>
+                        <p>{{ $line }}</p>
+                    </article>
+                @endforeach
+            </div>
+        </div>
     </div>
 </section>
 
 {{-- 3. Impact / statistics --}}
-<section class="irdc-reveal-on-scroll border-b border-stone-200/80 bg-slate-50/95 py-20 sm:py-24">
+<section class="hidden">
     <div class="container max-w-6xl">
         <header class="irdc-section-head irdc-section-head--emerald">
             <p class="irdc-section-head__eyebrow">{{ __('messages.home_stats_eyebrow') }}</p>
@@ -288,17 +389,23 @@
         </header>
         <div class="mt-10 grid grid-cols-2 gap-4 sm:mt-12 lg:grid-cols-4 lg:gap-6" data-reveal-stagger>
             <article class="irdc-stat-tile">
-                @php($districts = (string) ($stats['districts'] ?? '00'))
+                @php
+                    $districts = (string) ($stats['districts'] ?? '00');
+                @endphp
                 <p class="font-display text-4xl font-extrabold tabular-nums text-[#0A3D62] sm:text-5xl md:text-6xl lg:text-6xl" data-countup data-target="{{ (int) preg_replace('/\D+/', '', $districts) }}">{{ $districts }}</p>
                 <p class="mt-2 text-xs font-bold uppercase tracking-wider text-slate-500 sm:text-sm">{{ __('messages.stat_districts') }}</p>
             </article>
             <article class="irdc-stat-tile">
-                @php($beneficiaries = (string) ($stats['beneficiaries'] ?? '00'))
+                @php
+                    $beneficiaries = (string) ($stats['beneficiaries'] ?? '00');
+                @endphp
                 <p class="font-display text-4xl font-extrabold tabular-nums text-emerald-800 sm:text-5xl md:text-6xl lg:text-6xl" data-countup data-target="{{ (int) preg_replace('/\D+/', '', $beneficiaries) }}">{{ $beneficiaries }}</p>
                 <p class="mt-2 text-xs font-bold uppercase tracking-wider text-slate-500 sm:text-sm">{{ __('messages.stat_beneficiaries') }}</p>
             </article>
             <article class="irdc-stat-tile">
-                @php($farmers = (string) ($stats['farmers'] ?? '00'))
+                @php
+                    $farmers = (string) ($stats['farmers'] ?? '00');
+                @endphp
                 <p class="font-display text-4xl font-extrabold tabular-nums text-[#0A3D62] sm:text-5xl md:text-6xl lg:text-6xl" data-countup data-target="{{ (int) preg_replace('/\D+/', '', $farmers) }}">{{ $farmers }}</p>
                 <p class="mt-2 text-xs font-bold uppercase tracking-wider text-slate-500 sm:text-sm">{{ __('messages.stat_farmers') }}</p>
             </article>
@@ -311,6 +418,56 @@
 </section>
 
 {{-- 3b. Weather — single modern card (image + district picker + forecast) --}}
+<section class="irdc-impact-section irdc-reveal-on-scroll">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <div class="irdc-impact-shell">
+            <div class="irdc-impact-intro">
+                <p class="irdc-impact-eyebrow">{{ __('messages.home_stats_eyebrow') }}</p>
+                <h2 class="irdc-impact-title">Agriculture resilience in numbers</h2>
+                <p class="irdc-impact-lead">
+                    Key implementation indicators for climate-smart agriculture, value chain support, and resilient rural livelihoods in Sri Lanka.
+                </p>
+            </div>
+            <div class="irdc-impact-grid" data-reveal-stagger>
+                @foreach($impactMetrics as $metric)
+                    @php
+                        $countTarget = (int) ($metric->count_target ?? 0);
+                        $displayValue = (string) ($metric->value ?? '');
+                    @endphp
+                    <article class="irdc-impact-card irdc-impact-card--{{ $metric->key ?? 'metric' }}">
+                        <span class="irdc-impact-card__icon" aria-hidden="true">
+                            @switch($metric->key ?? '')
+                                @case('beneficiaries')
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 19c0-2.2-1.8-4-4-4s-4 1.8-4 4"/><path d="M12 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M20 18c0-1.7-1-3.1-2.5-3.7"/><path d="M17 6.4a2.5 2.5 0 0 1 0 4.2"/></svg>
+                                    @break
+                                @case('investment')
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 18V8l8-4 8 4v10"/><path d="M7 18v-6h10v6"/><path d="M3 20h18"/></svg>
+                                    @break
+                                @case('projects')
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/><path d="M8 5v14"/></svg>
+                                    @break
+                                @default
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20h16"/><path d="M6 20V9l6-5 6 5v11"/><path d="M9 20v-6h6v6"/></svg>
+                            @endswitch
+                        </span>
+                        <p class="irdc-impact-card__value">
+                            @if($countTarget > 0 && preg_match('/^[0-9,]+$/', $displayValue))
+                                <span data-countup data-target="{{ $countTarget }}">{{ $displayValue }}</span>
+                            @else
+                                {{ $displayValue }}
+                            @endif
+                        </p>
+                        <h3 class="irdc-impact-card__label">{{ $metric->label }}</h3>
+                        @if(filled($metric->helper))
+                            <p class="irdc-impact-card__helper">{{ $metric->helper }}</p>
+                        @endif
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</section>
+
 <section
     id="weather-areas"
     class="irdc-scroll-mt-header irdc-weather-section relative border-b border-stone-200/80 bg-gradient-to-b from-emerald-50/70 via-[#f8faf8] to-white py-16 sm:py-20 md:py-24"
@@ -437,43 +594,6 @@
     </div>
 </section>
 
-{{-- 4. Programmes --}}
-<section id="programmes" class="irdc-reveal-on-scroll irdc-scroll-mt-header border-b border-stone-200/80 bg-white py-20 sm:py-28">
-    <div class="container max-w-6xl">
-        <header class="irdc-section-head irdc-section-head--emerald">
-            <p class="irdc-section-head__eyebrow">{{ __('messages.home_programmes_eyebrow') }}</p>
-            <h2 class="irdc-section-head__title">{{ __('messages.home_programmes_title') }}</h2>
-            <p class="irdc-section-head__lead">{{ __('messages.home_programmes_sub') }}</p>
-        </header>
-        <div class="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:mt-16">
-            @foreach($programmeCards as $card)
-                <a
-                    href="{{ url('/components') }}"
-                    class="irdc-home-card group flex flex-col"
-                >
-                    <div class="relative aspect-[4/3] w-full overflow-hidden rounded-t-3xl bg-slate-200">
-                        <img
-                            src="{{ $card['image'] ?? '' }}"
-                            alt=""
-                            class="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-110"
-                            loading="lazy"
-                            decoding="async"
-                        >
-                    </div>
-                    <div class="flex flex-1 flex-col px-4 py-4 sm:px-5 sm:py-5">
-                        <h3 class="text-center font-display text-base font-bold text-slate-900 sm:text-lg">
-                            {{ __('messages.prog_'.$card['id']) }}
-                        </h3>
-                        <p class="mt-2 text-center text-sm leading-relaxed text-slate-600 line-clamp-3 sm:line-clamp-4">
-                            {{ __('messages.prog_'.$card['id'].'_desc') }}
-                        </p>
-                    </div>
-                </a>
-            @endforeach
-        </div>
-    </div>
-</section>
-
 {{-- 5. Success stories slider --}}
 <section
     class="irdc-success relative overflow-hidden py-20 sm:py-24"
@@ -483,9 +603,9 @@
         timer: null,
         viewportWidth: 0,
         cardStep() {
-            if (window.innerWidth < 640) return 272;
-            if (window.innerWidth < 1024) return 304;
-            return 320;
+            if (window.innerWidth < 640) return 316;
+            if (window.innerWidth < 1024) return 388;
+            return 430;
         },
         get visible() {
             return Math.max(1, Math.floor(this.viewportWidth / this.cardStep()));
@@ -496,7 +616,7 @@
         next() { this.i = (this.i + 1) % this.pages; },
         prev() { this.i = (this.i - 1 + this.pages) % this.pages; },
         goTo(idx) { this.i = idx; },
-        cardWidth() { return Math.max(this.cardStep() - 16, 224); },
+        cardWidth() { return Math.max(this.cardStep() - 18, 280); },
         start() {
             this.stop();
             if (this.pages > 1) {
@@ -534,9 +654,9 @@
 
     <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <header class="mx-auto mb-10 max-w-3xl text-center sm:mb-12">
-            <p class="text-xs font-bold uppercase tracking-[0.22em] text-emerald-100/90 sm:text-sm">Success Stories</p>
-            <h2 class="mt-3 font-display text-3xl font-extrabold tracking-tight text-white drop-shadow sm:text-4xl">Farmer Success Stories</h2>
-            <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-100/90 sm:text-base">
+            <p class="text-xs font-bold uppercase tracking-[0.22em] text-emerald-800/80 sm:text-sm">Success Stories</p>
+            <h2 class="mt-3 font-display text-3xl font-extrabold tracking-tight text-[#0A3D62] sm:text-4xl">Farmer Success Stories</h2>
+            <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
                 Real experiences from farming communities supported through climate-resilient livelihoods.
             </p>
         </header>
@@ -566,7 +686,7 @@
                                         loading="lazy"
                                         decoding="async"
                                     >
-                                    <div class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-600 shadow-sm ring-1 ring-amber-200/80">
+                                    <div class="rounded-full bg-amber-50 px-1.5 py-0.5 text-[8px] font-bold leading-none tracking-[-0.02em] text-amber-600 shadow-sm ring-1 ring-amber-200/80 sm:text-[9px]">
                                         {{ str_repeat('★', max(1, (int) ($story->rating ?? 5))) }}
                                     </div>
                                 </div>
@@ -604,7 +724,7 @@
                     type="button"
                     @click="goTo(dot - 1)"
                     class="h-2.5 rounded-full transition-all duration-300"
-                    :class="i === (dot - 1) ? 'w-8 bg-[#43A047]' : 'w-2.5 bg-white/65 hover:bg-white/90'"
+                    :class="i === (dot - 1) ? 'w-8 bg-[#43A047]' : 'w-2.5 bg-emerald-900/25 hover:bg-emerald-700/55'"
                     aria-label="Go to success story page"
                 ></button>
             </template>
@@ -613,32 +733,23 @@
 </section>
 
 {{-- 5. Video: text left, embed right --}}
-<section class="irdc-reveal-on-scroll border-b border-stone-200/80 bg-slate-50/95 py-20 sm:py-28">
+<section class="irdc-media-section irdc-reveal-on-scroll">
     <div class="container max-w-6xl">
-        <div class="grid items-start gap-10 lg:grid-cols-2 lg:gap-14">
-            <div>
-                <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#0A3D62]/80">{{ __('messages.home_video_eyebrow') }}</p>
-                <h2 class="mt-2 font-display text-3xl font-extrabold tracking-tight text-irdc-burgundy sm:text-4xl">{{ __('messages.home_video_title') }}</h2>
-                <p class="mt-4 text-lg leading-relaxed text-slate-600 sm:text-xl">{{ __('messages.home_video_lead') }}</p>
-                <ul class="mt-6 list-none space-y-3 text-slate-600">
-                    <li class="flex gap-2.5 sm:items-start">
-                        <span class="mt-0.5 inline-flex h-2 w-2 shrink-0 rounded-full bg-emerald-600" aria-hidden="true"></span>
-                        <span>{{ __('messages.home_video_bullet1') }}</span>
-                    </li>
-                    <li class="flex gap-2.5 sm:items-start">
-                        <span class="mt-0.5 inline-flex h-2 w-2 shrink-0 rounded-full bg-[#0A3D62]" aria-hidden="true"></span>
-                        <span>{{ __('messages.home_video_bullet2') }}</span>
-                    </li>
-                    <li class="flex gap-2.5 sm:items-start">
-                        <span class="mt-0.5 inline-flex h-2 w-2 shrink-0 rounded-full bg-emerald-600" aria-hidden="true"></span>
-                        <span>{{ __('messages.home_video_bullet3') }}</span>
-                    </li>
+        <div class="irdc-media-shell">
+            <div class="irdc-media-copy">
+                <p class="irdc-section-kicker">{{ __('messages.home_video_eyebrow') }}</p>
+                <h2>{{ __('messages.home_video_title') }}</h2>
+                <p>{{ __('messages.home_video_lead') }}</p>
+                <ul class="irdc-feature-list">
+                    <li>{{ __('messages.home_video_bullet1') }}</li>
+                    <li>{{ __('messages.home_video_bullet2') }}</li>
+                    <li>{{ __('messages.home_video_bullet3') }}</li>
                 </ul>
             </div>
-            <div class="w-full">
+            <div class="irdc-media-visual">
                 @if($firstVideo)
-                    <div class="overflow-hidden rounded-3xl border border-slate-200/90 bg-slate-900 shadow-2xl ring-1 ring-slate-900/10">
-                        <div class="aspect-video w-full">
+                    <div class="irdc-video-frame">
+                        <div class="aspect-video w-full overflow-hidden rounded-[1.15rem]">
                             <iframe
                                 class="h-full w-full"
                                 src="https://www.youtube.com/embed/{{ $firstVideo }}?rel=0"
@@ -649,19 +760,12 @@
                         </div>
                     </div>
                 @else
-                    <p class="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500">{{ __('messages.home_youtube_empty') }}</p>
+                    <p class="irdc-empty-state">{{ __('messages.home_youtube_empty') }}</p>
                 @endif
-                <div class="mt-6 text-center sm:text-left">
-                    <a
-                        href="{{ $ytChannel }}"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        class="inline-flex items-center justify-center gap-2 rounded-full bg-red-600 px-7 py-3.5 text-sm font-bold text-white shadow-lg transition hover:bg-red-700 sm:px-8 sm:py-4 sm:text-base"
-                    >
-                        <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 7.07 0 9.521 0 12s0 4.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136c.502-.914.502-3.365.502-5.814s0-4.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                        {{ __('messages.home_youtube_channel') }}
-                    </a>
-                </div>
+                <a href="{{ $ytChannel }}" rel="noopener noreferrer" target="_blank" class="irdc-button irdc-button--youtube mt-6">
+                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 7.07 0 9.521 0 12s0 4.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136c.502-.914.502-3.365.502-5.814s0-4.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    {{ __('messages.home_youtube_channel') }}
+                </a>
             </div>
         </div>
     </div>
@@ -669,48 +773,46 @@
 
 {{-- 6. News & updates --}}
 @if($homeNews->isNotEmpty())
-    <section class="irdc-reveal-on-scroll border-b border-stone-200/80 bg-white py-20 sm:py-28">
+    <section class="irdc-news-section irdc-reveal-on-scroll">
         <div class="container max-w-6xl">
             <header class="irdc-section-head">
                 <p class="irdc-section-head__eyebrow">{{ __('messages.home_news_events') }}</p>
                 <h2 class="irdc-section-head__title">{{ __('messages.home_news_title') }}</h2>
                 <p class="irdc-section-head__lead">{{ __('messages.home_news_sub') }}</p>
             </header>
-            <div class="row g-4 g-lg-4">
+            <div class="irdc-news-grid">
                 @foreach ($homeNews as $article)
-                    <div class="col-12 col-md-4">
-                        <a href="{{ route('news.show', $article) }}" class="group block h-full">
-                            <article class="irdc-home-card flex h-full flex-col bg-slate-50/50">
-                                @if ($article->image)
-                                    <div class="aspect-[16/10] w-full overflow-hidden rounded-t-3xl bg-slate-200">
-                                        <img src="{{ asset('storage/'.$article->image) }}" alt="" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
-                                    </div>
-                                @else
-                                    <div class="flex aspect-[16/10] w-full items-center justify-center rounded-t-3xl bg-gradient-to-br from-[#0A3D62]/8 to-emerald-600/10 text-4xl text-[#0A3D62]/30">📰</div>
-                                @endif
-                                <div class="flex flex-1 flex-col p-5 sm:p-6">
-                                    <h3 class="font-display text-lg font-bold text-slate-900 line-clamp-2 group-hover:text-[#0A3D62] sm:text-xl">
-                                        {{ $article->{'title_'.$tLoc} ?? $article->title_en }}
-                                    </h3>
-                                    @if ($article->published_date)
-                                        <p class="mt-2 text-sm text-slate-500">{{ $article->published_date->format('M j, Y') }}</p>
-                                    @endif
-                                    <p class="mt-3 text-sm font-semibold text-emerald-800">{{ __('messages.read_more') }} →</p>
+                    <a href="{{ route('news.show', $article) }}" class="irdc-news-card group">
+                        <article>
+                            @if ($article->image)
+                                <div class="irdc-news-card__image">
+                                    <img src="{{ asset('storage/'.$article->image) }}" alt="" loading="lazy" decoding="async">
                                 </div>
-                            </article>
-                        </a>
-                    </div>
+                            @else
+                                <div class="irdc-news-card__image irdc-news-card__image--empty">
+                                    <span>News</span>
+                                </div>
+                            @endif
+                            <div class="irdc-news-card__body">
+                                @if ($article->published_date)
+                                    <time datetime="{{ $article->published_date->toDateString() }}">{{ $article->published_date->format('M j, Y') }}</time>
+                                @endif
+                                <h3>{{ $article->{'title_'.$tLoc} ?? $article->title_en }}</h3>
+                                <p>{{ __('messages.read_more') }}</p>
+                            </div>
+                        </article>
+                    </a>
                 @endforeach
             </div>
             <div class="mt-12 text-center">
-                <a href="{{ route('news.index') }}" class="inline-flex items-center justify-center rounded-full border-2 border-[#0A3D62] bg-transparent px-8 py-3.5 text-sm font-bold text-[#0A3D62] transition hover:bg-[#0A3D62] hover:text-white sm:px-10 sm:py-4 sm:text-base">{{ __('messages.home_news_all') }}</a>
+                <a href="{{ route('news.index') }}" class="irdc-button irdc-button--outline">{{ __('messages.home_news_all') }}</a>
             </div>
         </div>
     </section>
 @endif
 
 {{-- 7. Gallery preview --}}
-<section class="irdc-reveal-on-scroll border-b border-stone-200/80 bg-slate-50/95 py-20 sm:py-28">
+<section class="irdc-gallery-section irdc-reveal-on-scroll">
     <div class="container max-w-6xl">
         <header class="irdc-section-head irdc-section-head--emerald">
             <p class="irdc-section-head__eyebrow">{{ __('messages.home_gallery_eyebrow') }}</p>
@@ -718,30 +820,30 @@
             <p class="irdc-section-head__lead">{{ __('messages.home_gallery_sub') }}</p>
         </header>
         @if($galleryPreview->isNotEmpty())
-            <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
+            <div class="irdc-gallery-grid">
                 @foreach($galleryPreview->take(6) as $g)
-                    <a href="{{ route('gallery.section', 'photos') }}" class="group relative block aspect-[4/3] overflow-hidden rounded-xl border border-slate-200/90 bg-slate-200 shadow-sm sm:rounded-2xl">
+                    <a href="{{ route('gallery.section', 'photos') }}" class="irdc-gallery-tile group">
                         <img
                             src="{{ $g->mediaUrl() }}"
                             alt="{{ $g->title }}"
-                            class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
                             loading="lazy"
                             decoding="async"
                         >
+                        <span>{{ $g->title }}</span>
                     </a>
                 @endforeach
             </div>
             <div class="mt-12 text-center">
-                <a href="{{ route('gallery.section', 'photos') }}" class="inline-flex items-center justify-center rounded-full border-2 border-emerald-800 bg-white px-8 py-3.5 text-sm font-bold text-emerald-900 shadow-sm transition hover:bg-emerald-800 hover:text-white sm:px-10 sm:py-4 sm:text-base">{{ __('messages.home_gallery_all') }}</a>
+                <a href="{{ route('gallery.section', 'photos') }}" class="irdc-button irdc-button--green">{{ __('messages.home_gallery_all') }}</a>
             </div>
         @else
-            <p class="text-center text-slate-500">{{ __('messages.home_gallery_empty') }}</p>
+            <p class="irdc-empty-state">{{ __('messages.home_gallery_empty') }}</p>
         @endif
     </div>
 </section>
 
 {{-- 8. Vacancies & notices --}}
-<section class="irdc-reveal-on-scroll border-b border-stone-200/80 bg-white py-20 sm:py-28">
+<section class="irdc-notices-section irdc-reveal-on-scroll">
     <div class="container max-w-5xl">
         <header class="irdc-section-head">
             <p class="irdc-section-head__eyebrow">{{ __('messages.home_vacancies_eyebrow') }}</p>
@@ -749,77 +851,62 @@
             <p class="irdc-section-head__lead">{{ __('messages.home_vacancies_sub') }}</p>
         </header>
         @if($vacanciesPreview->isNotEmpty())
-            <div class="mx-auto space-y-4">
+            <div class="irdc-notice-list">
                 @foreach($vacanciesPreview as $v)
-                    <div class="group relative overflow-hidden rounded-2xl border border-orange-200/80 bg-gradient-to-r from-amber-50/90 via-white to-white shadow-sm ring-1 ring-orange-200/30 transition hover:shadow-md">
-                        <div class="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-amber-500 to-orange-600" aria-hidden="true"></div>
-                        <div class="flex flex-col gap-4 p-4 pl-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5">
-                            <div class="min-w-0 pr-2">
-                                <h3 class="font-display text-lg font-bold text-slate-900 sm:text-xl">{{ $v->title }}</h3>
-                                <p class="mt-1.5 text-sm text-orange-900/80">
-                                    <span class="font-semibold">{{ __('messages.home_vacancy_deadline') }}:</span> {{ $v->deadline->format('M j, Y') }}
-                                </p>
-                            </div>
-                            <div class="flex shrink-0 flex-wrap items-center gap-2">
-                                @if(filled($v->pdf_path))
-                                    <a
-                                        href="{{ asset('storage/'.$v->pdf_path) }}"
-                                        rel="noopener"
-                                        target="_blank"
-                                        class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-600 to-orange-600 px-5 py-2.5 text-sm font-bold text-white shadow transition hover:from-amber-700 hover:to-orange-700"
-                                    >{{ __('messages.vacancy_download_pdf') }}</a>
-                                @endif
-                                <a
-                                    href="{{ route('vacancies.show', $v) }}"
-                                    class="inline-flex items-center justify-center rounded-full border-2 border-slate-300 bg-white px-5 py-2.5 text-sm font-bold text-slate-800 transition hover:border-[#0A3D62] hover:text-[#0A3D62]"
-                                >{{ __('messages.read_more') }}</a>
-                            </div>
+                    <article class="irdc-notice-card">
+                        <div>
+                            <span>{{ __('messages.home_vacancy_deadline') }}: {{ $v->deadline->format('M j, Y') }}</span>
+                            <h3>{{ $v->title }}</h3>
                         </div>
-                    </div>
+                        <div class="irdc-notice-card__actions">
+                            @if(filled($v->pdf_path))
+                                <a href="{{ asset('storage/'.$v->pdf_path) }}" rel="noopener" target="_blank" class="irdc-button irdc-button--amber">{{ __('messages.vacancy_download_pdf') }}</a>
+                            @endif
+                            <a href="{{ route('vacancies.show', $v) }}" class="irdc-button irdc-button--small-outline">{{ __('messages.read_more') }}</a>
+                        </div>
+                    </article>
                 @endforeach
             </div>
         @else
-            <p class="text-center text-slate-500">{{ __('messages.home_vacancies_empty') }}</p>
+            <p class="irdc-empty-state">{{ __('messages.home_vacancies_empty') }}</p>
         @endif
         <div class="mt-10 text-center">
-            <a href="{{ route('vacancies.index') }}" class="inline-flex items-center justify-center rounded-full border-2 border-[#0A3D62] bg-transparent px-8 py-3.5 text-sm font-bold text-[#0A3D62] transition hover:bg-[#0A3D62] hover:text-white sm:px-10 sm:py-4 sm:text-base">{{ __('messages.home_vacancies_all') }}</a>
+            <a href="{{ route('vacancies.index') }}" class="irdc-button irdc-button--outline">{{ __('messages.home_vacancies_all') }}</a>
         </div>
     </div>
 </section>
 
 {{-- 9. Contact (address + map optional) --}}
-<section id="contact-block" class="irdc-reveal-on-scroll irdc-scroll-mt-header border-b border-stone-200/80 bg-slate-100/90 py-20 sm:py-28">
+<section id="contact-block" class="irdc-contact-section irdc-reveal-on-scroll irdc-scroll-mt-header">
     <div class="container max-w-6xl">
-        <header class="irdc-section-head !mb-10 sm:!mb-12">
+        <header class="irdc-section-head">
             <p class="irdc-section-head__eyebrow">{{ __('messages.home_contact_eyebrow') }}</p>
             <h2 class="irdc-section-head__title">{{ __('messages.home_contact_title') }}</h2>
             <p class="irdc-section-head__lead">{{ __('messages.home_contact_sub') }}</p>
         </header>
-        <div class="mt-8 grid gap-8 lg:grid-cols-2 lg:items-stretch">
-            <div class="flex flex-col justify-center rounded-3xl border border-slate-200/90 bg-white p-6 shadow-md shadow-slate-900/5 ring-1 ring-slate-900/[0.03] sm:p-8">
-                <p class="text-sm font-semibold uppercase tracking-wider text-slate-500">{{ __('messages.address_label') }}</p>
-                <p class="mt-2 text-lg font-medium text-slate-800">{{ config('irdcrp.contact.address') }}</p>
-                <p class="mt-5 text-sm font-semibold uppercase tracking-wider text-slate-500">{{ __('messages.footer_contact') }}</p>
-                <a class="mt-1 text-lg font-semibold text-[#0A3D62] hover:underline" href="tel:{{ preg_replace('/\s+/', '', config('irdcrp.contact.phone')) }}">{{ config('irdcrp.contact.phone') }}</a>
-                <a class="mt-1 break-words text-lg font-semibold text-[#0A3D62] hover:underline" href="mailto:{{ config('irdcrp.contact.email') }}">{{ config('irdcrp.contact.email') }}</a>
-                <a href="{{ url('/contact') }}" class="mt-6 inline-flex w-fit items-center gap-2 rounded-full border-2 border-[#0A3D62] bg-transparent px-5 py-2.5 text-sm font-bold text-[#0A3D62] transition hover:bg-[#0A3D62] hover:text-white sm:px-6 sm:py-3">
-                    {{ __('messages.home_contact_full') }} →
-                </a>
+        <div class="irdc-contact-grid">
+            <div class="irdc-contact-card">
+                <span>{{ __('messages.address_label') }}</span>
+                <p>{{ config('irdcrp.contact.address') }}</p>
+                <span>{{ __('messages.footer_contact') }}</span>
+                <a href="tel:{{ preg_replace('/\s+/', '', config('irdcrp.contact.phone')) }}">{{ config('irdcrp.contact.phone') }}</a>
+                <a href="mailto:{{ config('irdcrp.contact.email') }}">{{ config('irdcrp.contact.email') }}</a>
+                <a href="{{ url('/contact') }}" class="irdc-button irdc-button--outline">{{ __('messages.home_contact_full') }}</a>
             </div>
-            <div class="min-h-[16rem] overflow-hidden rounded-3xl border border-slate-200/90 bg-slate-200 shadow-inner">
+            <div class="irdc-map-card">
                 @if(filled($mapEmbedUrl))
                     <iframe
                         title="{{ __('messages.home_contact_map_title') }}"
-                        class="h-full min-h-[16rem] w-full"
-                        style="min-height: 20rem; border: 0"
+                        class="h-full min-h-[18rem] w-full"
+                        style="border: 0"
                         src="{{ $mapEmbedUrl }}"
                         allowfullscreen
                         loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade"
                     ></iframe>
                 @else
-                    <div class="flex h-full min-h-[16rem] flex-col items-center justify-center bg-slate-100/90 p-6 text-center sm:min-h-[20rem]">
-                        <p class="text-slate-500 sm:text-base">{{ __('messages.home_contact_map_hint') }}</p>
+                    <div>
+                        <p>{{ __('messages.home_contact_map_hint') }}</p>
                     </div>
                 @endif
             </div>

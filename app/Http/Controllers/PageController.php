@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Download;
 use App\Models\Gallery;
+use App\Models\ImpactMetric;
 use App\Models\KeyLeader;
 use App\Models\News;
 use App\Models\Page;
+use App\Models\Programme;
 use App\Models\ProjectComponent;
 use App\Models\SuccessStory;
 use App\Models\Vacancy;
@@ -30,6 +32,13 @@ class PageController extends Controller
             ->where('status', 'published')
             ->latest('published_date')
             ->take(3)
+            ->get();
+
+        $programmes = Programme::query()
+            ->where('status', 'published')
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->take(8)
             ->get();
 
         $galleryPreview = Gallery::query()
@@ -65,13 +74,23 @@ class PageController extends Controller
             $keyLeaders = collect(config('irdcrp.key_leaders', []));
         }
 
+        $impactMetrics = Schema::hasTable('impact_metrics')
+            ? ImpactMetric::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->get()
+            : collect();
+
         return view('home', compact(
             'latestNews',
             'homeNews',
+            'programmes',
             'galleryPreview',
             'vacanciesPreview',
             'keyLeaders',
             'successStories',
+            'impactMetrics',
         ));
     }
 
@@ -89,6 +108,31 @@ class PageController extends Controller
             ->get();
 
         return view('components', compact('components'));
+    }
+
+    public function programmes(): View
+    {
+        $programmes = Programme::query()
+            ->where('status', 'published')
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->get();
+
+        return view('programmes.index', compact('programmes'));
+    }
+
+    public function showProgramme(Programme $programme): View
+    {
+        abort_unless($programme->status === 'published' || auth()->check(), 404);
+
+        $moreProgrammes = Programme::query()
+            ->where('status', 'published')
+            ->whereKeyNot($programme->id)
+            ->orderBy('sort_order')
+            ->take(3)
+            ->get();
+
+        return view('programmes.show', compact('programme', 'moreProgrammes'));
     }
 
     public function areas(): View

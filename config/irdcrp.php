@@ -8,8 +8,8 @@ return [
     'logos' => [
         'irdcrp' => 'images/irdcrp-logo.png',
         'emblem' => 'images/sri-lanka-emblem.png',
-        // SVG: sharp on all screens; replace with official press-kit PNG if you prefer
-        'world_bank' => 'images/world-bank.svg',
+        // Official World Bank PNG logo with white background
+        'world_bank' => 'images/world-bank.png',
     ],
 
     /*
@@ -36,6 +36,15 @@ return [
         'twitter' => 'https://twitter.com/',
         'youtube' => 'https://www.youtube.com/',
         'linkedin' => 'https://www.linkedin.com/',
+        'instagram' => 'https://www.instagram.com/',
+    ],
+
+    'social_icons' => [
+        'facebook' => 'images/social/facebook.png',
+        'youtube' => 'images/social/youtube.png',
+        'twitter' => 'images/social/twitter.png',
+        'linkedin' => 'images/social/linkedin.png',
+        'instagram' => 'images/social/instagram.png',
     ],
 
     /*

@@ -9,21 +9,34 @@
     <div class="card feature-card p-0 overflow-hidden">
         <table class="table table-hover mb-0">
             <thead class="table-light">
-                <tr><th>Title</th><th>Slug (URL)</th><th>Status</th><th></th></tr>
+                <tr><th>Title</th><th>Slug (URL)</th><th>Status</th><th>Navbar</th><th>Order</th><th></th></tr>
             </thead>
             <tbody>
                 @forelse($pages as $p)
                 <tr>
                     <td>{{ $p->title }}</td>
-                    <td><a href="{{ route('page.show', $p) }}" target="_blank">/p/{{ $p->slug }}</a></td>
+                    <td>
+                        <a href="{{ route('page.show', $p) }}" target="_blank">/p/{{ $p->slug }}</a>
+                        <div class="small text-muted">{{ $p->title }}</div>
+                    </td>
                     <td>{{ $p->status }}</td>
+                    <td>
+                        @if(($p->show_in_nav ?? false) && $p->status === 'published')
+                            <span class="badge text-bg-success">Shown</span>
+                        @elseif($p->show_in_nav ?? false)
+                            <span class="badge text-bg-warning">Draft</span>
+                        @else
+                            <span class="badge text-bg-secondary">Hidden</span>
+                        @endif
+                    </td>
+                    <td>{{ $p->nav_order ?? 0 }}</td>
                     <td>
                         <a href="{{ route('admin.pages.edit', $p) }}" class="btn btn-sm btn-primary">Edit</a>
                         <form class="d-inline" method="POST" action="{{ route('admin.pages.destroy', $p) }}" onsubmit="return confirm('Delete?')">@csrf @method('DELETE')<button class="btn btn-sm btn-danger">Delete</button></form>
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="4" class="text-muted">No pages yet.</td></tr>
+                <tr><td colspan="6" class="text-muted">No pages yet.</td></tr>
                 @endforelse
             </tbody>
         </table>

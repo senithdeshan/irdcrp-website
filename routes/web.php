@@ -5,7 +5,9 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DownloadController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\GrmComplaintController as AdminGrmComplaintController;
+use App\Http\Controllers\Admin\ImpactMetricController;
 use App\Http\Controllers\Admin\KeyLeaderController;
+use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
 use App\Http\Controllers\Admin\ProjectComponentController;
 use App\Http\Controllers\Admin\SupportMessageController as AdminSupportMessageController;
 use App\Http\Controllers\Admin\SuccessStoryController;
@@ -19,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PageController::class, 'home']);
 Route::get('/about', [PageController::class, 'about']);
 Route::get('/components', [PageController::class, 'components']);
+Route::get('/programmes', [PageController::class, 'programmes'])->name('programmes.index');
+Route::get('/programmes/{programme:slug}', [PageController::class, 'showProgramme'])->name('programmes.show');
 Route::get('/areas', [PageController::class, 'areas']);
 Route::get('/news', [PageController::class, 'news'])->name('news.index');
 Route::get('/news/{news}', [PageController::class, 'showNews'])->name('news.show');
@@ -53,6 +57,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::put('/news/{news}', [NewsController::class, 'update'])->name('news.update');
     Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('news.destroy');
 
+    Route::resource('programmes', AdminProgrammeController::class)->except(['show']);
     Route::resource('gallery', GalleryController::class)->except(['show']);
     Route::resource('vacancies', VacancyController::class)->except(['show']);
     Route::resource('downloads', DownloadController::class)->except(['show']);
@@ -60,6 +65,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('project-components', ProjectComponentController::class)->except(['show']);
     Route::resource('key-leaders', KeyLeaderController::class)->except(['show']);
     Route::resource('success-stories', SuccessStoryController::class)->except(['show']);
+    Route::get('impact-metrics', [ImpactMetricController::class, 'index'])->name('impact-metrics.index');
+    Route::put('impact-metrics', [ImpactMetricController::class, 'update'])->name('impact-metrics.update');
     Route::get('grm-complaints', [AdminGrmComplaintController::class, 'index'])->name('grm-complaints.index');
     Route::get('grm-complaints/{grmComplaint}/edit', [AdminGrmComplaintController::class, 'edit'])->name('grm-complaints.edit');
     Route::put('grm-complaints/{grmComplaint}', [AdminGrmComplaintController::class, 'update'])->name('grm-complaints.update');

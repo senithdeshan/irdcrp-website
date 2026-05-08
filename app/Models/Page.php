@@ -12,6 +12,8 @@ class Page extends Model
         'slug',
         'content',
         'status',
+        'show_in_nav',
+        'nav_order',
     ];
 
     public static function booted(): void

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -13,7 +14,15 @@ class CmsPageController extends Controller
 {
     public function index(): View
     {
-        $pages = Page::query()->orderBy('title')->get();
+        $pagesQuery = Page::query();
+
+        if ($this->hasNavFields()) {
+            $pagesQuery
+                ->orderByDesc('show_in_nav')
+                ->orderBy('nav_order');
+        }
+
+        $pages = $pagesQuery->orderBy('title')->get();
 
         return view('admin.pages.index', compact('pages'));
     }
@@ -53,7 +62,7 @@ class CmsPageController extends Controller
 
     private function validatePage(Request $request, ?Page $existing = null): array
     {
-        $data = $request->validate([
+        $rules = [
             'title' => 'required|string|max:255',
             'slug' => [
                 'nullable',
@@ -64,11 +73,30 @@ class CmsPageController extends Controller
             ],
             'content' => 'required|string',
             'status' => 'required|in:draft,published',
-        ]);
+        ];
+
+        if ($this->hasNavFields()) {
+            $rules['show_in_nav'] = 'nullable|boolean';
+            $rules['nav_order'] = 'nullable|integer|min:0|max:9999';
+        }
+
+        $data = $request->validate($rules);
+
         if (empty($data['slug'])) {
             $data['slug'] = null;
         }
 
+        if ($this->hasNavFields()) {
+            $data['show_in_nav'] = $request->boolean('show_in_nav');
+            $data['nav_order'] = (int) ($data['nav_order'] ?? 0);
+        }
+
         return $data;
+    }
+
+    private function hasNavFields(): bool
+    {
+        return Schema::hasColumn('pages', 'show_in_nav')
+            && Schema::hasColumn('pages', 'nav_order');
     }
 }

@@ -3,6 +3,7 @@ import './bootstrap';
 import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;
+document.documentElement.classList.add('js');
 
 function irdcWmoCategory(code) {
     const c = Number(code);

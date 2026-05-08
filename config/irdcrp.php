@@ -43,8 +43,8 @@ return [
     */
     'hero_slides' => [
         [
-            'image' => '/images/hero/hero-home-01.png',
-            'caption_en' => 'Climate-smart orchards — neat rows of fruit trees and resilient landscapes across project areas.',
+            'image' => '/images/hero-agriculture.jpg',
+            'caption_en' => 'Climate-smart agriculture — resilient landscapes and productive farming systems across project areas.',
         ],
         [
             'image' => '/images/hero/hero-home-02.png',

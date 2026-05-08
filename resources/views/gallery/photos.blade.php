@@ -8,7 +8,7 @@
     $maxHeights = [380, 270, 340, 300, 360];
     $galleryJson = $items->map(function ($item) {
         return [
-            'src' => asset('storage/'.$item->image),
+            'src' => $item->mediaUrl(),
             'title' => $item->title,
             'date' => $item->item_date?->format('M j, Y') ?? null,
         ];
@@ -54,7 +54,7 @@
                 >
                     <div class="relative w-full overflow-hidden bg-stone-200/50">
                         <img
-                            src="{{ asset('storage/'.$item->image) }}"
+                            src="{{ $item->mediaUrl() }}"
                             alt="{{ $item->title }}"
                             class="h-auto w-full object-cover object-center transition duration-500 group-hover:scale-[1.02]"
                             style="max-height: {{ $maxHeights[$loop->index % 5] }}px"

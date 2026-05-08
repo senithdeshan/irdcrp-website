@@ -305,9 +305,9 @@
     .irdc-hero__veil {
         pointer-events: none;
         background:
-            linear-gradient(165deg, rgba(6, 28, 20, 0.82) 0%, rgba(12, 42, 58, 0.48) 38%, rgba(4, 36, 24, 0.9) 100%),
-            radial-gradient(ellipse 90% 55% at 75% -5%, rgba(52, 211, 153, 0.16), transparent 55%),
-            radial-gradient(ellipse 70% 45% at 5% 85%, rgba(34, 211, 238, 0.09), transparent 50%);
+            linear-gradient(180deg, rgba(5, 20, 15, 0.46) 0%, rgba(5, 20, 15, 0.26) 42%, rgba(3, 16, 12, 0.64) 100%),
+            radial-gradient(ellipse 78% 50% at 50% 40%, rgba(0, 0, 0, 0.18), transparent 62%),
+            linear-gradient(90deg, rgba(2, 18, 12, 0.34) 0%, transparent 18%, transparent 82%, rgba(2, 18, 12, 0.3) 100%);
     }
 
     .irdc-hero__eyebrow {
@@ -317,17 +317,17 @@
     .irdc-hero__title {
         @apply font-display text-4xl font-extrabold leading-[1.06] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[3.5rem] lg:leading-[1.05];
         text-shadow:
-            0 2px 28px rgba(0, 0, 0, 0.38),
-            0 1px 3px rgba(0, 0, 0, 0.25);
+            0 3px 30px rgba(0, 0, 0, 0.46),
+            0 1px 4px rgba(0, 0, 0, 0.42);
     }
 
     .irdc-hero__lead {
         @apply mx-auto mt-6 max-w-2xl text-base font-medium leading-relaxed text-white/90 sm:mt-7 sm:text-lg md:text-xl;
-        text-shadow: 0 1px 16px rgba(0, 0, 0, 0.28);
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.48);
     }
 
     .irdc-hero__pill-lead {
-        @apply mx-auto mt-4 inline-flex max-w-4xl flex-wrap items-center justify-center rounded-full border border-white/30 bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide text-white/95 backdrop-blur-md sm:px-5 sm:text-sm;
+        @apply mx-auto mt-4 inline-flex max-w-4xl flex-wrap items-center justify-center rounded-full border border-white/35 bg-slate-950/25 px-4 py-2 text-xs font-semibold tracking-wide text-white/95 backdrop-blur-sm sm:px-5 sm:text-sm;
         text-shadow: 0 1px 8px rgba(0, 0, 0, 0.22);
     }
 
@@ -434,9 +434,17 @@
     }
 
     .irdc-hero-bg-layer {
+        background-position: center 48%;
+        filter: saturate(1.12) contrast(1.06) brightness(1.04);
         will-change: transform;
         transform-origin: center;
         transition: transform 0.2s linear;
+    }
+
+    @media (min-width: 1024px) {
+        .irdc-hero-bg-layer {
+            background-position: center 45%;
+        }
     }
 
     .irdc-hero-stagger__item {
@@ -674,40 +682,96 @@
     }
 
     /* Home: key leaders (static grid, no carousel) */
+    .irdc-leaders-section {
+        @apply relative overflow-hidden border-b border-emerald-900/10 py-12 sm:py-14 md:py-16;
+        background:
+            radial-gradient(circle at 12% 20%, rgba(34, 197, 94, 0.12), transparent 30%),
+            radial-gradient(circle at 86% 12%, rgba(10, 61, 98, 0.08), transparent 32%),
+            linear-gradient(180deg, #ffffff 0%, #f6fbf8 48%, #ffffff 100%);
+    }
+
+    .irdc-leaders-section::before {
+        content: "";
+        @apply pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-700/25 to-transparent;
+    }
+
     .irdc-leaders-head {
+        @apply mx-auto flex max-w-3xl flex-col items-center text-center;
+    }
+
+    .irdc-leaders-eyebrow {
+        @apply mb-3 inline-flex rounded-full border border-emerald-200 bg-white/90 px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.18em] text-emerald-800 shadow-sm ring-1 ring-white;
+    }
+
+    .irdc-leaders-title-row {
         @apply flex flex-wrap items-center justify-center gap-2 sm:gap-3;
     }
 
     .irdc-leaders-title {
-        @apply font-display text-2xl font-extrabold tracking-tight text-emerald-900 sm:text-3xl md:text-[2rem];
+        @apply font-display text-2xl font-extrabold tracking-tight text-[#0A3D62] sm:text-3xl md:text-[2.15rem];
     }
 
     .irdc-leaders-leaf {
-        @apply flex shrink-0 items-center;
+        @apply flex shrink-0 items-center text-emerald-600;
+    }
+
+    .irdc-leaders-subtitle {
+        @apply mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base;
     }
 
     .irdc-leaders-grid {
-        @apply mt-10 grid grid-cols-1 gap-8 sm:mt-12 sm:grid-cols-2 sm:gap-8 lg:mt-14 lg:grid-cols-4 lg:gap-6;
+        @apply mx-auto mt-8 grid max-w-6xl grid-cols-1 gap-5 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4;
     }
 
     .irdc-leader-card {
-        @apply flex flex-col items-center text-center;
+        @apply relative flex min-h-[21rem] flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white text-center shadow-[0_16px_36px_-24px_rgba(15,23,42,0.5)] ring-1 ring-slate-900/[0.03] transition duration-300;
+    }
+
+    .irdc-leader-card:hover {
+        @apply -translate-y-1 border-emerald-700/20 shadow-[0_24px_42px_-24px_rgba(21,83,45,0.55)];
+    }
+
+    .irdc-leader-card::before {
+        content: "";
+        @apply absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#0A3D62] via-emerald-600 to-amber-400;
+    }
+
+    .irdc-leader-card__index {
+        @apply absolute right-3 top-3 z-10 rounded-full border border-emerald-200 bg-white/90 px-2.5 py-1 text-[10px] font-extrabold tracking-wider text-emerald-800 shadow-sm;
     }
 
     .irdc-leader-card__photo {
-        @apply mb-4 w-full max-w-[220px] sm:max-w-[240px];
+        @apply mx-auto mt-7 flex aspect-square w-[76%] max-w-[12.5rem] items-center justify-center overflow-hidden rounded-2xl border border-slate-200/90 bg-gradient-to-br from-slate-50 via-white to-emerald-50/70 p-4 shadow-inner;
     }
 
     .irdc-leader-card__img {
-        @apply aspect-square w-full rounded-2xl object-cover shadow-md ring-1 ring-slate-900/10;
+        @apply h-full w-full object-contain transition duration-300;
+    }
+
+    .irdc-leader-card:hover .irdc-leader-card__img {
+        transform: scale(1.035);
+    }
+
+    .irdc-leader-card__content {
+        @apply flex flex-1 flex-col items-center justify-center px-4 pb-6 pt-4;
     }
 
     .irdc-leader-card__role {
-        @apply font-display text-base font-bold text-slate-900 sm:text-lg;
+        @apply font-display text-base font-extrabold leading-snug text-slate-950 sm:text-[1.05rem];
     }
 
     .irdc-leader-card__org {
-        @apply mt-2 max-w-[16.5rem] text-sm leading-relaxed text-slate-600 sm:text-[0.9375rem];
+        @apply mt-3 inline-flex max-w-full rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-semibold leading-relaxed text-emerald-900 sm:text-sm;
+    }
+
+    @media (min-width: 1536px) {
+        .irdc-leaders-grid {
+            @apply max-w-7xl gap-6;
+        }
+
+        .irdc-leader-card {
+            @apply min-h-[22rem];
+        }
     }
 
     /* Home: success stories slider */

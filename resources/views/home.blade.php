@@ -186,18 +186,24 @@
 
 {{-- Key leaders — first content after hero (always visible; no scroll-reveal fade) --}}
 @if(count($keyLeaders) > 0)
-    <section id="key-leaders" class="irdc-scroll-mt-header border-b border-stone-200/80 bg-white py-14 sm:py-16 md:py-20" aria-labelledby="key-leaders-heading">
+    <section id="key-leaders" class="irdc-leaders-section irdc-scroll-mt-header" aria-labelledby="key-leaders-heading">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <header class="irdc-leaders-head">
-                <h2 id="key-leaders-heading" class="irdc-leaders-title">
-                    {{ __('messages.home_leaders_title') }}
-                </h2>
-                <span class="irdc-leaders-leaf" aria-hidden="true">
-                    <svg class="h-8 w-8 text-emerald-600 sm:h-9 sm:w-9" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 22c-2-6 2-14 10-16 2 8-2 14-10 16Z" fill="currentColor" opacity="0.35"/>
-                        <path d="M14 24c8-2 12-10 10-18-8 2-12 10-10 18Z" fill="currentColor"/>
-                    </svg>
-                </span>
+                <p class="irdc-leaders-eyebrow">Project Governance</p>
+                <div class="irdc-leaders-title-row">
+                    <h2 id="key-leaders-heading" class="irdc-leaders-title">
+                        {{ __('messages.home_leaders_title') }}
+                    </h2>
+                    <span class="irdc-leaders-leaf" aria-hidden="true">
+                        <svg class="h-7 w-7 sm:h-8 sm:w-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 22c-2-6 2-14 10-16 2 8-2 14-10 16Z" fill="currentColor" opacity="0.35"/>
+                            <path d="M14 24c8-2 12-10 10-18-8 2-12 10-10 18Z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                </div>
+                <p class="irdc-leaders-subtitle">
+                    Leadership and institutional coordination for implementation, supervision, and partner collaboration.
+                </p>
             </header>
             <div class="irdc-leaders-grid">
                 @foreach ($keyLeaders as $leader)
@@ -223,6 +229,7 @@
                         }
                     @endphp
                     <article class="irdc-leader-card">
+                        <span class="irdc-leader-card__index">{{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                         <div class="irdc-leader-card__photo">
                             <img
                                 src="{{ $portrait }}"
@@ -234,12 +241,14 @@
                                 class="irdc-leader-card__img"
                             >
                         </div>
-                        @if(filled($roleLabel))
-                            <h3 class="irdc-leader-card__role">{{ $roleLabel }}</h3>
-                        @endif
-                        @if(filled($orgLabel))
-                            <p class="irdc-leader-card__org">{{ $orgLabel }}</p>
-                        @endif
+                        <div class="irdc-leader-card__content">
+                            @if(filled($roleLabel))
+                                <h3 class="irdc-leader-card__role">{{ $roleLabel }}</h3>
+                            @endif
+                            @if(filled($orgLabel))
+                                <p class="irdc-leader-card__org">{{ $orgLabel }}</p>
+                            @endif
+                        </div>
                     </article>
                 @endforeach
             </div>
@@ -713,7 +722,7 @@
                 @foreach($galleryPreview->take(6) as $g)
                     <a href="{{ route('gallery.section', 'photos') }}" class="group relative block aspect-[4/3] overflow-hidden rounded-xl border border-slate-200/90 bg-slate-200 shadow-sm sm:rounded-2xl">
                         <img
-                            src="{{ asset('storage/'.$g->image) }}"
+                            src="{{ $g->mediaUrl() }}"
                             alt="{{ $g->title }}"
                             class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
                             loading="lazy"

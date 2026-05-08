@@ -33,6 +33,8 @@ class PageController extends Controller
             ->get();
 
         $galleryPreview = Gallery::query()
+            ->where('category', 'photos')
+            ->where('status', 'published')
             ->orderByDesc('item_date')
             ->orderByDesc('id')
             ->take(6)
@@ -140,6 +142,8 @@ class PageController extends Controller
     {
         if ($section === 'photos') {
             $items = Gallery::query()
+                ->where('category', 'photos')
+                ->where('status', 'published')
                 ->orderByDesc('item_date')
                 ->orderByDesc('id')
                 ->get();
@@ -154,7 +158,18 @@ class PageController extends Controller
             'voice' => 'messages.nav_media_voice',
         ];
 
-        return view('gallery.placeholder', ['titleKey' => $titleKeys[$section]]);
+        $items = Gallery::query()
+            ->where('category', $section)
+            ->where('status', 'published')
+            ->orderByDesc('item_date')
+            ->orderByDesc('id')
+            ->get();
+
+        return view('gallery.media', [
+            'items' => $items,
+            'section' => $section,
+            'titleKey' => $titleKeys[$section],
+        ]);
     }
 
     public function vacancies(): View

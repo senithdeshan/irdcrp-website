@@ -63,19 +63,19 @@
                 <p class="text-sm text-white/90"><a href="tel:{{ preg_replace('/\s+/', '', config('irdcrp.contact.phone')) }}" class="hover:text-emerald-200">{{ config('irdcrp.contact.phone') }}</a></p>
 
                 <div class="mt-4 flex items-center gap-2.5">
-                    <a href="{{ config('irdcrp.social.facebook') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="Facebook">
+                    <a href="{{ $socialLinks['facebook'] ?? config('irdcrp.social.facebook') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="Facebook">
                         <img src="{{ asset(config('irdcrp.social_icons.facebook')) }}" alt="Facebook" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
                     </a>
-                    <a href="{{ config('irdcrp.social.youtube') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="YouTube">
+                    <a href="{{ $socialLinks['youtube'] ?? config('irdcrp.social.youtube') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="YouTube">
                         <img src="{{ asset(config('irdcrp.social_icons.youtube')) }}" alt="YouTube" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
                     </a>
-                    <a href="{{ config('irdcrp.social.twitter') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="X">
+                    <a href="{{ $socialLinks['twitter'] ?? config('irdcrp.social.twitter') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="X">
                         <img src="{{ asset(config('irdcrp.social_icons.twitter')) }}" alt="X" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
                     </a>
-                    <a href="{{ config('irdcrp.social.linkedin') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="LinkedIn">
+                    <a href="{{ $socialLinks['linkedin'] ?? config('irdcrp.social.linkedin') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="LinkedIn">
                         <img src="{{ asset(config('irdcrp.social_icons.linkedin')) }}" alt="LinkedIn" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
                     </a>
-                    <a href="{{ config('irdcrp.social.instagram') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="Instagram">
+                    <a href="{{ $socialLinks['instagram'] ?? config('irdcrp.social.instagram') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="Instagram">
                         <img src="{{ asset(config('irdcrp.social_icons.instagram')) }}" alt="Instagram" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
                     </a>
                 </div>

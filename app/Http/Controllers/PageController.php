@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Download;
 use App\Models\Gallery;
+use App\Models\HomeVideo;
 use App\Models\ImpactMetric;
 use App\Models\KeyLeader;
 use App\Models\News;
@@ -50,10 +51,8 @@ class PageController extends Controller
             ->get();
 
         $vacanciesPreview = Vacancy::query()
-            ->where('status', 'open')
-            ->whereDate('deadline', '>=', now())
-            ->orderBy('deadline')
-            ->take(3)
+            ->whereIn('status', ['open', 'closed'])
+            ->orderByDesc('deadline')
             ->get();
 
         $keyLeaders = KeyLeader::query()
@@ -67,6 +66,14 @@ class PageController extends Controller
                 ->where('status', 'active')
                 ->latest()
                 ->take(6)
+                ->get()
+            : collect();
+
+        $homeVideos = Schema::hasTable('home_videos')
+            ? HomeVideo::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('id')
                 ->get()
             : collect();
 
@@ -90,6 +97,7 @@ class PageController extends Controller
             'vacanciesPreview',
             'keyLeaders',
             'successStories',
+            'homeVideos',
             'impactMetrics',
         ));
     }

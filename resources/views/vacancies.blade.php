@@ -1,35 +1,85 @@
 @extends('layouts.app')
 
-@section('content')
+@section('title', __('messages.nav_vacancies').' | '.config('app.name'))
 
-<section class="py-5 text-white" style="background: linear-gradient(120deg, #0A3D62, #27AE60);">
-    <div class="container py-4">
-        <h1 class="fw-bold">{{ __('messages.nav_vacancies') }}</h1>
-        <p class="lead mb-0">Vacancy notices and application documents (PDF)</p>
+@section('content')
+@php
+    $openCount = $items->filter(fn ($v) => $v->status === 'open' && $v->isOpenForPublic())->count();
+    $closedCount = $items->count() - $openCount;
+@endphp
+
+<section class="irdc-vacancies-hero">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <a href="{{ url('/') }}" class="irdc-vacancies-hero__back">← Home</a>
+        <p class="irdc-vacancies-hero__eyebrow">Project notices</p>
+        <h1 class="irdc-vacancies-hero__title">{{ __('messages.nav_vacancies') }}</h1>
+        <p class="irdc-vacancies-hero__lead">
+            Download application documents, track closing dates, and open full notice details from one place.
+        </p>
+        <div class="irdc-vacancies-hero__stats">
+            <span class="irdc-vacancies-hero__stat irdc-vacancies-hero__stat--open">{{ $openCount }} open</span>
+            <span class="irdc-vacancies-hero__stat irdc-vacancies-hero__stat--closed">{{ $closedCount }} closed</span>
+            <span class="irdc-vacancies-hero__stat irdc-vacancies-hero__stat--total">{{ $items->count() }} total</span>
+        </div>
     </div>
 </section>
 
-<section class="container py-5">
-    <div class="row g-4">
-        @forelse($items as $v)
-            <div class="col-12 col-md-6">
-                <div class="card feature-card p-4 h-100 d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-                        <h2 class="h5 fw-bold mb-0">{{ $v->title }}</h2>
-                        @if($v->status === 'open' && $v->isOpenForPublic())
-                            <span class="badge text-bg-success">Open</span>
-                        @else
-                            <span class="badge text-bg-secondary">Closed</span>
-                        @endif
-                    </div>
-                    <p class="small text-muted mb-2">Deadline: <strong>{{ $v->deadline->format('F j, Y') }}</strong></p>
-                    <p class="small flex-grow-1">{{ \Illuminate\Support\Str::limit(strip_tags($v->description), 220) }}</p>
-                    <a href="{{ route('vacancies.show', $v) }}" class="btn btn-green btn-sm align-self-start">View details &amp; PDF</a>
-                </div>
+<section class="irdc-vacancies-board">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <header class="irdc-vacancies-board__head">
+            <div>
+                <p class="irdc-notices-head__eyebrow">Timeline</p>
+                <h2 class="irdc-notices-head__title">All notices & vacancies</h2>
+                <p class="irdc-notices-head__lead">
+                    Open notices show a live countdown using your system time. Finished notices remain available in red for reference.
+                </p>
             </div>
-        @empty
-            <p class="text-muted">No vacancies published yet.</p>
-        @endforelse
+        </header>
+
+        @if($items->isNotEmpty())
+            <div class="irdc-notice-list">
+                @foreach($items as $v)
+                    @php
+                        $noticeClosed = $v->status !== 'open' || $v->deadline->copy()->endOfDay()->isPast();
+                    @endphp
+                    <article class="irdc-notice-card {{ $noticeClosed ? 'irdc-notice-card--closed' : '' }}">
+                        <div class="irdc-notice-card__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M7 3h7l4 4v14H7V3Z"/>
+                                <path d="M14 3v5h4"/>
+                                <path d="M9.5 13h5"/>
+                                <path d="M9.5 17h4"/>
+                            </svg>
+                        </div>
+                        <div class="irdc-notice-card__content">
+                            <span>Deadline: {{ $v->deadline->format('M j, Y') }}</span>
+                            <h3>{{ $v->title }}</h3>
+                            <p class="irdc-vacancies-board__summary">
+                                {{ \Illuminate\Support\Str::limit(strip_tags($v->description), 190) }}
+                            </p>
+                            <a
+                                href="{{ route('vacancies.show', $v) }}"
+                                class="irdc-notice-countdown"
+                                x-data="irdcDeadlineCountdown('{{ $v->deadline->toDateString() }}')"
+                                x-init="start()"
+                                :class="{ 'irdc-notice-countdown--closed': expired }"
+                            >
+                                <span class="irdc-notice-countdown__dot" aria-hidden="true"></span>
+                                <span x-text="label"></span>
+                            </a>
+                        </div>
+                        <div class="irdc-notice-card__actions">
+                            @if(filled($v->pdf_path))
+                                <a href="{{ asset('storage/'.$v->pdf_path) }}" rel="noopener" target="_blank" class="irdc-button irdc-button--amber">Download PDF</a>
+                            @endif
+                            <a href="{{ route('vacancies.show', $v) }}" class="irdc-button irdc-button--small-outline">View details</a>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        @else
+            <p class="irdc-empty-state">No vacancies published yet.</p>
+        @endif
     </div>
 </section>
 

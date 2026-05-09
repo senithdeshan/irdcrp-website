@@ -1,42 +1,75 @@
 @extends('layouts.app')
 
-@section('content')
+@section('title', 'News & Events | '.config('app.name'))
 
-<section class="py-5 text-white" style="background: linear-gradient(120deg, #0A3D62, #27AE60);">
-    <div class="container py-4">
-        <h1 class="fw-bold">News & Events</h1>
-        <p class="lead mb-0">Latest updates, events and announcements of IRDCRP</p>
+@section('content')
+@php
+    $tLoc = in_array(app()->getLocale(), ['en', 'si', 'ta'], true) ? app()->getLocale() : 'en';
+@endphp
+
+<section class="irdc-news-page-hero">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <a href="{{ url('/') }}" class="irdc-news-page-hero__back">← Home</a>
+        <p class="irdc-news-page-hero__eyebrow">Latest updates</p>
+        <h1 class="irdc-news-page-hero__title">News & Events</h1>
+        <p class="irdc-news-page-hero__lead">
+            Official announcements, procurement notices, and field stories from IRDCRP.
+        </p>
+        <div class="irdc-news-page-hero__stats">
+            <span>{{ $news->count() }} published updates</span>
+        </div>
     </div>
 </section>
 
-<section class="container py-5">
-    <div class="row g-4">
-        @forelse($news as $item)
-            <div class="col-md-4">
-                <div class="card feature-card">
-                    @if($item->image)
-                        <img src="{{ asset('storage/'.$item->image) }}" style="height:200px; width:100%; object-fit:cover;">
-                    @else
-                        <div style="height:200px; background:#EAF7F0;" class="d-flex align-items-center justify-content-center">
-                            <span class="fs-1">📰</span>
-                        </div>
-                    @endif
+<section class="irdc-news-page-list">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <header class="irdc-news-head">
+            <div>
+                <p class="irdc-news-head__eyebrow">News archive</p>
+                <h2 class="irdc-news-head__title">All updates</h2>
+                <p class="irdc-news-head__lead">
+                    Follow project milestones, community activities, announcements, and implementation progress.
+                </p>
+            </div>
+        </header>
 
-                    <div class="card-body p-4">
-                        <small class="text-success fw-bold">{{ $item->published_date ?? 'No date' }}</small>
-                        <h5 class="fw-bold mt-2">{{ $item->title_en }}</h5>
-                        <p>{{ Str::limit($item->content_en, 120) }}</p>
-                        <a href="{{ route('news.show', $item->id) }}" class="btn btn-green btn-sm">Read More</a>
-                    </div>
-                </div>
+        @if($news->isNotEmpty())
+            <div class="irdc-news-grid">
+                @foreach($news as $item)
+                    <a href="{{ route('news.show', $item) }}" class="irdc-news-card {{ $loop->first ? 'irdc-news-card--featured' : '' }} group">
+                        <article>
+                            @if($item->image)
+                                <div class="irdc-news-card__image">
+                                    <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->{'title_'.$tLoc} ?? $item->title_en }}" loading="lazy" decoding="async">
+                                </div>
+                            @else
+                                <div class="irdc-news-card__image irdc-news-card__image--empty">
+                                    <span>News</span>
+                                </div>
+                            @endif
+
+                            <div class="irdc-news-card__body">
+                                @if($item->published_date)
+                                    <time datetime="{{ $item->published_date->toDateString() }}">{{ $item->published_date->format('M j, Y') }}</time>
+                                @else
+                                    <time>No date</time>
+                                @endif
+                                <h3>{{ $item->{'title_'.$tLoc} ?? $item->title_en }}</h3>
+                                <div class="irdc-news-card__summary">
+                                    {{ \Illuminate\Support\Str::limit(strip_tags($item->{'content_'.$tLoc} ?? $item->content_en), $loop->first ? 190 : 120) }}
+                                </div>
+                                <p><span>{{ __('messages.read_more') }}</span></p>
+                            </div>
+                        </article>
+                    </a>
+                @endforeach
             </div>
-        @empty
-            <div class="col-12 text-center">
-                <div class="card feature-card p-5">
-                    <h5 class="fw-bold">No news available yet.</h5>
-                </div>
+        @else
+            <div class="irdc-empty-state">
+                <h2 class="font-display text-xl font-extrabold text-slate-900">No news available yet.</h2>
+                <p class="mt-2 text-sm text-slate-500">Published updates will appear here.</p>
             </div>
-        @endforelse
+        @endif
     </div>
 </section>
 

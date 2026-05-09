@@ -78,19 +78,19 @@
                     <div class="irdc-header-tools__cluster flex min-w-0 max-w-full flex-nowrap items-center justify-end gap-1 sm:gap-1.5">
 
                         <div class="inline-flex items-center gap-0.5 rounded-full border border-emerald-200/80 bg-white p-0.5 shadow-sm" aria-label="{{ __('messages.header_social_aria') }}">
-                            <a class="irdc-header-social" href="{{ config('irdcrp.social.facebook') }}" rel="noopener noreferrer" target="_blank" title="Facebook">
+                            <a class="irdc-header-social" href="{{ $socialLinks['facebook'] ?? config('irdcrp.social.facebook') }}" rel="noopener noreferrer" target="_blank" title="Facebook">
                                 <img src="{{ asset(config('irdcrp.social_icons.facebook')) }}" alt="Facebook" class="h-4 w-4 rounded-sm object-contain" loading="lazy" decoding="async">
                             </a>
-                            <a class="irdc-header-social" href="{{ config('irdcrp.social.youtube') }}" rel="noopener noreferrer" target="_blank" title="YouTube">
+                            <a class="irdc-header-social" href="{{ $socialLinks['youtube'] ?? config('irdcrp.social.youtube') }}" rel="noopener noreferrer" target="_blank" title="YouTube">
                                 <img src="{{ asset(config('irdcrp.social_icons.youtube')) }}" alt="YouTube" class="h-4 w-4 rounded-sm object-contain" loading="lazy" decoding="async">
                             </a>
-                            <a class="irdc-header-social" href="{{ config('irdcrp.social.twitter') }}" rel="noopener noreferrer" target="_blank" title="X">
+                            <a class="irdc-header-social" href="{{ $socialLinks['twitter'] ?? config('irdcrp.social.twitter') }}" rel="noopener noreferrer" target="_blank" title="X">
                                 <img src="{{ asset(config('irdcrp.social_icons.twitter')) }}" alt="X" class="h-4 w-4 rounded-sm object-contain" loading="lazy" decoding="async">
                             </a>
-                            <a class="irdc-header-social" href="{{ config('irdcrp.social.linkedin') }}" rel="noopener noreferrer" target="_blank" title="LinkedIn">
+                            <a class="irdc-header-social" href="{{ $socialLinks['linkedin'] ?? config('irdcrp.social.linkedin') }}" rel="noopener noreferrer" target="_blank" title="LinkedIn">
                                 <img src="{{ asset(config('irdcrp.social_icons.linkedin')) }}" alt="LinkedIn" class="h-4 w-4 rounded-sm object-contain" loading="lazy" decoding="async">
                             </a>
-                            <a class="irdc-header-social" href="{{ config('irdcrp.social.instagram') }}" rel="noopener noreferrer" target="_blank" title="Instagram">
+                            <a class="irdc-header-social" href="{{ $socialLinks['instagram'] ?? config('irdcrp.social.instagram') }}" rel="noopener noreferrer" target="_blank" title="Instagram">
                                 <img src="{{ asset(config('irdcrp.social_icons.instagram')) }}" alt="Instagram" class="h-4 w-4 rounded-sm object-contain" loading="lazy" decoding="async">
                             </a>
                         </div>

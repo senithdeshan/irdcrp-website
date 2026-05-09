@@ -23,10 +23,12 @@
     }
     $firstCaption = (isset($slides[0]) ? ($slides[0]['caption_en'] ?? '') : '');
     $programmes = $programmes ?? collect();
+    $socialLinks = $socialLinks ?? config('irdcrp.social', []);
     $ytConfig = config('irdcrp.youtube', []);
-    $ytChannel = $ytConfig['channel_url'] ?? 'https://www.youtube.com/';
+    $ytChannel = $socialLinks['youtube'] ?? ($ytConfig['channel_url'] ?? 'https://www.youtube.com/');
     $ytIds = $ytConfig['embed_ids'] ?? [];
-    $firstVideo = $ytIds[0] ?? null;
+    $videoCards = collect($ytIds)->filter()->values();
+    $homeVideos = $homeVideos ?? collect();
     $tLoc = in_array(app()->getLocale(), ['en', 'si', 'ta'], true) ? app()->getLocale() : 'en';
     $stats = config('irdcrp.home_stats', []);
     $impactMetrics = ($impactMetrics ?? collect())->isNotEmpty()
@@ -177,19 +179,19 @@
 
 {{-- Outside hero: hero section uses overflow:hidden which clips position:fixed children --}}
 <aside class="irdc-hero-social" aria-label="{{ __('messages.header_social_aria') }}">
-    <a href="{{ config('irdcrp.social.youtube') }}" target="_blank" rel="noopener noreferrer" title="YouTube" class="irdc-hero-social__btn">
+    <a href="{{ $socialLinks['youtube'] ?? config('irdcrp.social.youtube') }}" target="_blank" rel="noopener noreferrer" title="YouTube" class="irdc-hero-social__btn">
         <img src="{{ asset(config('irdcrp.social_icons.youtube')) }}" alt="YouTube" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
     </a>
-    <a href="{{ config('irdcrp.social.facebook') }}" target="_blank" rel="noopener noreferrer" title="Facebook" class="irdc-hero-social__btn">
+    <a href="{{ $socialLinks['facebook'] ?? config('irdcrp.social.facebook') }}" target="_blank" rel="noopener noreferrer" title="Facebook" class="irdc-hero-social__btn">
         <img src="{{ asset(config('irdcrp.social_icons.facebook')) }}" alt="Facebook" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
     </a>
-    <a href="{{ config('irdcrp.social.twitter') }}" target="_blank" rel="noopener noreferrer" title="X" class="irdc-hero-social__btn">
+    <a href="{{ $socialLinks['twitter'] ?? config('irdcrp.social.twitter') }}" target="_blank" rel="noopener noreferrer" title="X" class="irdc-hero-social__btn">
         <img src="{{ asset(config('irdcrp.social_icons.twitter')) }}" alt="X" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
     </a>
-    <a href="{{ config('irdcrp.social.linkedin') }}" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="irdc-hero-social__btn">
+    <a href="{{ $socialLinks['linkedin'] ?? config('irdcrp.social.linkedin') }}" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="irdc-hero-social__btn">
         <img src="{{ asset(config('irdcrp.social_icons.linkedin')) }}" alt="LinkedIn" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
     </a>
-    <a href="{{ config('irdcrp.social.instagram') }}" target="_blank" rel="noopener noreferrer" title="Instagram" class="irdc-hero-social__btn">
+    <a href="{{ $socialLinks['instagram'] ?? config('irdcrp.social.instagram') }}" target="_blank" rel="noopener noreferrer" title="Instagram" class="irdc-hero-social__btn">
         <img src="{{ asset(config('irdcrp.social_icons.instagram')) }}" alt="Instagram" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
     </a>
 </aside>
@@ -481,7 +483,6 @@
             <h2 class="mt-3 font-display text-2xl font-extrabold leading-snug tracking-tight text-[#3d2f1f] sm:text-3xl md:text-[1.75rem] lg:text-4xl">
                 {{ __('messages.home_weather_title') }}
             </h2>
-            <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">{{ __('messages.home_weather_sub') }}</p>
         </header>
 
         <div class="irdc-weather-mega">
@@ -602,13 +603,17 @@
         i: 0,
         timer: null,
         viewportWidth: 0,
+        cardGap() {
+            return window.innerWidth < 640 ? 12 : 16;
+        },
         cardStep() {
-            if (window.innerWidth < 640) return 316;
-            if (window.innerWidth < 1024) return 388;
-            return 430;
+            return this.cardWidth() + this.cardGap();
         },
         get visible() {
-            return Math.max(1, Math.floor(this.viewportWidth / this.cardStep()));
+            const total = Math.max(this.stories.length, 1);
+            if (window.innerWidth >= 1024) return Math.min(4, total);
+            if (window.innerWidth >= 640) return Math.min(2, total);
+            return 1;
         },
         get pages() {
             return Math.max(this.stories.length - this.visible + 1, 1);
@@ -616,7 +621,12 @@
         next() { this.i = (this.i + 1) % this.pages; },
         prev() { this.i = (this.i - 1 + this.pages) % this.pages; },
         goTo(idx) { this.i = idx; },
-        cardWidth() { return Math.max(this.cardStep() - 18, 280); },
+        cardWidth() {
+            const gap = this.cardGap();
+            const totalGaps = gap * Math.max(this.visible - 1, 0);
+            const available = Math.max((this.viewportWidth || window.innerWidth) - totalGaps, 240);
+            return Math.max(available / this.visible, 220);
+        },
         start() {
             this.stop();
             if (this.pages > 1) {
@@ -686,7 +696,7 @@
                                         loading="lazy"
                                         decoding="async"
                                     >
-                                    <div class="rounded-full bg-amber-50 px-1.5 py-0.5 text-[8px] font-bold leading-none tracking-[-0.02em] text-amber-600 shadow-sm ring-1 ring-amber-200/80 sm:text-[9px]">
+                                    <div class="irdc-success-rating-badge">
                                         {{ str_repeat('★', max(1, (int) ($story->rating ?? 5))) }}
                                     </div>
                                 </div>
@@ -732,57 +742,94 @@
     </div>
 </section>
 
-{{-- 5. Video: text left, embed right --}}
+{{-- 5. Krushi TV: modern media cards --}}
 <section class="irdc-media-section irdc-reveal-on-scroll">
     <div class="container max-w-6xl">
-        <div class="irdc-media-shell">
-            <div class="irdc-media-copy">
-                <p class="irdc-section-kicker">{{ __('messages.home_video_eyebrow') }}</p>
-                <h2>{{ __('messages.home_video_title') }}</h2>
-                <p>{{ __('messages.home_video_lead') }}</p>
-                <ul class="irdc-feature-list">
-                    <li>{{ __('messages.home_video_bullet1') }}</li>
-                    <li>{{ __('messages.home_video_bullet2') }}</li>
-                    <li>{{ __('messages.home_video_bullet3') }}</li>
-                </ul>
-            </div>
-            <div class="irdc-media-visual">
-                @if($firstVideo)
-                    <div class="irdc-video-frame">
-                        <div class="aspect-video w-full overflow-hidden rounded-[1.15rem]">
+        <header class="irdc-section-head !mb-10 sm:!mb-12">
+            <p class="irdc-section-head__eyebrow">Krushi TV &amp; video</p>
+            <h2 class="irdc-section-head__title">Field stories &amp; video</h2>
+            <p class="irdc-section-head__lead">Modern updates from project areas, training sessions, and community engagement.</p>
+        </header>
+
+        @php
+            $commonItems = [
+                'On-the-ground activities and good agricultural practices in partner areas.',
+                'Highlights of training, workshops, and engagement with communities.',
+                'New videos are added on the YouTube channel as they are ready.',
+            ];
+            $mediaCards = $homeVideos->isNotEmpty()
+                ? $homeVideos->sortBy('sort_order')->values()->map(function ($video) use ($commonItems): array {
+                    return [
+                        'title' => $video->title,
+                        'items' => [
+                            $video->bullet_one ?: $commonItems[0],
+                            $video->bullet_two ?: $commonItems[1],
+                            $video->bullet_three ?: $commonItems[2],
+                        ],
+                        'video_id' => $video->youtube_id,
+                    ];
+                })
+                : $videoCards->values()->map(function (string $videoId, int $index) use ($commonItems): array {
+                    return [
+                        'title' => 'Video '.str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT),
+                        'items' => $commonItems,
+                        'video_id' => $videoId,
+                    ];
+                });
+        @endphp
+
+        @if($mediaCards->isNotEmpty())
+            <div class="irdc-media-card-grid" data-reveal-stagger>
+                @foreach($mediaCards as $card)
+                <article class="irdc-media-feature-card">
+                    <h3 class="irdc-media-feature-card__title">{{ $card['title'] }}</h3>
+                    <ul class="irdc-media-feature-card__list">
+                        @foreach($card['items'] as $item)
+                            <li>{{ $item }}</li>
+                        @endforeach
+                    </ul>
+
+                    @if(filled($card['video_id']))
+                        <div class="irdc-media-feature-card__video">
                             <iframe
                                 class="h-full w-full"
-                                src="https://www.youtube.com/embed/{{ $firstVideo }}?rel=0"
-                                title="YouTube video"
+                                src="https://www.youtube.com/embed/{{ $card['video_id'] }}?rel=0"
+                                title="{{ $card['title'] }} video"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowfullscreen
                             ></iframe>
                         </div>
-                    </div>
-                @else
-                    <p class="irdc-empty-state">{{ __('messages.home_youtube_empty') }}</p>
-                @endif
-                <a href="{{ $ytChannel }}" rel="noopener noreferrer" target="_blank" class="irdc-button irdc-button--youtube mt-6">
-                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 7.07 0 9.521 0 12s0 4.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136c.502-.914.502-3.365.502-5.814s0-4.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                    {{ __('messages.home_youtube_channel') }}
-                </a>
+                    @else
+                        <div class="irdc-media-feature-card__empty">Add YouTube video</div>
+                    @endif
+
+                    <a href="{{ $ytChannel }}" rel="noopener noreferrer" target="_blank" class="irdc-media-feature-card__cta">
+                        Visit channel
+                    </a>
+                </article>
+                @endforeach
             </div>
-        </div>
+        @else
+            <p class="irdc-empty-state">{{ __('messages.home_youtube_empty') }}</p>
+        @endif
     </div>
 </section>
 
 {{-- 6. News & updates --}}
 @if($homeNews->isNotEmpty())
     <section class="irdc-news-section irdc-reveal-on-scroll">
-        <div class="container max-w-6xl">
-            <header class="irdc-section-head">
-                <p class="irdc-section-head__eyebrow">{{ __('messages.home_news_events') }}</p>
-                <h2 class="irdc-section-head__title">{{ __('messages.home_news_title') }}</h2>
-                <p class="irdc-section-head__lead">{{ __('messages.home_news_sub') }}</p>
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <header class="irdc-news-head">
+                <div>
+                    <p class="irdc-news-head__eyebrow">{{ __('messages.home_news_events') }}</p>
+                    <h2 class="irdc-news-head__title">{{ __('messages.home_news_title') }}</h2>
+                    <p class="irdc-news-head__lead">{{ __('messages.home_news_sub') }}</p>
+                </div>
+                <a href="{{ route('news.index') }}" class="irdc-news-head__link">{{ __('messages.home_news_all') }}</a>
             </header>
             <div class="irdc-news-grid">
                 @foreach ($homeNews as $article)
-                    <a href="{{ route('news.show', $article) }}" class="irdc-news-card group">
+                    <a href="{{ route('news.show', $article) }}" class="irdc-news-card {{ $loop->first ? 'irdc-news-card--featured' : '' }} group">
                         <article>
                             @if ($article->image)
                                 <div class="irdc-news-card__image">
@@ -798,14 +845,11 @@
                                     <time datetime="{{ $article->published_date->toDateString() }}">{{ $article->published_date->format('M j, Y') }}</time>
                                 @endif
                                 <h3>{{ $article->{'title_'.$tLoc} ?? $article->title_en }}</h3>
-                                <p>{{ __('messages.read_more') }}</p>
+                                <p><span>{{ __('messages.read_more') }}</span></p>
                             </div>
                         </article>
                     </a>
                 @endforeach
-            </div>
-            <div class="mt-12 text-center">
-                <a href="{{ route('news.index') }}" class="irdc-button irdc-button--outline">{{ __('messages.home_news_all') }}</a>
             </div>
         </div>
     </section>
@@ -844,19 +888,43 @@
 
 {{-- 8. Vacancies & notices --}}
 <section class="irdc-notices-section irdc-reveal-on-scroll">
-    <div class="container max-w-5xl">
-        <header class="irdc-section-head">
-            <p class="irdc-section-head__eyebrow">{{ __('messages.home_vacancies_eyebrow') }}</p>
-            <h2 class="irdc-section-head__title">{{ __('messages.home_vacancies_title') }}</h2>
-            <p class="irdc-section-head__lead">{{ __('messages.home_vacancies_sub') }}</p>
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <header class="irdc-notices-head">
+            <div>
+                <p class="irdc-notices-head__eyebrow">{{ __('messages.home_vacancies_eyebrow') }}</p>
+                <h2 class="irdc-notices-head__title">{{ __('messages.home_vacancies_title') }}</h2>
+                <p class="irdc-notices-head__lead">{{ __('messages.home_vacancies_sub') }}</p>
+            </div>
+            <a href="{{ route('vacancies.index') }}" class="irdc-notices-head__link">{{ __('messages.home_vacancies_all') }}</a>
         </header>
         @if($vacanciesPreview->isNotEmpty())
             <div class="irdc-notice-list">
                 @foreach($vacanciesPreview as $v)
-                    <article class="irdc-notice-card">
-                        <div>
+                    @php
+                        $noticeClosed = $v->status !== 'open' || $v->deadline->copy()->endOfDay()->isPast();
+                    @endphp
+                    <article class="irdc-notice-card {{ $noticeClosed ? 'irdc-notice-card--closed' : '' }}">
+                        <div class="irdc-notice-card__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M7 3h7l4 4v14H7V3Z"/>
+                                <path d="M14 3v5h4"/>
+                                <path d="M9.5 13h5"/>
+                                <path d="M9.5 17h4"/>
+                            </svg>
+                        </div>
+                        <div class="irdc-notice-card__content">
                             <span>{{ __('messages.home_vacancy_deadline') }}: {{ $v->deadline->format('M j, Y') }}</span>
                             <h3>{{ $v->title }}</h3>
+                            <a
+                                href="{{ route('vacancies.show', $v) }}"
+                                class="irdc-notice-countdown"
+                                x-data="irdcDeadlineCountdown('{{ $v->deadline->toDateString() }}')"
+                                x-init="start()"
+                                :class="{ 'irdc-notice-countdown--closed': expired }"
+                            >
+                                <span class="irdc-notice-countdown__dot" aria-hidden="true"></span>
+                                <span x-text="label"></span>
+                            </a>
                         </div>
                         <div class="irdc-notice-card__actions">
                             @if(filled($v->pdf_path))
@@ -870,9 +938,6 @@
         @else
             <p class="irdc-empty-state">{{ __('messages.home_vacancies_empty') }}</p>
         @endif
-        <div class="mt-10 text-center">
-            <a href="{{ route('vacancies.index') }}" class="irdc-button irdc-button--outline">{{ __('messages.home_vacancies_all') }}</a>
-        </div>
     </div>
 </section>
 
@@ -895,6 +960,10 @@
             </div>
             <div class="irdc-map-card">
                 @if(filled($mapEmbedUrl))
+                    <div class="irdc-map-card__badge">
+                        <span aria-hidden="true">✓</span>
+                        <strong>Project location</strong>
+                    </div>
                     <iframe
                         title="{{ __('messages.home_contact_map_title') }}"
                         class="h-full min-h-[18rem] w-full"
@@ -905,7 +974,7 @@
                         referrerpolicy="no-referrer-when-downgrade"
                     ></iframe>
                 @else
-                    <div>
+                    <div class="irdc-map-card__fallback">
                         <p>{{ __('messages.home_contact_map_hint') }}</p>
                     </div>
                 @endif

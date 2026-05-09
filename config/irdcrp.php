@@ -144,7 +144,7 @@ return [
     | Optional Google Maps embed (iframe `src` URL). Leave null to hide map.
     | Example: 'https://www.google.com/maps/embed?pb=...'
     */
-    'map_embed_url' => null,
+    'map_embed_url' => 'https://www.google.com/maps?q=IRDCRP%20Project%20Management%20Unit%2C%20Colombo%2C%20Sri%20Lanka&output=embed',
 
     /*
     | Home weather strip: district list + Open-Meteo (no API key). Optional per-area `image` path under /public.

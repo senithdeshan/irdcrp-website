@@ -1,23 +1,38 @@
 @extends('layouts.app')
 
-@section('content')
+@section('title', $news->title_en.' | '.config('app.name'))
 
-<section class="py-5 text-white" style="background: linear-gradient(120deg, #0A3D62, #27AE60);">
-    <div class="container py-4">
-        <h1 class="fw-bold">{{ $news->title_en }}</h1>
-        <p class="lead mb-0">{{ $news->published_date }}</p>
+@section('content')
+@php
+    $tLoc = in_array(app()->getLocale(), ['en', 'si', 'ta'], true) ? app()->getLocale() : 'en';
+    $title = $news->{'title_'.$tLoc} ?? $news->title_en;
+    $content = $news->{'content_'.$tLoc} ?? $news->content_en;
+@endphp
+
+<section class="irdc-news-show-hero">
+    <div class="mx-auto max-w-5xl px-4 py-14 sm:px-6 sm:py-18 lg:px-8">
+        <a href="{{ route('news.index') }}" class="irdc-news-page-hero__back">← News & Events</a>
+        <p class="irdc-news-page-hero__eyebrow">Project update</p>
+        <h1 class="irdc-news-show-hero__title">{{ $title }}</h1>
+        @if($news->published_date)
+            <p class="irdc-news-show-hero__date">{{ $news->published_date->format('F j, Y') }}</p>
+        @endif
     </div>
 </section>
 
-<section class="container py-5">
-    <div class="card feature-card p-4">
-        @if($news->image)
-            <img src="{{ asset('storage/'.$news->image) }}" class="img-fluid rounded mb-4">
-        @endif
+<section class="irdc-news-show-page">
+    <div class="mx-auto max-w-5xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
+        <article class="irdc-news-show-card">
+            @if($news->image)
+                <img src="{{ asset('storage/'.$news->image) }}" alt="{{ $title }}" class="irdc-news-show-card__image">
+            @endif
 
-        <p style="white-space: pre-line;">{{ $news->content_en }}</p>
+            <div class="irdc-news-show-card__content">
+                {!! nl2br(e($content)) !!}
+            </div>
 
-        <a href="/news" class="btn btn-green mt-3">Back to News</a>
+            <a href="{{ route('news.index') }}" class="irdc-button irdc-button--outline mt-8">Back to News</a>
+        </article>
     </div>
 </section>
 

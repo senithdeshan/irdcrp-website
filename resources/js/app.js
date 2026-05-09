@@ -131,6 +131,47 @@ Alpine.data('irdcWeather', (config) => ({
     },
 }));
 
+Alpine.data('irdcDeadlineCountdown', (deadlineDate) => ({
+    label: '',
+    expired: false,
+    timer: null,
+    deadline: null,
+    initDeadline() {
+        this.deadline = new Date(`${deadlineDate}T23:59:59`);
+    },
+    format(ms) {
+        if (ms <= 0) {
+            this.expired = true;
+            return 'Deadline finished - view notice';
+        }
+        this.expired = false;
+        const totalMinutes = Math.floor(ms / 60000);
+        const days = Math.floor(totalMinutes / 1440);
+        const hours = Math.floor((totalMinutes % 1440) / 60);
+        const minutes = totalMinutes % 60;
+        const parts = [];
+        if (days > 0) parts.push(`${days} day${days === 1 ? '' : 's'}`);
+        if (hours > 0 || days > 0) parts.push(`${hours} hour${hours === 1 ? '' : 's'}`);
+        parts.push(`${minutes} min`);
+        return `${parts.join(' ')} remaining`;
+    },
+    tick() {
+        if (!this.deadline || Number.isNaN(this.deadline.getTime())) {
+            this.label = '';
+            return;
+        }
+        this.label = this.format(this.deadline.getTime() - Date.now());
+    },
+    start() {
+        this.initDeadline();
+        this.tick();
+        this.timer = window.setInterval(() => this.tick(), 60000);
+    },
+    destroy() {
+        if (this.timer) window.clearInterval(this.timer);
+    },
+}));
+
 Alpine.start();
 
 /* Fade in sections on scroll (home page) */

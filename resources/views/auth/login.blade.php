@@ -42,8 +42,8 @@
                 @csrf
 
                 <div>
-                    <x-input-label for="email" :value="__('Email address')" />
-                    <x-text-input id="email" class="irdc-login-input mt-2" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                    <x-input-label for="email" :value="__('Admin login ID')" />
+                    <x-text-input id="email" class="irdc-login-input mt-2" type="text" name="email" :value="old('email')" required autofocus autocomplete="username" />
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
 
@@ -75,11 +75,8 @@
 
             <div class="irdc-login-card__foot">
                 <a href="{{ url('/') }}">Return to website</a>
-                @if (Route::has('register'))
-                    <span aria-hidden="true">·</span>
-                    <a href="{{ route('register') }}">Create account</a>
-                @endif
             </div>
         </section>
     </div>
 </x-guest-layout>
+

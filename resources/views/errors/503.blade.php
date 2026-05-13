@@ -413,7 +413,7 @@
                         </p>
                     </div>
 
-                    <div class="countdown" id="countdown" aria-label="Countdown to launch">
+                    <div class="countdown is-hidden" id="countdown" aria-label="Countdown to launch">
                         <div class="time-box"><b id="days">00</b><span>Days</span></div>
                         <div class="time-box"><b id="hours">00</b><span>Hours</span></div>
                         <div class="time-box"><b id="minutes">00</b><span>Minutes</span></div>
@@ -437,6 +437,9 @@
 
     <script>
         (function () {
+            document.getElementById('launch-date-text').textContent = 'Launch date will be announced soon.';
+            return;
+
             // TEMPORARY TEST TIMER: change back to the real launch date/time after testing.
             var launchDate = new Date(Date.now() + 300000);
             var labels = {
@@ -449,6 +452,8 @@
                 livePanel: document.getElementById('live-panel')
             };
             var finished = false;
+            var timerId = null;
+            var finishedStorageKey = 'irdcrp-maintenance-test-finished';
 
             function pad(value) {
                 return String(value).padStart(2, '0');
@@ -466,7 +471,42 @@
                 }
             }
 
+            function showLiveState() {
+                labels.days.textContent = '00';
+                labels.hours.textContent = '00';
+                labels.minutes.textContent = '00';
+                labels.seconds.textContent = '00';
+                labels.launchText.textContent = 'Launch day has arrived.';
+                labels.countdown.classList.add('is-hidden');
+                labels.livePanel.classList.add('is-visible');
+            }
+
+            function finishCountdown() {
+                if (finished) {
+                    return;
+                }
+
+                finished = true;
+
+                if (timerId !== null) {
+                    window.clearInterval(timerId);
+                    timerId = null;
+                }
+
+                try {
+                    window.localStorage.setItem(finishedStorageKey, '1');
+                } catch (error) {
+                    // Local storage may be unavailable in private or restricted browsers.
+                }
+
+                showLiveState();
+            }
+
             function tick() {
+                if (finished) {
+                    return;
+                }
+
                 var diff = Math.max(0, launchDate.getTime() - Date.now());
 
                 var totalSeconds = Math.ceil(diff / 1000);
@@ -481,20 +521,25 @@
                 labels.seconds.textContent = pad(seconds);
 
                 if (totalSeconds === 0) {
-                    if (finished) {
-                        return;
-                    }
+                    finishCountdown();
+                }
+            }
+
+            try {
+                if (window.localStorage.getItem(finishedStorageKey) === '1') {
                     finished = true;
-                    labels.launchText.textContent = 'Launch day has arrived.';
-                    labels.countdown.classList.add('is-hidden');
-                    labels.livePanel.classList.add('is-visible');
+                    showLiveState();
                     return;
                 }
+            } catch (error) {
+                // Continue with normal countdown if local storage cannot be read.
             }
 
             updateDateText();
             tick();
-            window.setInterval(tick, 1000);
+            if (!finished) {
+                timerId = window.setInterval(tick, 1000);
+            }
         })();
     </script>
 </body>

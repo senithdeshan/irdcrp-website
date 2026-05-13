@@ -48,6 +48,24 @@ return [
     ],
 
     /*
+    | Launching soon mode.
+    | When enabled, public frontend routes show the launch page while admin/login
+    | routes remain available for website updates.
+    */
+    'launching_soon' => [
+        'enabled' => env('IRDCRP_LAUNCHING_SOON', true),
+    ],
+
+    /*
+    | Locked super-admin account for website maintenance.
+    */
+    'super_admin' => [
+        'name' => env('IRDCRP_SUPER_ADMIN_NAME', 'Super Admin'),
+        'login' => env('IRDCRP_SUPER_ADMIN_LOGIN', 'irdcrpadmin.lk'),
+        'password' => env('IRDCRP_SUPER_ADMIN_PASSWORD', 'irdcrp123@123'),
+    ],
+
+    /*
     | Hero slider: local files in public/images/hero/ (leading / = site root).
     */
     'hero_slides' => [

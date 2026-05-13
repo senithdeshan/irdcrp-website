@@ -13,7 +13,11 @@ class ShowLaunchingSoon
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! config('irdcrp.launching_soon.enabled', true) || $this->shouldPassThrough($request)) {
+        if (
+            ! config('irdcrp.launching_soon.enabled', true)
+            || $this->isSuperAdmin($request)
+            || $this->shouldPassThrough($request)
+        ) {
             return $next($request);
         }
 
@@ -50,5 +54,10 @@ class ShowLaunchingSoon
         }
 
         return false;
+    }
+
+    private function isSuperAdmin(Request $request): bool
+    {
+        return $request->user()?->email === config('irdcrp.super_admin.login');
     }
 }

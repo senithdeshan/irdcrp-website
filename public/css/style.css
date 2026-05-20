@@ -22,11 +22,25 @@ body {
 
 .nav-link {
     font-weight: 500;
+    color: #111827 !important;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    color: #000000 !important;
 }
 
 .navbar-custom {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(6px);
+}
+
+.navbar-custom .navbar-toggler {
+    border-color: rgba(17, 24, 39, 0.3);
+}
+
+.navbar-custom .navbar-toggler-icon {
+    filter: invert(1);
 }
 
 /* Add to the first block on non-hero pages (fixed navbar clears content) */

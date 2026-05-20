@@ -70,7 +70,7 @@ return [
     */
     'hero_slides' => [
         [
-            'image' => '/images/hero-agriculture.jpg',
+            'image' => '/images/hero/sky.jpeg',
             'caption_en' => 'Climate-smart agriculture — resilient landscapes and productive farming systems across project areas.',
         ],
         [

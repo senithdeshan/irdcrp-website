@@ -46,14 +46,14 @@
     }
 
     /*
-     * Fixed header: fill the scroll padding band with the same green as the nav (no harsh white strip).
+     * Fixed header: fill the scroll padding band with the same white as the nav.
      */
     .irdc-main--fixed-header {
         padding-top: var(--irdc-header-offset);
         background-image: linear-gradient(
             to bottom,
-            #14532d 0,
-            #14532d var(--irdc-header-offset),
+            #ffffff 0,
+            #ffffff var(--irdc-header-offset),
             #ffffff var(--irdc-header-offset)
         );
     }
@@ -212,8 +212,25 @@
     }
 
     /* Main nav links: keyboard focus */
+    .irdc-main-nav {
+        @apply bg-white text-slate-950;
+    }
+
+    .irdc-main-nav .irdc-nav-link,
+    .irdc-main-nav .irdc-dropdown__trigger,
+    .irdc-main-nav .irdc-dropdown__trigger span {
+        color: #0f172a !important;
+        text-shadow: none !important;
+    }
+
+    .irdc-main-nav .irdc-nav-link:hover,
+    .irdc-main-nav .irdc-dropdown__trigger:hover,
+    .irdc-main-nav .irdc-dropdown__trigger:hover span {
+        color: #000000 !important;
+    }
+
     .irdc-main-nav .irdc-nav-link:focus-visible {
-        @apply rounded-md outline-none ring-2 ring-emerald-200/90 ring-offset-2 ring-offset-[#14532d];
+        @apply rounded-md outline-none ring-2 ring-slate-400 ring-offset-2 ring-offset-white;
     }
 
     .irdc-main-nav a,
@@ -241,6 +258,27 @@
 
     .irdc-main-nav .irdc-dropdown__panel {
         z-index: 50 !important;
+    }
+
+    #main-nav-mobile {
+        @apply bg-white text-slate-950;
+    }
+
+    #main-nav-mobile a,
+    #main-nav-mobile button,
+    #main-nav-mobile span {
+        color: #0f172a !important;
+    }
+
+    #main-nav-mobile a:hover,
+    #main-nav-mobile button:hover {
+        @apply bg-slate-100;
+        color: #000000 !important;
+    }
+
+    #main-nav-mobile .border-white\/10,
+    #main-nav-mobile .border-white\/20 {
+        @apply border-slate-200;
     }
 
     .irdc-top-bar__lang:focus-visible,

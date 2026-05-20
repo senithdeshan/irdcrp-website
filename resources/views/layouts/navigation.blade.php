@@ -30,10 +30,10 @@
         $navCmsPages = collect();
     }
     $navLink = 'irdc-nav-link relative inline-flex items-center whitespace-nowrap rounded-md px-2 py-2.5 text-sm font-semibold tracking-wide font-display border-b-[3px] transition-colors duration-300 sm:px-2.5 sm:text-base md:px-3 md:text-lg lg:px-3.5 lg:text-[1.0625rem]';
-    $active = 'border-emerald-300 bg-white/10 text-white font-bold shadow-sm [text-shadow:0_1px_2px_rgba(0,0,0,0.12)] after:pointer-events-none after:absolute after:bottom-1.5 after:left-1/2 after:h-1.5 after:w-1.5 after:-translate-x-1/2 after:rounded-full after:bg-emerald-200 after:ring-2 after:ring-emerald-500/25 hover:text-irdc-nav-hover sm:after:bottom-2';
+    $active = 'border-slate-950 bg-slate-100 text-slate-950 font-bold shadow-sm after:pointer-events-none after:absolute after:bottom-1.5 after:left-1/2 after:h-1.5 after:w-1.5 after:-translate-x-1/2 after:rounded-full after:bg-slate-950 after:ring-2 after:ring-slate-300 hover:text-black sm:after:bottom-2';
     /* No ::after dot: avoids overlap with the dropdown panel; chevron marks the control */
-    $activeGalleryNav = 'border-emerald-300 bg-white/10 text-white font-bold shadow-sm [text-shadow:0_1px_2px_rgba(0,0,0,0.12)] after:hidden hover:text-irdc-nav-hover';
-    $inactive = 'border-transparent text-white hover:border-white/20 hover:bg-white/10 hover:text-irdc-nav-hover';
+    $activeGalleryNav = 'border-slate-950 bg-slate-100 text-slate-950 font-bold shadow-sm after:hidden hover:text-black';
+    $inactive = 'border-transparent text-slate-950 hover:border-slate-300 hover:bg-slate-100 hover:text-black';
 @endphp
 
 <header
@@ -134,7 +134,7 @@
         </div>
     </div>
 
-    <div class="irdc-main-nav overflow-visible border-b border-emerald-950/25 bg-irdc-bar-green shadow-md shadow-emerald-950/25 ring-1 ring-white/10">
+    <div class="irdc-main-nav overflow-visible border-b border-slate-200 bg-white text-slate-950 shadow-md shadow-slate-900/10 ring-1 ring-slate-900/5">
         <div class="mx-auto max-w-7xl overflow-visible px-3 py-1.5 sm:px-5 lg:px-8">
             <div class="flex w-full min-h-[3.25rem] items-center justify-end gap-2 overflow-visible md:min-h-14 md:justify-between">
 
@@ -157,7 +157,7 @@
                                     aria-haspopup="true"
                                 >
                                     <span class="whitespace-nowrap">{{ __('messages.nav_programmes') }}</span>
-                                    <span class="inline-flex shrink-0 text-white/75 transition-colors duration-300 group-hover:text-irdc-nav-hover" aria-hidden="true">
+                                    <span class="inline-flex shrink-0 text-slate-700 transition-colors duration-300 group-hover:text-black" aria-hidden="true">
                                         <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-[11px] w-[11px] max-h-[11px] max-w-[11px]">
                                             <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
                                         </svg>
@@ -192,7 +192,7 @@
                                         aria-haspopup="true"
                                     >
                                         <span class="whitespace-nowrap">Information</span>
-                                        <span class="inline-flex shrink-0 text-white/75 transition-colors duration-300 group-hover:text-irdc-nav-hover" aria-hidden="true">
+                                        <span class="inline-flex shrink-0 text-slate-700 transition-colors duration-300 group-hover:text-black" aria-hidden="true">
                                             <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-[11px] w-[11px] max-h-[11px] max-w-[11px]">
                                                 <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
                                             </svg>
@@ -221,7 +221,7 @@
                                     aria-haspopup="true"
                                 >
                                     <span class="whitespace-nowrap">{{ __('messages.nav_gallery') }}</span>
-                                    <span class="inline-flex shrink-0 text-white/75 transition-colors duration-300 group-hover:text-irdc-nav-hover" aria-hidden="true">
+                                    <span class="inline-flex shrink-0 text-slate-700 transition-colors duration-300 group-hover:text-black" aria-hidden="true">
                                         <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-[11px] w-[11px] max-h-[11px] max-w-[11px]">
                                             <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
                                         </svg>
@@ -255,7 +255,7 @@
                                     aria-haspopup="true"
                                 >
                                     <span class="whitespace-nowrap">{{ __('messages.nav_grm') }}</span>
-                                    <span class="inline-flex shrink-0 text-white/75 transition-colors duration-300 group-hover:text-irdc-nav-hover" aria-hidden="true">
+                                    <span class="inline-flex shrink-0 text-slate-700 transition-colors duration-300 group-hover:text-black" aria-hidden="true">
                                         <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-[11px] w-[11px] max-h-[11px] max-w-[11px]">
                                             <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
                                         </svg>
@@ -285,7 +285,7 @@
                     type="button"
                     id="main-nav-toggle"
                     @click="mobile = ! mobile"
-                    class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-white transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200/80 md:hidden"
+                    class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-slate-950 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 md:hidden"
                     :aria-expanded="mobile"
                     aria-controls="main-nav-mobile"
                     aria-label="{{ __('messages.nav_menu_toggle') }}"
@@ -313,7 +313,7 @@
             x-transition:leave="transition ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="md:hidden max-h-[min(75vh,32rem)] overflow-y-auto border-t border-white/20 bg-irdc-bar-green/98 shadow-inner backdrop-blur-sm"
+            class="md:hidden max-h-[min(75vh,32rem)] overflow-y-auto border-t border-slate-200 bg-white shadow-inner backdrop-blur-sm"
             role="navigation"
             aria-label="{{ __('messages.nav_primary_aria') }}"
         >

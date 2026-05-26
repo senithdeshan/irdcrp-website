@@ -95,6 +95,13 @@
         </div>
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Home images</h2>
+                <p class="text-muted small mb-3">Upload and change the seven home page hero slider images.</p>
+                <a href="{{ route('admin.home-images.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Site settings</h2>
                 <p class="text-muted small mb-3">Edit YouTube, Facebook, LinkedIn, Instagram, and X channel links.</p>
                 <a href="{{ route('admin.site-settings.edit') }}" class="btn btn-green btn-sm">Manage</a>

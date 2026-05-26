@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Download;
 use App\Models\Gallery;
+use App\Models\HomeImage;
 use App\Models\HomeVideo;
 use App\Models\ImpactMetric;
 use App\Models\KeyLeader;
@@ -77,6 +78,14 @@ class PageController extends Controller
                 ->get()
             : collect();
 
+        $homeImages = Schema::hasTable('home_images')
+            ? HomeImage::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->get()
+            : collect();
+
         if ($keyLeaders->isEmpty()) {
             $keyLeaders = collect(config('irdcrp.key_leaders', []));
         }
@@ -98,6 +107,7 @@ class PageController extends Controller
             'keyLeaders',
             'successStories',
             'homeVideos',
+            'homeImages',
             'impactMetrics',
         ));
     }

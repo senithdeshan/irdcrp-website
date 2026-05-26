@@ -4,7 +4,13 @@
 @section('meta_description', __('messages.site_meta_description'))
 
 @php
-    $slides = config('irdcrp.hero_slides', []);
+    $homeImages = $homeImages ?? collect();
+    $slides = $homeImages->isNotEmpty()
+        ? $homeImages->map(fn ($image) => [
+            'image' => $image->imageUrl(),
+            'caption_en' => $image->caption ?? '',
+        ])->values()->all()
+        : config('irdcrp.hero_slides', []);
     $names = config('irdcrp.project_name', []);
     $heroLoc = in_array(app()->getLocale(), ['en', 'si', 'ta'], true) ? app()->getLocale() : 'en';
     $heroTitle = filled($names[$heroLoc] ?? null) ? $names[$heroLoc] : ($names['en'] ?? 'Integrated Rurban Development and Climate Resilience Project');

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DownloadController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\GrmComplaintController as AdminGrmComplaintController;
+use App\Http\Controllers\Admin\HomeImageController;
 use App\Http\Controllers\Admin\HomeVideoController;
 use App\Http\Controllers\Admin\ImpactMetricController;
 use App\Http\Controllers\Admin\KeyLeaderController;
@@ -69,6 +70,7 @@ Route::middleware(['auth', EnsureSuperAdmin::class])->prefix('admin')->name('adm
     Route::resource('project-components', ProjectComponentController::class)->except(['show']);
     Route::resource('key-leaders', KeyLeaderController::class)->except(['show']);
     Route::resource('success-stories', SuccessStoryController::class)->except(['show']);
+    Route::resource('home-images', HomeImageController::class)->only(['index', 'edit', 'update']);
     Route::resource('home-videos', HomeVideoController::class)->except(['show']);
     Route::get('site-settings', [SiteSettingController::class, 'edit'])->name('site-settings.edit');
     Route::put('site-settings', [SiteSettingController::class, 'update'])->name('site-settings.update');

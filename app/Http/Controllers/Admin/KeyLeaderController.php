@@ -41,7 +41,7 @@ class KeyLeaderController extends Controller
 
         $data['sort_order'] = $data['sort_order'] ?? 0;
         $data['is_active'] = $request->boolean('is_active');
-        $data['image'] = $request->file('image')->store('key-leaders', 'public');
+        $data['image'] = $this->storeImage($request);
 
         KeyLeader::create($data);
 
@@ -73,7 +73,7 @@ class KeyLeaderController extends Controller
             if ($key_leader->image) {
                 Storage::disk('public')->delete($key_leader->image);
             }
-            $data['image'] = $request->file('image')->store('key-leaders', 'public');
+            $data['image'] = $this->storeImage($request);
         } else {
             unset($data['image']);
         }
@@ -91,5 +91,10 @@ class KeyLeaderController extends Controller
         $key_leader->delete();
 
         return redirect()->route('admin.key-leaders.index')->with('success', 'Key leader removed.');
+    }
+
+    private function storeImage(Request $request): string
+    {
+        return $request->file('image')->store('key-leaders', 'public');
     }
 }

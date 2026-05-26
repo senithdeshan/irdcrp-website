@@ -253,6 +253,11 @@ class PageController extends Controller
         return view('grm');
     }
 
+    public function faq(): View
+    {
+        return view('faq');
+    }
+
     public function contact(): View
     {
         return view('contact');

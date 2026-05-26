@@ -64,19 +64,19 @@
 
                 <div class="mt-4 flex items-center gap-2.5">
                     <a href="{{ $socialLinks['facebook'] ?? config('irdcrp.social.facebook') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="Facebook">
-                        <img src="{{ asset(config('irdcrp.social_icons.facebook')) }}" alt="Facebook" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+                        <x-social-icon name="facebook" class="h-5 w-5" />
                     </a>
                     <a href="{{ $socialLinks['youtube'] ?? config('irdcrp.social.youtube') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="YouTube">
-                        <img src="{{ asset(config('irdcrp.social_icons.youtube')) }}" alt="YouTube" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+                        <x-social-icon name="youtube" class="h-5 w-5" />
                     </a>
                     <a href="{{ $socialLinks['twitter'] ?? config('irdcrp.social.twitter') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="X">
-                        <img src="{{ asset(config('irdcrp.social_icons.twitter')) }}" alt="X" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+                        <x-social-icon name="x" class="h-5 w-5" />
                     </a>
                     <a href="{{ $socialLinks['linkedin'] ?? config('irdcrp.social.linkedin') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="LinkedIn">
-                        <img src="{{ asset(config('irdcrp.social_icons.linkedin')) }}" alt="LinkedIn" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+                        <x-social-icon name="linkedin" class="h-5 w-5" />
                     </a>
                     <a href="{{ $socialLinks['instagram'] ?? config('irdcrp.social.instagram') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="Instagram">
-                        <img src="{{ asset(config('irdcrp.social_icons.instagram')) }}" alt="Instagram" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+                        <x-social-icon name="instagram" class="h-5 w-5" />
                     </a>
                 </div>
 

@@ -83,7 +83,7 @@
         next() { this.i = (this.i + 1) % this.n; },
     }"
     x-init="n = Math.max(slides && slides.length ? slides.length : 0, 1); if (slides && slides.length > 1) { setInterval(() => { i = (i + 1) % n }, 7500) }"
-    class="irdc-hero irdc-hero--with-fixed-nav relative min-h-[100svh] min-h-screen overflow-hidden text-white"
+    class="irdc-hero relative min-h-[100svh] min-h-screen overflow-hidden text-white"
 >
     <div class="absolute inset-0 min-h-[100svh] min-h-screen">
         <template x-for="(s, idx) in slides" :key="idx">
@@ -105,8 +105,7 @@
         <div class="irdc-hero__veil absolute inset-0 min-h-full" aria-hidden="true"></div>
     </div>
 
-    {{-- Header offset on this wrapper (not the centered inner) so flex justify-center runs only in the band below the fixed nav --}}
-    <div class="relative z-10 box-border flex min-h-[100svh] min-h-screen flex-col pt-[var(--irdc-header-offset)]">
+    <div class="relative z-10 box-border flex min-h-[100svh] min-h-screen flex-col pt-8 sm:pt-10">
         <div class="irdc-hero-anim irdc-hero-stagger mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-3 pb-44 text-center sm:px-5 sm:pb-48 lg:px-8">
             <p class="irdc-hero__eyebrow irdc-hero-stagger__item">{{ __('messages.hero_eyebrow') }}</p>
             <h1 class="irdc-hero__title irdc-hero-stagger__item mt-6 sm:mt-7">
@@ -180,19 +179,19 @@
 {{-- Outside hero: hero section uses overflow:hidden which clips position:fixed children --}}
 <aside class="irdc-hero-social" aria-label="{{ __('messages.header_social_aria') }}">
     <a href="{{ $socialLinks['youtube'] ?? config('irdcrp.social.youtube') }}" target="_blank" rel="noopener noreferrer" title="YouTube" class="irdc-hero-social__btn">
-        <img src="{{ asset(config('irdcrp.social_icons.youtube')) }}" alt="YouTube" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+        <x-social-icon name="youtube" class="h-5 w-5" />
     </a>
     <a href="{{ $socialLinks['facebook'] ?? config('irdcrp.social.facebook') }}" target="_blank" rel="noopener noreferrer" title="Facebook" class="irdc-hero-social__btn">
-        <img src="{{ asset(config('irdcrp.social_icons.facebook')) }}" alt="Facebook" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+        <x-social-icon name="facebook" class="h-5 w-5" />
     </a>
     <a href="{{ $socialLinks['twitter'] ?? config('irdcrp.social.twitter') }}" target="_blank" rel="noopener noreferrer" title="X" class="irdc-hero-social__btn">
-        <img src="{{ asset(config('irdcrp.social_icons.twitter')) }}" alt="X" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+        <x-social-icon name="x" class="h-5 w-5" />
     </a>
     <a href="{{ $socialLinks['linkedin'] ?? config('irdcrp.social.linkedin') }}" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="irdc-hero-social__btn">
-        <img src="{{ asset(config('irdcrp.social_icons.linkedin')) }}" alt="LinkedIn" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+        <x-social-icon name="linkedin" class="h-5 w-5" />
     </a>
     <a href="{{ $socialLinks['instagram'] ?? config('irdcrp.social.instagram') }}" target="_blank" rel="noopener noreferrer" title="Instagram" class="irdc-hero-social__btn">
-        <img src="{{ asset(config('irdcrp.social_icons.instagram')) }}" alt="Instagram" class="h-5 w-5 rounded-sm object-contain" loading="lazy" decoding="async">
+        <x-social-icon name="instagram" class="h-5 w-5" />
     </a>
 </aside>
 

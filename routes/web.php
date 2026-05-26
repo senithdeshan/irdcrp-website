@@ -42,6 +42,7 @@ Route::get('/vacancies', [PageController::class, 'vacancies'])->name('vacancies.
 Route::get('/vacancies/{vacancy}', [PageController::class, 'showVacancy'])->name('vacancies.show');
 Route::get('/grm', [PageController::class, 'grm']);
 Route::post('/grm/complaints', [GrmComplaintController::class, 'store'])->name('grm.complaints.store');
+Route::get('/faq', [PageController::class, 'faq']);
 Route::get('/contact', [PageController::class, 'contact']);
 Route::post('/contact/support', [SupportMessageController::class, 'store'])->name('support-messages.store');
 Route::get('/p/{page:slug}', [PageController::class, 'showCmsPage'])->name('page.show');

@@ -20,24 +20,24 @@
      */
     /* Slim top bar + main nav (wraps to two rows on md–lg). Must clear fixed header on home hero. */
     :root {
-        --irdc-header-offset: 11rem;
+        --irdc-header-offset: 8.35rem;
     }
 
     @media (min-width: 640px) {
         :root {
-            --irdc-header-offset: 12rem;
+            --irdc-header-offset: 8.85rem;
         }
     }
 
     @media (min-width: 1024px) {
         :root {
-            --irdc-header-offset: 14.5rem;
+            --irdc-header-offset: 8.5rem;
         }
     }
 
     @media (min-width: 1280px) {
         :root {
-            --irdc-header-offset: 15rem;
+            --irdc-header-offset: 8.75rem;
         }
     }
 
@@ -120,35 +120,35 @@
     }
 
     .irdc-top-bar--slim .irdc-header-logo-parts {
-        @apply gap-2 sm:gap-3;
+        @apply gap-1.5 sm:gap-2.5;
     }
 
     .irdc-top-bar--slim .irdc-header-logo-cell {
-        @apply flex shrink-0 items-center justify-center rounded-xl border border-slate-200/90 bg-white shadow-md;
-        @apply p-1.5 sm:p-2;
+        @apply flex shrink-0 items-center justify-center rounded-xl border border-slate-200/90 bg-white shadow-sm;
+        @apply p-1 sm:p-1.5;
     }
 
     /* Emblem: compact square */
     .irdc-top-bar--slim .irdc-header-logo-cell--emblem {
-        @apply h-[3.5rem] w-[3.75rem] sm:h-16 sm:w-16 md:h-[4.75rem] md:w-[4.75rem] lg:h-[5.25rem] lg:w-[5.25rem];
+        @apply h-10 w-11 sm:h-11 sm:w-11 md:h-12 md:w-12 lg:h-14 lg:w-14;
     }
 
     .irdc-top-bar--slim .irdc-header-logo-cell--emblem img {
-        @apply h-9 max-h-[90%] w-auto max-w-[90%] object-contain object-center sm:h-11 md:h-12 lg:h-14;
+        @apply h-6 max-h-[86%] w-auto max-w-[86%] object-contain object-center sm:h-7 md:h-8 lg:h-9;
     }
 
     /* IRDCRP: portrait roundel + wordmark (intrinsic ~800×1024) */
     .irdc-top-bar--slim .irdc-header-logo-cell--irdcrp {
-        @apply h-[4.75rem] w-[3.75rem] sm:h-20 sm:w-16 md:h-[5.25rem] md:w-[4.125rem] lg:h-[5.25rem] lg:w-[4.25rem];
+        @apply h-11 w-9 sm:h-12 sm:w-10 md:h-14 md:w-11 lg:h-16 lg:w-12;
     }
 
     .irdc-top-bar--slim .irdc-header-logo-cell--irdcrp img {
-        @apply max-h-[96%] w-auto max-w-[96%] object-contain object-center;
+        @apply max-h-[92%] w-auto max-w-[92%] object-contain object-center;
     }
 
     /* World Bank: wide logo card matched to the logo artwork ratio */
     .irdc-top-bar--slim .irdc-header-logo-cell--worldbank {
-        @apply h-[4rem] w-[14rem] px-2 sm:h-[4.4rem] sm:w-[15.5rem] md:h-[5.05rem] md:w-[18rem] lg:h-[5.5rem] lg:w-[19.75rem];
+        @apply h-10 w-[8.75rem] px-2 sm:h-11 sm:w-[10.25rem] md:h-12 md:w-[11.75rem] lg:h-14 lg:w-[13.25rem];
         aspect-ratio: 2600 / 683;
     }
 
@@ -161,7 +161,7 @@
     }
 
     .irdc-header-tools--slim .irdc-header-social {
-        @apply h-9 w-9;
+        @apply h-8 w-8;
     }
 
     .irdc-header-tools--slim .irdc-header-social svg {
@@ -169,12 +169,12 @@
     }
 
     .irdc-header-tools--slim .irdc-top-bar__lang {
-        @apply gap-1.5 px-3 py-2 text-sm sm:text-base;
+        @apply gap-1.5 px-2.5 py-1.5 text-sm;
     }
 
     .irdc-header-tools--slim .irdc-top-bar__auth-in,
     .irdc-header-tools--slim .irdc-top-bar__auth-out {
-        @apply px-3 py-2 text-xs font-bold sm:text-sm;
+        @apply px-2.5 py-1.5 text-xs font-bold sm:text-sm;
     }
 
     .irdc-header-logo-parts {
@@ -208,7 +208,20 @@
     }
 
     .irdc-header-social {
-        @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-emerald-700 transition hover:bg-emerald-50 hover:text-emerald-800;
+        @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#0A3D62] transition hover:bg-emerald-50 hover:text-emerald-700;
+    }
+
+    .irdc-header-social svg,
+    .irdc-hero-social__btn svg,
+    .irdc-footer-modern__social svg {
+        display: block;
+        transition: transform 0.2s ease;
+    }
+
+    .irdc-header-social:hover svg,
+    .irdc-hero-social__btn:hover svg,
+    .irdc-footer-modern__social:hover svg {
+        transform: scale(1.04);
     }
 
     /* Main nav links: keyboard focus */
@@ -241,7 +254,7 @@
         z-index: 2;
     }
 
-    /* Desktop nav is 2 rows; avoid scrollbars that can block clicks (Windows shows arrow box). */
+    /* Desktop nav is a single row; avoid scrollbars that can block clicks (Windows shows arrow box). */
     #main-nav-desktop,
     .irdc-main-nav__row {
         overflow: visible;
@@ -523,7 +536,7 @@
     }
 
     .irdc-hero-social__btn {
-        @apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200/90 bg-white text-[#0A3D62] shadow-md shadow-slate-900/15 ring-1 ring-slate-900/10 transition hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-lg;
+        @apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/85 bg-white/95 text-[#0A3D62] shadow-md shadow-slate-900/15 ring-1 ring-slate-900/10 transition hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 hover:shadow-lg;
     }
 
     .irdc-hero-social__glyph {
@@ -532,10 +545,6 @@
 
     .irdc-hero-social__glyph--wide {
         @apply text-[11px] font-extrabold tracking-tight;
-    }
-
-    .irdc-nav-cta {
-        @apply items-center justify-center rounded-full border border-amber-300/70 bg-gradient-to-r from-amber-400 to-orange-500 px-4 py-2 text-sm font-bold text-slate-900 shadow-md transition hover:from-amber-300 hover:to-orange-400;
     }
 
     /* Section headers (home) */
@@ -2542,7 +2551,7 @@
     }
 
     .irdc-footer-modern__social {
-        @apply inline-flex h-9 w-9 items-center justify-center rounded-full border border-emerald-200/25 bg-white/10 text-xs font-bold text-white transition hover:-translate-y-0.5 hover:bg-emerald-500/30;
+        @apply inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-white/95 text-xs font-bold text-[#0A3D62] shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700;
     }
 
     /* Contact page: modern glass layout */

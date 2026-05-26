@@ -40,8 +40,13 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            'root' => env(
+                'PUBLIC_DISK_ROOT',
+                env('APP_ENV') === 'production'
+                    ? '/home/irdcrp/public_html/storage'
+                    : storage_path('app/public')
+            ),
+            'url' => rtrim(env('PUBLIC_DISK_URL', env('APP_URL', 'http://localhost').'/storage'), '/'),
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CmsPageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DownloadController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\GrmComplaintController as AdminGrmComplaintController;
 use App\Http\Controllers\Admin\HomeImageController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Admin\ImpactMetricController;
 use App\Http\Controllers\Admin\KeyLeaderController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
 use App\Http\Controllers\Admin\ProjectComponentController;
+use App\Http\Controllers\Admin\SafeguardResourceController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\SupportMessageController as AdminSupportMessageController;
 use App\Http\Controllers\Admin\SuccessStoryController;
@@ -18,6 +20,7 @@ use App\Http\Controllers\Admin\VacancyController;
 use App\Http\Controllers\GrmComplaintController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SafeguardController;
 use App\Http\Controllers\SupportMessageController;
 use App\Http\Middleware\EnsureSuperAdmin;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +36,8 @@ Route::get('/news/{news}', [PageController::class, 'showNews'])->name('news.show
 Route::get('/procurement', [PageController::class, 'procurement']);
 Route::get('/downloads', [PageController::class, 'downloads'])->name('downloads.index');
 Route::get('/downloads/file/{download}', [PageController::class, 'downloadFile'])->name('download.file');
+Route::get('/safeguards/{category}', [SafeguardController::class, 'show'])->name('safeguards.show');
+Route::get('/safeguards/file/{safeguard}', [SafeguardController::class, 'download'])->name('safeguards.download');
 Route::get('/gallery', function () {
     return redirect()->route('gallery.section', ['section' => 'photos']);
 })->name('gallery.index');
@@ -66,6 +71,8 @@ Route::middleware(['auth', EnsureSuperAdmin::class])->prefix('admin')->name('adm
     Route::resource('gallery', GalleryController::class)->except(['show']);
     Route::resource('vacancies', VacancyController::class)->except(['show']);
     Route::resource('downloads', DownloadController::class)->except(['show']);
+    Route::resource('safeguards', SafeguardResourceController::class)->except(['show']);
+    Route::resource('faqs', FaqController::class)->except(['show']);
     Route::resource('pages', CmsPageController::class)->except(['show']);
     Route::resource('project-components', ProjectComponentController::class)->except(['show']);
     Route::resource('key-leaders', KeyLeaderController::class)->except(['show']);

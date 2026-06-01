@@ -31,6 +31,7 @@ class KeyLeaderSeeder extends Seeder
 
             KeyLeader::create([
                 'sort_order' => $index + 1,
+                'group' => $cfg['group'] ?? 'key_leader',
                 'is_active' => true,
                 'image' => null,
                 'role_en' => trans('messages.'.$roleKey, [], 'en'),

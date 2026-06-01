@@ -17,9 +17,8 @@ return [
     | Edit these to match official wording in each language.
     */
     'project_name' => [
-        // Replace with officially approved wording when available.
-        'si' => 'ඒකාබද්ධ ග්‍රාමීය-නාගරික සංවර්ධන සහ දේශගුණ ඔරොත්තුව ව්‍යාපෘතිය',
-        'ta' => 'ஒருங்கிணைந்த ஊரக-நகர்ப்புற வளர்ச்சி மற்றும் காலநிலை மீட்சித் திட்டம்',
+        'si' => 'ඒකාබද්ධ ග්රාම-නගර සංවර්ධන සහ දේශගුණික තත්ත්වයන්ට ඔරොත්තුදීමේ ව්යාපෘතිය',
+        'ta' => 'ஒருங்கிணைந்த கிராம-நகர அபிவிருத்தி மற்றும் காலநிலை மீள்திறன் செயற்றிட்டம்',
         'en' => 'Integrated Rurban Development and Climate Resilience Project',
     ],
 

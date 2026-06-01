@@ -14,6 +14,7 @@ class KeyLeaderController extends Controller
     public function index(): View
     {
         $items = KeyLeader::query()
+            ->orderBy('group')
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get();
@@ -30,6 +31,7 @@ class KeyLeaderController extends Controller
     {
         $data = $request->validate([
             'sort_order' => 'nullable|integer|min:0|max:9999',
+            'group' => 'required|in:key_leader,project_staff',
             'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:8192',
             'role_en' => 'required|string|max:255',
             'role_si' => 'nullable|string|max:255',
@@ -57,6 +59,7 @@ class KeyLeaderController extends Controller
     {
         $data = $request->validate([
             'sort_order' => 'nullable|integer|min:0|max:9999',
+            'group' => 'required|in:key_leader,project_staff',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:8192',
             'role_en' => 'required|string|max:255',
             'role_si' => 'nullable|string|max:255',

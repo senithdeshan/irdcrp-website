@@ -5,13 +5,14 @@
         <h2 class="section-title mb-0">Key leaders</h2>
         <a href="{{ route('admin.key-leaders.create') }}" class="btn btn-green">Add leader</a>
     </div>
-    <p class="text-muted small mb-4">Photos and text shown on the home page. Drag order uses <strong>Sort</strong> (lower numbers first). Inactive rows are hidden on the site.</p>
+    <p class="text-muted small mb-4">Photos and text shown on the home page. Use <strong>Group</strong> to split the section into Key Leaders and Project Staff. Sort uses lower numbers first inside each group.</p>
     @if (session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
     <div class="table-responsive card feature-card">
         <table class="table table-hover mb-0 align-middle">
             <thead class="table-light">
                 <tr>
                     <th>Sort</th>
+                    <th>Group</th>
                     <th>Photo</th>
                     <th>Role (EN)</th>
                     <th>Organisation (EN)</th>
@@ -23,6 +24,11 @@
                 @forelse($items as $item)
                     <tr>
                         <td>{{ $item->sort_order }}</td>
+                        <td>
+                            <span class="badge text-bg-{{ $item->group === 'project_staff' ? 'danger' : 'primary' }}">
+                                {{ $item->groupLabel() }}
+                            </span>
+                        </td>
                         <td style="width: 72px">
                             @if($item->image)
                                 <img src="{{ asset('storage/'.$item->image) }}" alt="" class="rounded" style="width: 56px; height: 56px; object-fit: cover;">
@@ -48,7 +54,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="text-muted p-4">No key leaders yet. Add entries or run <code class="small">php artisan db:seed --class=KeyLeaderSeeder</code> to import defaults.</td></tr>
+                    <tr><td colspan="7" class="text-muted p-4">No key leaders yet. Add entries or run <code class="small">php artisan db:seed --class=KeyLeaderSeeder</code> to import defaults.</td></tr>
                 @endforelse
             </tbody>
         </table>

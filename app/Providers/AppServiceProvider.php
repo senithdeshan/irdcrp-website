@@ -22,7 +22,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view): void {
-            $view->with('socialLinks', app(SiteSettings::class)->socialLinks());
+            $settings = app(SiteSettings::class);
+
+            $view->with('socialLinks', $settings->socialLinks());
+            $view->with('footerSettings', $settings->footer());
         });
     }
 }

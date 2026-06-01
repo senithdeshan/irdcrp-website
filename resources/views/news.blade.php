@@ -38,9 +38,9 @@
                 @foreach($news as $item)
                     <a href="{{ route('news.show', $item) }}" class="irdc-news-card {{ $loop->first ? 'irdc-news-card--featured' : '' }} group">
                         <article>
-                            @if($item->image)
+                            @if($item->imageUrl())
                                 <div class="irdc-news-card__image">
-                                    <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->{'title_'.$tLoc} ?? $item->title_en }}" loading="lazy" decoding="async">
+                                    <img src="{{ $item->imageUrl() }}" alt="{{ $item->{'title_'.$tLoc} ?? $item->title_en }}" loading="lazy" decoding="async">
                                 </div>
                             @else
                                 <div class="irdc-news-card__image irdc-news-card__image--empty">

@@ -8,6 +8,7 @@ class KeyLeader extends Model
 {
     protected $fillable = [
         'sort_order',
+        'group',
         'is_active',
         'image',
         'role_en',
@@ -24,6 +25,14 @@ class KeyLeader extends Model
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];
+    }
+
+    public function groupLabel(): string
+    {
+        return match ($this->group) {
+            'project_staff' => 'Project Staff',
+            default => 'Key Leaders',
+        };
     }
 
     /**

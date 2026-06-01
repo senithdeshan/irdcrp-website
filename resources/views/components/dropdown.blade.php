@@ -6,6 +6,7 @@
     'panelMinWidth' => false,
     'panelExtraClass' => '',
     'panelRounded' => 'rounded-xl',
+    'contentOverflow' => 'overflow-hidden',
 ])
 
 @php
@@ -43,7 +44,7 @@ $panelMin = $panelMinWidth !== false
             style="display: none;"
             @click="open = false"
     >
-        <div class="overflow-hidden {{ $panelRounded }} {{ $contentClasses }}">
+        <div class="{{ $contentOverflow }} {{ $panelRounded }} {{ $contentClasses }}">
             {{ $content }}
         </div>
     </div>

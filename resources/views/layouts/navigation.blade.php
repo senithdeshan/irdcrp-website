@@ -11,22 +11,47 @@
         return $page ? route('page.show', $page) : $fallback;
     };
     $pathIs = fn (...$patterns) => request()->is(...$patterns);
-    $inProject = $pathIs('about', 'components', 'areas', 'programmes*', 'p/activities', 'p/organizational-structure');
-    $inResources = $pathIs('downloads*', 'p/reports', 'p/safeguard', 'p/institutional-development');
+    $inProject = $pathIs('about', 'components', 'areas', 'p/activities', 'p/organizational-structure');
+    $inResources = $pathIs(
+        'downloads*',
+        'safeguards*',
+        'p/reports',
+        'p/safeguard',
+        'p/social-management-plan-social-screening-report',
+        'p/environment-management-plan-environment-screening-plan',
+        'p/institutional-development',
+    );
+    $inSafeguard = $pathIs(
+        'safeguards*',
+        'p/safeguard',
+        'p/social-management-plan-social-screening-report',
+        'p/environment-management-plan-environment-screening-plan',
+    );
     $inAnnouncements = $pathIs('procurement*', 'vacancies*');
     $inFaq = $pathIs('faq');
     $projectItems = [
         ['label' => 'About Us', 'href' => url('/about'), 'active' => $pathIs('about')],
         ['label' => 'Components', 'href' => url('/components'), 'active' => $pathIs('components')],
         ['label' => 'Areas', 'href' => url('/areas'), 'active' => $pathIs('areas')],
-        ['label' => 'Activities', 'href' => url('/programmes'), 'active' => $pathIs('programmes*')],
         ['label' => 'Organizational Structure', 'href' => $pageUrl('organizational-structure', url('/#key-leaders')), 'active' => $pathIs('p/organizational-structure')],
     ];
     $resourceItems = [
         ['label' => 'Documents', 'href' => route('downloads.index'), 'active' => $pathIs('downloads*')],
         ['label' => 'Reports', 'href' => $pageUrl('reports', route('downloads.index')), 'active' => $pathIs('p/reports')],
-        ['label' => 'Safeguard', 'href' => $pageUrl('safeguard', route('downloads.index')), 'active' => $pathIs('p/safeguard')],
+        ['type' => 'submenu', 'label' => 'Safeguard', 'active' => $inSafeguard],
         ['label' => 'Institutional Development', 'href' => $pageUrl('institutional-development', route('downloads.index')), 'active' => $pathIs('p/institutional-development')],
+    ];
+    $safeguardItems = [
+        [
+            'label' => 'Social Management Plan & Social Screening Report',
+            'href' => route('safeguards.show', 'social-management-plan-social-screening-report'),
+            'active' => $pathIs('safeguards/social-management-plan-social-screening-report', 'p/social-management-plan-social-screening-report'),
+        ],
+        [
+            'label' => 'Environment Management Plan & Environment Screening Plan',
+            'href' => route('safeguards.show', 'environment-management-plan-environment-screening-plan'),
+            'active' => $pathIs('safeguards/environment-management-plan-environment-screening-plan', 'p/environment-management-plan-environment-screening-plan'),
+        ],
     ];
     $announcementItems = [
         ['label' => 'Procurement', 'href' => url('/procurement'), 'active' => $pathIs('procurement*')],
@@ -39,7 +64,7 @@
 @endphp
 
 <div
-    x-data="{ mobile: false, projectMobile: @js($inProject), resourcesMobile: @js($inResources), announcementsMobile: @js($inAnnouncements) }"
+    x-data="{ mobile: false, projectMobile: @js($inProject), resourcesMobile: @js($inResources), safeguardMobile: @js($inSafeguard), announcementsMobile: @js($inAnnouncements) }"
     class="sticky top-0 z-[9999]"
 >
 <header class="relative z-[1]">
@@ -144,7 +169,7 @@
                         </x-slot>
                     </x-dropdown>
 
-                    <x-dropdown align="left" width="w-max max-w-[24rem]" panelMinWidth="" panelRounded="rounded-lg" panelExtraClass="shadow-[0_6px_18px_rgba(0,0,0,0.12)]" contentClasses="bg-white py-1 [&>a]:!px-3 [&>a]:!py-2 [&>a]:!text-sm [&>a]:!leading-snug [&>a:hover]:!pl-4">
+                    <x-dropdown align="left" width="w-max max-w-[30rem]" panelMinWidth="" panelRounded="rounded-lg" panelExtraClass="shadow-[0_6px_18px_rgba(0,0,0,0.12)]" contentOverflow="overflow-visible" contentClasses="bg-white py-1 [&>a]:!px-3 [&>a]:!py-2 [&>a]:!text-sm [&>a]:!leading-snug [&>a:hover]:!pl-4">
                         <x-slot name="trigger">
                             <button type="button" class="group {{ $navLink }} {{ $inResources ? $activeGalleryNav : $inactive }} !inline-flex max-w-max items-center gap-1" aria-haspopup="true">
                                 <span class="whitespace-nowrap">Resources</span>
@@ -157,16 +182,60 @@
                         </x-slot>
                         <x-slot name="content">
                             @foreach($resourceItems as $item)
-                                <x-dropdown-link href="{{ $item['href'] }}" @class(['font-bold text-[#0A3D62]' => $item['active']])>
-                                    {{ $item['label'] }}
-                                    @if($item['label'] === 'Safeguard')
-                                        <span class="block text-xs font-normal leading-snug text-slate-500">Social &amp; Environment Management / Screening Plans</span>
-                                    @endif
-                                </x-dropdown-link>
+                                @if(($item['type'] ?? null) === 'submenu')
+                                    <div
+                                        x-data="{ safeguardOpen: @js($item['active']) }"
+                                        class="group/safeguard relative border-y border-slate-100 bg-slate-50/60"
+                                        @click.stop
+                                    >
+                                        <button
+                                            type="button"
+                                            class="flex w-full items-center justify-between gap-3 px-3 py-2 text-start text-sm font-semibold leading-snug text-gray-800 transition hover:bg-white hover:pl-4 {{ $item['active'] ? 'font-bold text-[#0A3D62]' : '' }}"
+                                            aria-haspopup="true"
+                                            @click="safeguardOpen = ! safeguardOpen"
+                                            :aria-expanded="safeguardOpen"
+                                        >
+                                            <span>{{ $item['label'] }}</span>
+                                            <span
+                                                class="text-slate-500 transition-transform group-hover/safeguard:translate-x-0.5"
+                                                :class="safeguardOpen ? 'translate-x-0.5 text-[#0A3D62]' : ''"
+                                                aria-hidden="true"
+                                            >
+                                                <svg width="13" height="13" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </span>
+                                        </button>
+                                        <div
+                                            class="invisible absolute left-[calc(100%+0.35rem)] top-0 z-[10001] w-[24rem] rounded-lg border border-slate-100 bg-white py-1 opacity-0 shadow-[0_10px_25px_rgba(0,0,0,0.14)] ring-1 ring-black/5 transition group-hover/safeguard:visible group-hover/safeguard:opacity-100 group-focus-within/safeguard:visible group-focus-within/safeguard:opacity-100"
+                                            :class="safeguardOpen ? '!visible !opacity-100' : ''"
+                                        >
+                                            @foreach($safeguardItems as $safeguardItem)
+                                                <x-dropdown-link
+                                                    href="{{ $safeguardItem['href'] }}"
+                                                    @class([
+                                                        'font-bold text-[#0A3D62]' => $safeguardItem['active'],
+                                                        '!pl-6 text-[0.82rem]',
+                                                    ])
+                                                >
+                                                    {{ $safeguardItem['label'] }}
+                                                </x-dropdown-link>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @else
+                                    <x-dropdown-link
+                                        href="{{ $item['href'] }}"
+                                        @class([
+                                            'font-bold text-[#0A3D62]' => $item['active'],
+                                        ])
+                                    >
+                                        {{ $item['label'] }}
+                                    </x-dropdown-link>
+                                @endif
                             @endforeach
                         </x-slot>
                     </x-dropdown>
 
+                    <a href="{{ route('programmes.index') }}" class="{{ $navLink }} {{ request()->is('programmes*') ? $active : $inactive }}">Programmes</a>
                     <a href="{{ route('news.index') }}" class="{{ $navLink }} {{ request()->is('news*') ? $active : $inactive }}">News &amp; Events</a>
                     <a href="{{ route('gallery.index') }}" class="{{ $navLink }} {{ $inGallery ? $active : $inactive }}">Gallery</a>
 
@@ -259,11 +328,45 @@
                     </button>
                     <div x-show="resourcesMobile" x-cloak class="space-y-0 border-t border-slate-200 bg-slate-50 py-1 pl-3">
                         @foreach($resourceItems as $item)
-                            <a class="block rounded-md py-2.5 pl-2 text-sm transition duration-300 hover:bg-white {{ $item['active'] ? 'font-bold text-[#0A3D62]' : 'text-slate-700' }}" href="{{ $item['href'] }}" @click="mobile = false; resourcesMobile = false">{{ $item['label'] }}</a>
+                            @if(($item['type'] ?? null) === 'submenu')
+                                <div class="border-b border-slate-200/70">
+                                    <button
+                                        type="button"
+                                        class="flex w-full items-center justify-between rounded-md py-2.5 pl-2 pr-2 text-start text-sm transition duration-300 hover:bg-white {{ $item['active'] ? 'font-bold text-[#0A3D62]' : 'text-slate-700' }}"
+                                        @click="safeguardMobile = ! safeguardMobile"
+                                        :aria-expanded="safeguardMobile"
+                                    >
+                                        <span>{{ $item['label'] }}</span>
+                                        <span class="inline-flex shrink-0 text-slate-500 transition-transform duration-200" :class="safeguardMobile ? 'rotate-180' : ''" aria-hidden="true">
+                                            <svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-3.5 w-3.5 max-h-[14px] max-w-[14px]"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" /></svg>
+                                        </span>
+                                    </button>
+                                    <div x-show="safeguardMobile" x-cloak class="border-t border-slate-200 bg-white/70 py-1 pl-3">
+                                        @foreach($safeguardItems as $safeguardItem)
+                                            <a
+                                                class="block rounded-md py-2.5 pl-3 text-sm transition duration-300 hover:bg-white {{ $safeguardItem['active'] ? 'font-bold text-[#0A3D62]' : 'text-slate-700' }}"
+                                                href="{{ $safeguardItem['href'] }}"
+                                                @click="mobile = false; resourcesMobile = false; safeguardMobile = false"
+                                            >
+                                                {{ $safeguardItem['label'] }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @else
+                                <a
+                                    class="block rounded-md py-2.5 pl-2 text-sm transition duration-300 hover:bg-white {{ $item['active'] ? 'font-bold text-[#0A3D62]' : 'text-slate-700' }}"
+                                    href="{{ $item['href'] }}"
+                                    @click="mobile = false; resourcesMobile = false"
+                                >
+                                    {{ $item['label'] }}
+                                </a>
+                            @endif
                         @endforeach
                     </div>
                 </div>
 
+                <a class="block rounded-lg border-b border-slate-200 py-3.5 pl-1 transition duration-300 hover:bg-slate-100 {{ request()->is('programmes*') ? 'font-bold text-[#0A3D62]' : '' }}" href="{{ route('programmes.index') }}" @click="mobile = false">Programmes</a>
                 <a class="block rounded-lg border-b border-slate-200 py-3.5 pl-1 transition duration-300 hover:bg-slate-100" href="{{ route('news.index') }}" @click="mobile = false">News &amp; Events</a>
                 <a class="block rounded-lg border-b border-slate-200 py-3.5 pl-1 transition duration-300 hover:bg-slate-100" href="{{ route('gallery.index') }}" @click="mobile = false">Gallery</a>
 

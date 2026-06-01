@@ -16,6 +16,7 @@
         <table class="table table-hover">
             <thead class="table-success">
                 <tr>
+                    <th>Images</th>
                     <th>Title</th>
                     <th>Date</th>
                     <th>Status</th>
@@ -25,6 +26,16 @@
             <tbody>
                 @foreach($news as $item)
                     <tr>
+                        <td style="width: 92px">
+                            @if($item->imageUrl())
+                                <img src="{{ $item->imageUrl() }}" alt="" class="rounded" style="width: 72px; height: 48px; object-fit: cover;">
+                                @if(count($item->imagePaths()) > 1)
+                                    <span class="badge bg-secondary">{{ count($item->imagePaths()) }}</span>
+                                @endif
+                            @else
+                                <span class="text-muted small">No image</span>
+                            @endif
+                        </td>
                         <td>{{ $item->title_en }}</td>
                         <td>{{ $item->published_date }}</td>
                         <td>{{ ucfirst($item->status) }}</td>

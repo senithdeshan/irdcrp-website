@@ -53,6 +53,20 @@
         </div>
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Safeguard</h2>
+                <p class="text-muted small mb-3">Add descriptions, reports, Office files, presentations, and images for Safeguard pages.</p>
+                <a href="{{ route('admin.safeguards.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">FAQs</h2>
+                <p class="text-muted small mb-3">Edit public frequently asked questions and answers.</p>
+                <a href="{{ route('admin.faqs.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Pages</h2>
                 <p class="text-muted small mb-3">Custom pages at <code class="small">/p/your-slug</code></p>
                 <a href="{{ route('admin.pages.index') }}" class="btn btn-green btn-sm">Manage</a>
@@ -103,7 +117,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Site settings</h2>
-                <p class="text-muted small mb-3">Edit YouTube, Facebook, LinkedIn, Instagram, and X channel links.</p>
+                <p class="text-muted small mb-3">Edit footer logo, project contact details, and social channel links.</p>
                 <a href="{{ route('admin.site-settings.edit') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>

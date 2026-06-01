@@ -1,15 +1,14 @@
 @php
     $showPublicFooter = ! request()->is('admin*') && ! request()->routeIs('dashboard');
+    $footer = $footerSettings ?? [];
+    $footerLogo = $footer['logo'] ?? config('irdcrp.logos.irdcrp');
+    $footerProjectName = $footer['project_name'] ?? config('irdcrp.project_name.en', config('app.name', 'IRDCRP'));
+    $footerAddress = $footer['address'] ?? config('irdcrp.contact.address');
+    $footerEmail = $footer['email'] ?? config('irdcrp.contact.email');
+    $footerPhone = $footer['phone'] ?? config('irdcrp.contact.phone');
 @endphp
 
 @if($showPublicFooter)
-<section class="irdc-footer-cta">
-    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-4 text-center sm:flex-row sm:px-6 sm:text-left lg:px-8">
-        <p class="text-sm font-semibold text-white sm:text-base">Join us in building climate-resilient rural communities.</p>
-        <a href="/contact" class="irdc-footer-cta__btn">Contact Us</a>
-    </div>
-</section>
-
 <footer class="irdc-footer-modern">
     <div class="irdc-footer-modern__wave" aria-hidden="true">
         <svg viewBox="0 0 1200 90" preserveAspectRatio="none" class="h-10 w-full sm:h-12">
@@ -18,16 +17,47 @@
     </div>
 
     <div class="relative mx-auto max-w-7xl px-4 pb-6 pt-12 sm:px-6 sm:pt-14 lg:px-8">
-        <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
-            <div>
-                <div class="mb-4 flex items-center gap-3">
-                    <img src="{{ asset(config('irdcrp.logos.irdcrp')) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" class="h-14 w-auto rounded-md bg-white/90 p-1">
-                    <p class="text-lg font-extrabold text-white">IRDCRP</p>
+        <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.35fr_0.8fr_0.85fr] lg:gap-12">
+            <div class="irdc-footer-modern__brand">
+                <div class="irdc-footer-modern__identity">
+                    <img src="{{ asset($footerLogo) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" class="irdc-footer-modern__logo">
+                    <div>
+                        <p class="irdc-footer-modern__kicker">IRDCRP</p>
+                        <h2 class="irdc-footer-modern__project">{{ $footerProjectName }}</h2>
+                    </div>
                 </div>
-                <p class="text-sm leading-relaxed text-white/80">
-                    Integrated Rurban Development and Climate Resilience Project supports climate-smart development and resilient livelihoods.
-                </p>
-                <p class="mt-3 text-xs text-emerald-100/80">{{ config('irdcrp.ministry_line_en') }}</p>
+
+                <div class="irdc-footer-modern__contact-list">
+                    @if(filled($footerAddress))
+                        <p>{{ $footerAddress }}</p>
+                    @endif
+
+                    @if(filled($footerEmail))
+                        <a href="mailto:{{ $footerEmail }}">{{ $footerEmail }}</a>
+                    @endif
+
+                    @if(filled($footerPhone))
+                        <a href="tel:{{ preg_replace('/\s+/', '', $footerPhone) }}">{{ $footerPhone }}</a>
+                    @endif
+                </div>
+
+                <div class="irdc-footer-modern__socials" aria-label="{{ __('messages.footer_social') }}">
+                    <a href="{{ $socialLinks['facebook'] ?? config('irdcrp.social.facebook') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="Facebook">
+                        <x-social-icon name="facebook" class="h-5 w-5" />
+                    </a>
+                    <a href="{{ $socialLinks['youtube'] ?? config('irdcrp.social.youtube') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="YouTube">
+                        <x-social-icon name="youtube" class="h-5 w-5" />
+                    </a>
+                    <a href="{{ $socialLinks['twitter'] ?? config('irdcrp.social.twitter') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="X">
+                        <x-social-icon name="x" class="h-5 w-5" />
+                    </a>
+                    <a href="{{ $socialLinks['linkedin'] ?? config('irdcrp.social.linkedin') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="LinkedIn">
+                        <x-social-icon name="linkedin" class="h-5 w-5" />
+                    </a>
+                    <a href="{{ $socialLinks['instagram'] ?? config('irdcrp.social.instagram') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="Instagram">
+                        <x-social-icon name="instagram" class="h-5 w-5" />
+                    </a>
+                </div>
             </div>
 
             <div>
@@ -46,7 +76,7 @@
                 </ul>
             </div>
 
-            <div>
+            <div class="sm:col-span-2 lg:col-span-1">
                 <h3 class="irdc-footer-modern__head">Project Focus</h3>
                 <ul class="irdc-footer-modern__links">
                     <li><a href="/components">Climate Resilience</a></li>
@@ -54,39 +84,6 @@
                     <li><a href="/components">Sustainable Agriculture</a></li>
                     <li><a href="/components">Livelihood Development</a></li>
                 </ul>
-            </div>
-
-            <div>
-                <h3 class="irdc-footer-modern__head">{{ __('messages.footer_contact') }}</h3>
-                <p class="text-sm leading-relaxed text-white/80">{{ config('irdcrp.contact.address') }}</p>
-                <p class="mt-2 text-sm text-white/90"><a href="mailto:{{ config('irdcrp.contact.email') }}" class="hover:text-emerald-200">{{ config('irdcrp.contact.email') }}</a></p>
-                <p class="text-sm text-white/90"><a href="tel:{{ preg_replace('/\s+/', '', config('irdcrp.contact.phone')) }}" class="hover:text-emerald-200">{{ config('irdcrp.contact.phone') }}</a></p>
-
-                <div class="mt-4 flex items-center gap-2.5">
-                    <a href="{{ $socialLinks['facebook'] ?? config('irdcrp.social.facebook') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="Facebook">
-                        <x-social-icon name="facebook" class="h-5 w-5" />
-                    </a>
-                    <a href="{{ $socialLinks['youtube'] ?? config('irdcrp.social.youtube') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="YouTube">
-                        <x-social-icon name="youtube" class="h-5 w-5" />
-                    </a>
-                    <a href="{{ $socialLinks['twitter'] ?? config('irdcrp.social.twitter') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="X">
-                        <x-social-icon name="x" class="h-5 w-5" />
-                    </a>
-                    <a href="{{ $socialLinks['linkedin'] ?? config('irdcrp.social.linkedin') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="LinkedIn">
-                        <x-social-icon name="linkedin" class="h-5 w-5" />
-                    </a>
-                    <a href="{{ $socialLinks['instagram'] ?? config('irdcrp.social.instagram') }}" rel="noopener noreferrer" target="_blank" class="irdc-footer-modern__social" aria-label="Instagram">
-                        <x-social-icon name="instagram" class="h-5 w-5" />
-                    </a>
-                </div>
-
-                <form class="mt-5">
-                    <label class="mb-2 block text-xs font-semibold uppercase tracking-wider text-emerald-100/90">Newsletter</label>
-                    <div class="flex gap-2">
-                        <input type="email" placeholder="Your email" class="w-full rounded-full border border-emerald-200/30 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/60 focus:border-emerald-200 focus:outline-none">
-                        <button type="button" class="rounded-full bg-amber-500 px-4 py-2 text-sm font-bold text-slate-900 transition hover:bg-amber-400">Join</button>
-                    </div>
-                </form>
             </div>
         </div>
 

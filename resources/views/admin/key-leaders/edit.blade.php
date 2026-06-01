@@ -10,6 +10,13 @@
                     <label class="form-label">Sort order</label>
                     <input type="number" name="sort_order" class="form-control" value="{{ old('sort_order', $keyLeader->sort_order) }}" min="0">
                 </div>
+                <div class="col-md-6">
+                    <label class="form-label">Group</label>
+                    <select name="group" class="form-select" required>
+                        <option value="key_leader" @selected(old('group', $keyLeader->group) === 'key_leader')>Key Leaders</option>
+                        <option value="project_staff" @selected(old('group', $keyLeader->group) === 'project_staff')>Project Staff</option>
+                    </select>
+                </div>
                 <div class="col-md-6 d-flex align-items-end">
                     <div class="form-check">
                         <input type="hidden" name="is_active" value="0">

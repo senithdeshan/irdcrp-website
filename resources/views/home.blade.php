@@ -45,7 +45,6 @@
             (object) ['key' => 'investment', 'label' => 'Total Investment', 'value' => $stats['investment'] ?? 'USD 105 Million', 'count_target' => null, 'helper' => 'Financing envelope for resilient agriculture development'],
             (object) ['key' => 'projects', 'label' => 'Total Projects', 'value' => $stats['projects'] ?? '34', 'count_target' => is_numeric($stats['projects'] ?? null) ? (int) $stats['projects'] : 34, 'helper' => 'Priority investments and field-level activities'],
         ]);
-    $mapEmbedUrl = config('irdcrp.map_embed_url');
     $successStories = $successStories ?? collect();
     $programmeCards = collect(config('irdcrp.programme_cards', []));
     $weatherAreas = config('irdcrp.weather_areas', []);
@@ -113,7 +112,9 @@
 
     <div class="relative z-10 box-border flex min-h-[100svh] min-h-screen flex-col pt-8 sm:pt-10">
         <div class="irdc-hero-anim irdc-hero-stagger mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-3 pb-44 text-center sm:px-5 sm:pb-48 lg:px-8">
-            <p class="irdc-hero__eyebrow irdc-hero-stagger__item">{{ __('messages.hero_eyebrow') }}</p>
+            @if(filled(__('messages.hero_eyebrow')))
+                <p class="irdc-hero__eyebrow irdc-hero-stagger__item">{{ __('messages.hero_eyebrow') }}</p>
+            @endif
             <h1 class="irdc-hero__title irdc-hero-stagger__item mt-6 sm:mt-7">
                 {{ $heroTitle }}
             </h1>
@@ -134,9 +135,6 @@
             <div class="irdc-hero__actions irdc-hero-stagger__item">
                 <a href="/about" class="irdc-hero__btn-primary">
                     {{ __('messages.home_hero_learn') }} <span aria-hidden="true">→</span>
-                </a>
-                <a href="{{ url('/contact') }}" class="irdc-hero__btn-secondary">
-                    {{ __('messages.home_get_involved') }}
                 </a>
             </div>
             <a href="#about-project" class="irdc-hero__scroll irdc-hero-stagger__item">
@@ -212,6 +210,19 @@
 
 {{-- Key leaders — first content after hero (always visible; no scroll-reveal fade) --}}
 @if(count($keyLeaders) > 0)
+    @php
+        $keyLeaderGroups = collect($keyLeaders)->groupBy(function ($leader) {
+            if ($leader instanceof \App\Models\KeyLeader) {
+                return $leader->group ?? 'key_leader';
+            }
+
+            return $leader['group'] ?? 'key_leader';
+        });
+        $leaderSections = [
+            ['key_leader', null, $keyLeaderGroups->get('key_leader', collect())],
+            ['project_staff', 'Project Staff', $keyLeaderGroups->get('project_staff', collect())],
+        ];
+    @endphp
     <section id="key-leaders" class="irdc-leaders-section irdc-scroll-mt-header" aria-labelledby="key-leaders-heading">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <header class="irdc-leaders-head">
@@ -231,53 +242,65 @@
                     Leadership and institutional coordination for implementation, supervision, and partner collaboration.
                 </p>
             </header>
-            <div class="irdc-leaders-grid">
-                @foreach ($keyLeaders as $leader)
-                    @php
-                        if ($leader instanceof \App\Models\KeyLeader) {
-                            $portrait = $leader->image
-                                ? asset('storage/'.$leader->image)
-                                : asset('images/hero/hero-home-02.png');
-                            $roleLabel = $leader->label('role', $tLoc);
-                            $orgLabel = $leader->label('org', $tLoc);
-                        } else {
-                            $imgPath = ltrim($leader['image'] ?? '', '/');
-                            $portraitPath = isset($leader['image']) && is_file(public_path($imgPath))
-                                ? $leader['image']
-                                : ($leader['fallback'] ?? '/images/hero/hero-home-01.png');
-                            $portrait = str_starts_with($portraitPath, 'http')
-                                ? $portraitPath
-                                : asset(ltrim($portraitPath, '/'));
-                            $roleKey = $leader['role'] ?? '';
-                            $orgKey = $leader['org'] ?? '';
-                            $roleLabel = $roleKey ? __('messages.'.$roleKey) : '';
-                            $orgLabel = $orgKey ? __('messages.'.$orgKey) : '';
-                        }
-                    @endphp
-                    <article class="irdc-leader-card">
-                        <span class="irdc-leader-card__index">{{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                        <div class="irdc-leader-card__photo">
-                            <img
-                                src="{{ $portrait }}"
-                                alt="{{ __('messages.leader_photo_alt', ['role' => $roleLabel]) }}"
-                                width="280"
-                                height="280"
-                                loading="lazy"
-                                decoding="async"
-                                class="irdc-leader-card__img"
-                            >
+            @foreach ($leaderSections as [$groupKey, $groupTitle, $leaders])
+                @if($leaders->isNotEmpty())
+                    @if($groupKey === 'project_staff')
+                        <div class="irdc-leaders-divider" aria-hidden="true"></div>
+                        <div class="irdc-leaders-group-head">
+                            <p class="irdc-leaders-eyebrow">Implementation Team</p>
+                            <h3>{{ $groupTitle }}</h3>
                         </div>
-                        <div class="irdc-leader-card__content">
-                            @if(filled($roleLabel))
-                                <h3 class="irdc-leader-card__role">{{ $roleLabel }}</h3>
-                            @endif
-                            @if(filled($orgLabel))
-                                <p class="irdc-leader-card__org">{{ $orgLabel }}</p>
-                            @endif
-                        </div>
-                    </article>
+                    @endif
+
+                    <div class="irdc-leaders-grid {{ $groupKey === 'project_staff' ? 'irdc-leaders-grid--staff' : '' }}">
+                    @foreach ($leaders as $leader)
+                        @php
+                            if ($leader instanceof \App\Models\KeyLeader) {
+                                $portrait = $leader->image
+                                    ? asset('storage/'.$leader->image)
+                                    : asset('images/hero/hero-home-02.png');
+                                $roleLabel = $leader->label('role', $tLoc);
+                                $orgLabel = $leader->label('org', $tLoc);
+                            } else {
+                                $imgPath = ltrim($leader['image'] ?? '', '/');
+                                $portraitPath = isset($leader['image']) && is_file(public_path($imgPath))
+                                    ? $leader['image']
+                                    : ($leader['fallback'] ?? '/images/hero/hero-home-01.png');
+                                $portrait = str_starts_with($portraitPath, 'http')
+                                    ? $portraitPath
+                                    : asset(ltrim($portraitPath, '/'));
+                                $roleKey = $leader['role'] ?? '';
+                                $orgKey = $leader['org'] ?? '';
+                                $roleLabel = $roleKey ? __('messages.'.$roleKey) : '';
+                                $orgLabel = $orgKey ? __('messages.'.$orgKey) : '';
+                            }
+                        @endphp
+                        <article class="irdc-leader-card">
+                            <span class="irdc-leader-card__index">{{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                            <div class="irdc-leader-card__photo">
+                                <img
+                                    src="{{ $portrait }}"
+                                    alt="{{ __('messages.leader_photo_alt', ['role' => $roleLabel]) }}"
+                                    width="280"
+                                    height="280"
+                                    loading="lazy"
+                                    decoding="async"
+                                    class="irdc-leader-card__img"
+                                >
+                            </div>
+                            <div class="irdc-leader-card__content">
+                                @if(filled($roleLabel))
+                                    <h3 class="irdc-leader-card__role">{{ $roleLabel }}</h3>
+                                @endif
+                                @if(filled($orgLabel))
+                                    <p class="irdc-leader-card__org">{{ $orgLabel }}</p>
+                                @endif
+                            </div>
+                        </article>
+                    @endforeach
+                    </div>
+                @endif
                 @endforeach
-            </div>
         </div>
     </section>
 @endif
@@ -360,9 +383,12 @@
             <div class="irdc-identity-copy">
                 <p class="irdc-identity-eyebrow">{{ __('messages.home_trilingual_eyebrow') }}</p>
                 <h2 class="irdc-identity-title">Integrated Rurban Development and Climate Resilience Project</h2>
-                <p class="irdc-identity-lead">
-                    A flagship initiative of the Government of Sri Lanka, implemented with the World Bank and partners, to scale climate-resilient "rurban" development - linking smallholders, value chains, and public services across the country. Official figures and results are published as they are validated.
-                </p>
+                <div class="irdc-identity-lead">
+                    <p>The Integrated Rurban Development and Climate Resilience Project builds on current and recently closed World Bank-financed operations and other sector engagements designed to rapidly address pressing development challenges, especially as Sri Lanka recovers from the economic crisis. It is the first in a Series of Projects (SOP), envisioning two projects over a nine-year period, that incorporates learning and institutional development for multisector solutions and adjusts the implementation approach as needed across projects.</p>
+                    <p>The World Bank and IFC are collaborating to create an enabling environment for smallholder producers to link with commercial buyers and financial institutions, with IFC providing complementary technical assistance to the sector to enhance service delivery.</p>
+                    <p>The SOP will deepen investments in the enabling environment, boost market links, and invest in coordinated efforts for climate resilience to bring greater competitiveness and private sector engagement in the agriculture, livestock, plantation, and aquaculture sectors.</p>
+                    <p>This will support Sri Lanka's objectives of increasing agriculture exports and ensuring a sustainable and climate-resilient agri-food production system with improved coordination among a number of departments and agencies.</p>
+                </div>
                 <div class="irdc-identity-badges" aria-label="Project focus areas">
                     <span>Climate resilience</span>
                     <span>Rurban development</span>
@@ -836,9 +862,9 @@
                 @foreach ($homeNews as $article)
                     <a href="{{ route('news.show', $article) }}" class="irdc-news-card {{ $loop->first ? 'irdc-news-card--featured' : '' }} group">
                         <article>
-                            @if ($article->image)
+                            @if ($article->imageUrl())
                                 <div class="irdc-news-card__image">
-                                    <img src="{{ asset('storage/'.$article->image) }}" alt="" loading="lazy" decoding="async">
+                                    <img src="{{ $article->imageUrl() }}" alt="" loading="lazy" decoding="async">
                                 </div>
                             @else
                                 <div class="irdc-news-card__image irdc-news-card__image--empty">
@@ -943,48 +969,6 @@
         @else
             <p class="irdc-empty-state">{{ __('messages.home_vacancies_empty') }}</p>
         @endif
-    </div>
-</section>
-
-{{-- 9. Contact (address + map optional) --}}
-<section id="contact-block" class="irdc-contact-section irdc-reveal-on-scroll irdc-scroll-mt-header">
-    <div class="container max-w-6xl">
-        <header class="irdc-section-head">
-            <p class="irdc-section-head__eyebrow">{{ __('messages.home_contact_eyebrow') }}</p>
-            <h2 class="irdc-section-head__title">{{ __('messages.home_contact_title') }}</h2>
-            <p class="irdc-section-head__lead">{{ __('messages.home_contact_sub') }}</p>
-        </header>
-        <div class="irdc-contact-grid">
-            <div class="irdc-contact-card">
-                <span>{{ __('messages.address_label') }}</span>
-                <p>{{ config('irdcrp.contact.address') }}</p>
-                <span>{{ __('messages.footer_contact') }}</span>
-                <a href="tel:{{ preg_replace('/\s+/', '', config('irdcrp.contact.phone')) }}">{{ config('irdcrp.contact.phone') }}</a>
-                <a href="mailto:{{ config('irdcrp.contact.email') }}">{{ config('irdcrp.contact.email') }}</a>
-                <a href="{{ url('/contact') }}" class="irdc-button irdc-button--outline">{{ __('messages.home_contact_full') }}</a>
-            </div>
-            <div class="irdc-map-card">
-                @if(filled($mapEmbedUrl))
-                    <div class="irdc-map-card__badge">
-                        <span aria-hidden="true">✓</span>
-                        <strong>Project location</strong>
-                    </div>
-                    <iframe
-                        title="{{ __('messages.home_contact_map_title') }}"
-                        class="h-full min-h-[18rem] w-full"
-                        style="border: 0"
-                        src="{{ $mapEmbedUrl }}"
-                        allowfullscreen
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                    ></iframe>
-                @else
-                    <div class="irdc-map-card__fallback">
-                        <p>{{ __('messages.home_contact_map_hint') }}</p>
-                    </div>
-                @endif
-            </div>
-        </div>
     </div>
 </section>
 

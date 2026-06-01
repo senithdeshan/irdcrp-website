@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Download;
+use App\Models\Faq;
 use App\Models\Gallery;
 use App\Models\HomeImage;
 use App\Models\HomeVideo;
@@ -58,6 +59,7 @@ class PageController extends Controller
 
         $keyLeaders = KeyLeader::query()
             ->where('is_active', true)
+            ->orderBy('group')
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get();
@@ -265,11 +267,53 @@ class PageController extends Controller
 
     public function faq(): View
     {
-        return view('faq');
+        $faqs = Schema::hasTable('faqs')
+            ? Faq::query()
+                ->where('status', 'published')
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->get()
+            : collect($this->fallbackFaqs());
+
+        if ($faqs->isEmpty()) {
+            $faqs = collect($this->fallbackFaqs());
+        }
+
+        return view('faq', compact('faqs'));
     }
 
     public function contact(): View
     {
         return view('contact');
+    }
+
+    private function fallbackFaqs(): array
+    {
+        return [
+            [
+                'question' => 'What is the Integrated Rurban Development and Climate Resilience Project?',
+                'answer' => 'IRDCRP supports climate-smart agriculture, rural livelihoods, resilient natural resource management, sector services, and project coordination for targeted communities in Sri Lanka.',
+            ],
+            [
+                'question' => 'Where can I find project documents?',
+                'answer' => 'Use the Resources menu and open Documents to view published reports, forms, and official public files.',
+            ],
+            [
+                'question' => 'Where are procurement notices published?',
+                'answer' => 'Procurement opportunities are available under Announcements, then Procurement.',
+            ],
+            [
+                'question' => 'How can I submit a complaint or grievance?',
+                'answer' => 'Open GRM from the main navigation and complete the complaint form with your contact details and message.',
+            ],
+            [
+                'question' => 'Where can I find vacancies?',
+                'answer' => 'Vacancy notices are listed under Announcements, then Vacancy.',
+            ],
+            [
+                'question' => 'How can I contact the project team?',
+                'answer' => 'Use Contact Us in the navigation to view contact details and send a support message.',
+            ],
+        ];
     }
 }

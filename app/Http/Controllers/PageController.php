@@ -12,6 +12,7 @@ use App\Models\KeyLeader;
 use App\Models\News;
 use App\Models\Page;
 use App\Models\Programme;
+use App\Models\ProcurementNotice;
 use App\Models\ProjectComponent;
 use App\Models\SuccessStory;
 use App\Models\Vacancy;
@@ -176,7 +177,30 @@ class PageController extends Controller
 
     public function procurement(): View
     {
-        return view('procurement');
+        $items = Schema::hasTable('procurement_notices')
+            ? ProcurementNotice::query()
+                ->whereIn('status', ['open', 'closed'])
+                ->orderBy('sort_order')
+                ->orderByDesc('published_date')
+                ->orderByDesc('id')
+                ->get()
+            : collect();
+
+        return view('procurement', compact('items'));
+    }
+
+    public function procurementFile(ProcurementNotice $procurementNotice, int $index): Response|StreamedResponse
+    {
+        abort_unless(in_array($procurementNotice->status, ['open', 'closed'], true), 404);
+
+        $document = $procurementNotice->documentAt($index);
+        abort_unless(is_array($document) && filled($document['path'] ?? null), 404);
+        abort_unless(Storage::disk('public')->exists($document['path']), 404);
+
+        return Storage::disk('public')->download(
+            $document['path'],
+            $document['original_name'] ?? basename($document['path'])
+        );
     }
 
     public function downloads(): View

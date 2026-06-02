@@ -90,7 +90,7 @@
             x-transition:leave="transition ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/88 p-2 backdrop-blur-sm sm:p-4"
+            class="fixed inset-0 z-[10000] flex items-center justify-center bg-slate-900/88 p-2 backdrop-blur-sm sm:p-4"
             role="dialog"
             aria-modal="true"
             :aria-label="items[i] && items[i].title"
@@ -128,10 +128,9 @@
                         <span class="text-2xl leading-none" aria-hidden="true">›</span>
                     </button>
                 </div>
-                <div class="mt-2 flex flex-col items-center gap-1 text-center sm:mt-3">
-                    <p x-text="items[i] && items[i].title" class="max-w-2xl px-2 text-sm font-semibold text-white sm:text-base"></p>
-                    <p x-show="items[i] && items[i].date" x-text="items[i] && items[i].date" class="text-xs text-white/80"></p>
-                    <p x-show="items.length > 1" class="text-xs text-white/50" x-text="(i + 1) + ' / ' + items.length"></p>
+                <div class="mx-auto mt-3 max-w-2xl rounded-lg bg-white/95 px-4 py-2 text-center shadow-xl shadow-slate-950/25 ring-1 ring-white/60 backdrop-blur-sm sm:mt-4 sm:px-5">
+                    <p x-text="items[i] && items[i].title" class="text-sm font-bold leading-snug text-slate-950 sm:text-[0.95rem]"></p>
+                    <p x-show="items.length > 1" class="mt-1 text-xs font-semibold text-slate-500" x-text="(i + 1) + ' / ' + items.length"></p>
                 </div>
                 <button
                     type="button"

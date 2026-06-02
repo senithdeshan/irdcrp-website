@@ -46,6 +46,13 @@
         </div>
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Procurement Notices</h2>
+                <p class="text-muted small mb-3">Publish procurement notices with multiple attached PDF reports.</p>
+                <a href="{{ route('admin.procurement-notices.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Downloads</h2>
                 <p class="text-muted small mb-3">Document library (PDF, Office, etc.).</p>
                 <a href="{{ route('admin.downloads.index') }}" class="btn btn-green btn-sm">Manage</a>

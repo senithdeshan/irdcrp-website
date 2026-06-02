@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\HomeVideoController;
 use App\Http\Controllers\Admin\ImpactMetricController;
 use App\Http\Controllers\Admin\KeyLeaderController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
+use App\Http\Controllers\Admin\ProcurementNoticeController;
 use App\Http\Controllers\Admin\ProjectComponentController;
 use App\Http\Controllers\Admin\SafeguardResourceController;
 use App\Http\Controllers\Admin\SiteSettingController;
@@ -33,7 +34,10 @@ Route::get('/programmes/{programme:slug}', [PageController::class, 'showProgramm
 Route::get('/areas', [PageController::class, 'areas']);
 Route::get('/news', [PageController::class, 'news'])->name('news.index');
 Route::get('/news/{news}', [PageController::class, 'showNews'])->name('news.show');
-Route::get('/procurement', [PageController::class, 'procurement']);
+Route::get('/procurement', [PageController::class, 'procurement'])->name('procurement.index');
+Route::get('/procurement/file/{procurementNotice}/{index}', [PageController::class, 'procurementFile'])
+    ->whereNumber('index')
+    ->name('procurement.file');
 Route::get('/downloads', [PageController::class, 'downloads'])->name('downloads.index');
 Route::get('/downloads/file/{download}', [PageController::class, 'downloadFile'])->name('download.file');
 Route::get('/safeguards/{category}', [SafeguardController::class, 'show'])->name('safeguards.show');
@@ -70,6 +74,7 @@ Route::middleware(['auth', EnsureSuperAdmin::class])->prefix('admin')->name('adm
     Route::resource('programmes', AdminProgrammeController::class)->except(['show']);
     Route::resource('gallery', GalleryController::class)->except(['show']);
     Route::resource('vacancies', VacancyController::class)->except(['show']);
+    Route::resource('procurement-notices', ProcurementNoticeController::class)->except(['show']);
     Route::resource('downloads', DownloadController::class)->except(['show']);
     Route::resource('safeguards', SafeguardResourceController::class)->except(['show']);
     Route::resource('faqs', FaqController::class)->except(['show']);

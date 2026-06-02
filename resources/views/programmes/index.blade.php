@@ -2,7 +2,7 @@
 
 @section('content')
 <section class="irdc-programmes-hero">
-    <div class="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
+    <div class="mx-auto max-w-7xl px-4 pb-3 pt-8 text-center sm:px-6 sm:pb-4 sm:pt-10 lg:px-8 lg:pt-11">
         <p class="irdc-programmes-eyebrow">Field Implementation</p>
         <h1 class="irdc-programmes-title">Programmes</h1>
         <p class="irdc-programmes-lead">Climate-smart programmes supporting production, training, home gardens, seeds, monitoring, and market linkages.</p>
@@ -10,7 +10,7 @@
 </section>
 
 <section class="irdc-programmes-section">
-    <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
+    <div class="mx-auto max-w-7xl px-4 pb-14 pt-1 sm:px-6 sm:pb-16 sm:pt-2 lg:px-8 lg:pt-3">
         <div class="irdc-programmes-grid">
             @forelse($programmes as $programme)
                 <a href="{{ route('programmes.show', $programme) }}" class="irdc-programme-card group">

@@ -75,15 +75,15 @@
                 <div class="min-w-0 flex flex-1 justify-start overflow-hidden">
                     <div class="irdc-header-logo-parts" role="group" aria-label="{{ __('messages.logos_aria') }}">
                         <div class="irdc-header-logo-cell irdc-header-logo-cell--emblem" title="{{ __('messages.logo_emblem_alt') }}">
-                            <img src="{{ asset(config('irdcrp.logos.emblem')) }}" alt="{{ __('messages.logo_emblem_alt') }}" loading="eager" decoding="async">
+                            <img src="{{ asset(config('irdcrp.logos.emblem')) }}" alt="{{ __('messages.logo_emblem_alt') }}" width="48" height="48" loading="eager" decoding="async">
                         </div>
 
                         <a href="{{ url('/') }}" class="irdc-header-logo-cell irdc-header-logo-cell--irdcrp" title="{{ config('app.name', 'IRDCRP') }}">
-                            <img src="{{ asset(config('irdcrp.logos.irdcrp')) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" width="200" height="256" loading="eager" decoding="async">
+                            <img src="{{ asset(config('irdcrp.logos.irdcrp')) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" width="48" height="61" loading="eager" decoding="async">
                         </a>
 
                         <div class="irdc-header-logo-cell irdc-header-logo-cell--worldbank" title="{{ __('messages.logo_world_bank_alt') }}">
-                            <img src="{{ asset(config('irdcrp.logos.world_bank')) }}" alt="{{ __('messages.logo_world_bank_alt') }}" loading="eager" decoding="async">
+                            <img src="{{ asset(config('irdcrp.logos.world_bank')) }}" alt="{{ __('messages.logo_world_bank_alt') }}" width="160" height="53" loading="eager" decoding="async">
                         </div>
                     </div>
                 </div>

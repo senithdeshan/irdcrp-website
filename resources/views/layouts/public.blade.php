@@ -17,7 +17,7 @@
             <div class="container">
                 <div class="public-navbar-logos me-2 me-lg-3" role="group" aria-label="Partner logos">
                     <a class="public-navbar-logos__item public-navbar-logos__item--brand text-decoration-none" href="{{ url('/') }}" title="{{ config('app.name', 'IRDCRP') }}">
-                        <img src="{{ asset(config('irdcrp.logos.irdcrp')) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" width="200" height="256">
+                        <img src="{{ asset(config('irdcrp.logos.irdcrp')) }}" alt="{{ __('messages.logo_irdcrp_alt') }}" width="48" height="61">
                     </a>
                     <span class="public-navbar-logos__divider d-none d-sm-block" aria-hidden="true"></span>
                     <div class="public-navbar-logos__item public-navbar-logos__item--emblem d-none d-sm-flex" title="{{ __('messages.logo_emblem_alt') }}">
@@ -25,7 +25,7 @@
                     </div>
                     <span class="public-navbar-logos__divider d-none d-md-block" aria-hidden="true"></span>
                     <div class="public-navbar-logos__item public-navbar-logos__item--bank d-none d-md-flex" title="{{ __('messages.logo_world_bank_alt') }}">
-                        <img src="{{ asset(config('irdcrp.logos.world_bank')) }}" alt="{{ __('messages.logo_world_bank_alt') }}" width="120" height="36">
+                        <img src="{{ asset(config('irdcrp.logos.world_bank')) }}" alt="{{ __('messages.logo_world_bank_alt') }}" width="160" height="53">
                     </div>
                 </div>
 

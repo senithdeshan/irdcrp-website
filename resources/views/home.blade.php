@@ -46,6 +46,7 @@
             (object) ['key' => 'projects', 'label' => 'Total Projects', 'value' => $stats['projects'] ?? '34', 'count_target' => is_numeric($stats['projects'] ?? null) ? (int) $stats['projects'] : 34, 'helper' => 'Priority investments and field-level activities'],
         ]);
     $successStories = $successStories ?? collect();
+    $latestInsights = $latestInsights ?? collect();
     $programmeCards = collect(config('irdcrp.programme_cards', []));
     $weatherAreas = config('irdcrp.weather_areas', []);
     if (! is_array($weatherAreas) || $weatherAreas === []) {
@@ -626,7 +627,53 @@
     </div>
 </section>
 
-{{-- 5. Success stories slider --}}
+{{-- 5. Latest insights --}}
+<section class="irdc-insights relative overflow-hidden py-12 sm:py-14">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <header class="irdc-insights-head">
+            <div>
+                <p class="irdc-insights-head__eyebrow">Latest Insights</p>
+                <h2 class="irdc-insights-head__title">Project updates from the field</h2>
+                <p class="irdc-insights-head__lead">Approved highlights, lessons, and implementation notes from IRDCRP activities.</p>
+            </div>
+        </header>
+
+        <div class="irdc-insights-grid">
+            @forelse ($latestInsights as $insight)
+                <article class="irdc-insight-card">
+                    <div class="irdc-insight-card__image">
+                        <img
+                            src="{{ $insight->imageUrl() }}"
+                            alt="{{ $insight->title }}"
+                            loading="lazy"
+                            decoding="async"
+                        >
+                    </div>
+                    <div class="irdc-insight-card__body">
+                        <div class="irdc-insight-card__meta">
+                            <span>{{ $insight->category ?: 'Insight' }}</span>
+                            @if($insight->insight_date)
+                                <time datetime="{{ $insight->insight_date->toDateString() }}">{{ $insight->insight_date->format('M j, Y') }}</time>
+                            @endif
+                        </div>
+                        <h3>{{ $insight->title }}</h3>
+                        <p>{{ $insight->summary }}</p>
+                    </div>
+                </article>
+            @empty
+                <article class="irdc-insight-card irdc-insight-card--empty">
+                    <div class="irdc-insight-card__body">
+                        <span class="irdc-insight-card__empty-label">Latest Insights</span>
+                        <h3>No latest insights yet</h3>
+                        <p>Add an insight from the admin panel and set it to Active to display it here.</p>
+                    </div>
+                </article>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+{{-- 6. Success stories slider --}}
 <section
     class="irdc-success relative overflow-hidden py-20 sm:py-24"
     x-data="{

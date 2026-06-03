@@ -27,7 +27,7 @@
         'p/social-management-plan-social-screening-report',
         'p/environment-management-plan-environment-screening-plan',
     );
-    $inAnnouncements = $pathIs('procurement*', 'vacancies*');
+    $inAnnouncements = $pathIs('procurement*', 'vacancies*', 'announcements/other*');
     $inFaq = $pathIs('faq');
     $projectItems = [
         ['label' => 'About Us', 'href' => url('/about'), 'active' => $pathIs('about')],
@@ -56,6 +56,7 @@
     $announcementItems = [
         ['label' => 'Procurement', 'href' => url('/procurement'), 'active' => $pathIs('procurement*')],
         ['label' => 'Vacancy', 'href' => route('vacancies.index'), 'active' => $pathIs('vacancies*')],
+        ['label' => 'Other', 'href' => route('other-announcements.index'), 'active' => $pathIs('announcements/other*')],
     ];
     $navLink = 'irdc-nav-link relative inline-flex items-center whitespace-nowrap rounded-md px-1.5 py-2 text-[0.82rem] font-semibold tracking-wide font-display border-b-[3px] transition-colors duration-300 sm:px-2 sm:text-sm md:px-2 md:text-[0.86rem] lg:px-2 lg:text-[0.9rem] xl:px-2.5 xl:text-[0.98rem]';
     $active = 'border-[#0A3D62] bg-slate-50 text-[#0A3D62] font-bold shadow-sm hover:text-[#0A3D62]';

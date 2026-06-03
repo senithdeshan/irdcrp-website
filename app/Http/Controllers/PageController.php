@@ -9,13 +9,16 @@ use App\Models\HomeImage;
 use App\Models\HomeVideo;
 use App\Models\ImpactMetric;
 use App\Models\KeyLeader;
+use App\Models\LatestInsight;
 use App\Models\News;
+use App\Models\OtherAnnouncement;
 use App\Models\Page;
 use App\Models\Programme;
 use App\Models\ProcurementNotice;
 use App\Models\ProjectComponent;
 use App\Models\SuccessStory;
 use App\Models\Vacancy;
+use App\Support\SiteSettings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Schema;
@@ -73,6 +76,15 @@ class PageController extends Controller
                 ->get()
             : collect();
 
+        $latestInsights = Schema::hasTable('latest_insights')
+            ? LatestInsight::query()
+                ->where('status', 'active')
+                ->latest('insight_date')
+                ->latest()
+                ->take(3)
+                ->get()
+            : collect();
+
         $homeVideos = Schema::hasTable('home_videos')
             ? HomeVideo::query()
                 ->where('is_active', true)
@@ -109,15 +121,18 @@ class PageController extends Controller
             'vacanciesPreview',
             'keyLeaders',
             'successStories',
+            'latestInsights',
             'homeVideos',
             'homeImages',
             'impactMetrics',
         ));
     }
 
-    public function about(): View
+    public function about(SiteSettings $settings): View
     {
-        return view('about');
+        return view('about', [
+            'about' => $settings->aboutPageForPublic(),
+        ]);
     }
 
     public function components(): View
@@ -275,6 +290,38 @@ class PageController extends Controller
         abort_unless($vacancy->status !== 'draft' || auth()->check(), 404);
 
         return view('vacancy-show', compact('vacancy'));
+    }
+
+    public function otherAnnouncements(): View
+    {
+        $items = Schema::hasTable('other_announcements')
+            ? OtherAnnouncement::query()
+                ->where('status', 'published')
+                ->orderBy('sort_order')
+                ->orderByDesc('published_date')
+                ->orderByDesc('id')
+                ->get()
+            : collect();
+
+        return view('other-announcements', compact('items'));
+    }
+
+    public function showOtherAnnouncement(OtherAnnouncement $otherAnnouncement): View
+    {
+        abort_unless($otherAnnouncement->status === 'published', 404);
+
+        return view('other-announcement-show', compact('otherAnnouncement'));
+    }
+
+    public function otherAnnouncementFile(OtherAnnouncement $otherAnnouncement): Response|StreamedResponse
+    {
+        abort_unless($otherAnnouncement->status === 'published', 404);
+        abort_unless($otherAnnouncement->documentExists(), 404);
+
+        return Storage::disk('public')->download(
+            $otherAnnouncement->document_path,
+            $otherAnnouncement->document_original_name ?: basename($otherAnnouncement->document_path),
+        );
     }
 
     public function showCmsPage(Page $page): View

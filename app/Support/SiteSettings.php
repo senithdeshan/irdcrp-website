@@ -102,4 +102,58 @@ class SiteSettings
 
         Storage::disk('public')->delete(Str::after($path, 'storage/'));
     }
+
+    public function aboutPageDefaults(): array
+    {
+        return config('irdcrp.about_page', []);
+    }
+
+    public function aboutPageForAdmin(): array
+    {
+        $defaults = $this->aboutPageDefaults();
+        $saved = $this->savedAboutPage();
+
+        return array_replace_recursive($defaults, $saved);
+    }
+
+    public function aboutPageForPublic(): array
+    {
+        $defaults = $this->aboutPageDefaults();
+        $saved = $this->savedAboutPage();
+
+        if (($saved['status'] ?? 'draft') !== 'published') {
+            return $defaults;
+        }
+
+        return array_replace_recursive($defaults, $saved);
+    }
+
+    public function putAboutPage(array $about): void
+    {
+        SiteSetting::query()->updateOrCreate(
+            ['key' => 'about_page'],
+            ['value' => json_encode($about, JSON_UNESCAPED_UNICODE)],
+        );
+
+        Cache::forget('irdcrp.site_settings.about_page');
+    }
+
+    private function savedAboutPage(): array
+    {
+        if (! Schema::hasTable('site_settings')) {
+            return [];
+        }
+
+        $json = Cache::rememberForever('irdcrp.site_settings.about_page', function (): ?string {
+            return SiteSetting::query()->where('key', 'about_page')->value('value');
+        });
+
+        if (! filled($json)) {
+            return [];
+        }
+
+        $decoded = json_decode($json, true);
+
+        return is_array($decoded) ? $decoded : [];
+    }
 }

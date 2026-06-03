@@ -67,9 +67,23 @@
         </div>
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Other announcements</h2>
+                <p class="text-muted small mb-3">General notices under Announcements → Other (not procurement or vacancy).</p>
+                <a href="{{ route('admin.other-announcements.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">FAQs</h2>
                 <p class="text-muted small mb-3">Edit public frequently asked questions and answers.</p>
                 <a href="{{ route('admin.faqs.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">About Us</h2>
+                <p class="text-muted small mb-3">Edit mission, objectives, grievance, and why choose us text on the About page.</p>
+                <a href="{{ route('admin.about-page.edit') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
         <div class="col-md-6 col-lg-4">
@@ -105,6 +119,13 @@
                 <h2 class="h5 fw-bold">Success stories</h2>
                 <p class="text-muted small mb-3">Farmer testimonials for the home page slider.</p>
                 <a href="{{ route('admin.success-stories.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Latest insights</h2>
+                <p class="text-muted small mb-3">Approved field insights for the home page slider.</p>
+                <a href="{{ route('admin.latest-insights.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
         <div class="col-md-6 col-lg-4">

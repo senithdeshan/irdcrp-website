@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AboutPageController;
 use App\Http\Controllers\Admin\CmsPageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DownloadController;
@@ -10,7 +11,9 @@ use App\Http\Controllers\Admin\HomeImageController;
 use App\Http\Controllers\Admin\HomeVideoController;
 use App\Http\Controllers\Admin\ImpactMetricController;
 use App\Http\Controllers\Admin\KeyLeaderController;
+use App\Http\Controllers\Admin\LatestInsightController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
+use App\Http\Controllers\Admin\OtherAnnouncementController;
 use App\Http\Controllers\Admin\ProcurementNoticeController;
 use App\Http\Controllers\Admin\ProjectComponentController;
 use App\Http\Controllers\Admin\SafeguardResourceController;
@@ -50,6 +53,9 @@ Route::get('/gallery/{section}', [PageController::class, 'gallerySection'])
     ->name('gallery.section');
 Route::get('/vacancies', [PageController::class, 'vacancies'])->name('vacancies.index');
 Route::get('/vacancies/{vacancy}', [PageController::class, 'showVacancy'])->name('vacancies.show');
+Route::get('/announcements/other', [PageController::class, 'otherAnnouncements'])->name('other-announcements.index');
+Route::get('/announcements/other/file/{otherAnnouncement}', [PageController::class, 'otherAnnouncementFile'])->name('other-announcements.file');
+Route::get('/announcements/other/{otherAnnouncement}', [PageController::class, 'showOtherAnnouncement'])->name('other-announcements.show');
 Route::get('/grm', [PageController::class, 'grm']);
 Route::post('/grm/complaints', [GrmComplaintController::class, 'store'])->name('grm.complaints.store');
 Route::get('/faq', [PageController::class, 'faq']);
@@ -75,17 +81,21 @@ Route::middleware(['auth', EnsureSuperAdmin::class])->prefix('admin')->name('adm
     Route::resource('gallery', GalleryController::class)->except(['show']);
     Route::resource('vacancies', VacancyController::class)->except(['show']);
     Route::resource('procurement-notices', ProcurementNoticeController::class)->except(['show']);
+    Route::resource('other-announcements', OtherAnnouncementController::class)->except(['show']);
     Route::resource('downloads', DownloadController::class)->except(['show']);
     Route::resource('safeguards', SafeguardResourceController::class)->except(['show']);
     Route::resource('faqs', FaqController::class)->except(['show']);
     Route::resource('pages', CmsPageController::class)->except(['show']);
     Route::resource('project-components', ProjectComponentController::class)->except(['show']);
     Route::resource('key-leaders', KeyLeaderController::class)->except(['show']);
+    Route::resource('latest-insights', LatestInsightController::class)->except(['show']);
     Route::resource('success-stories', SuccessStoryController::class)->except(['show']);
     Route::resource('home-images', HomeImageController::class)->only(['index', 'edit', 'update']);
     Route::resource('home-videos', HomeVideoController::class)->except(['show']);
     Route::get('site-settings', [SiteSettingController::class, 'edit'])->name('site-settings.edit');
     Route::put('site-settings', [SiteSettingController::class, 'update'])->name('site-settings.update');
+    Route::get('about-page', [AboutPageController::class, 'edit'])->name('about-page.edit');
+    Route::put('about-page', [AboutPageController::class, 'update'])->name('about-page.update');
     Route::get('impact-metrics', [ImpactMetricController::class, 'index'])->name('impact-metrics.index');
     Route::put('impact-metrics', [ImpactMetricController::class, 'update'])->name('impact-metrics.update');
     Route::get('grm-complaints', [AdminGrmComplaintController::class, 'index'])->name('grm-complaints.index');

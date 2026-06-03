@@ -21,6 +21,7 @@ return [
     'nav_news' => 'செய்திகள்',
     'nav_programmes' => 'நிரல்கள்',
     'nav_procurement' => 'ஒப்பந்தங்கள்',
+    'nav_other_announcements' => 'பிற',
     'nav_downloads' => 'பதிவிறக்கங்கள்',
     'nav_gallery' => 'படங்கள்',
     'nav_media_audio' => 'ஒலி',

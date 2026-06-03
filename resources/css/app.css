@@ -250,6 +250,10 @@
         @apply break-words text-xs leading-5 text-slate-600;
     }
 
+    .irdc-procurement-card__view-link span {
+        @apply bg-[#0A3D62];
+    }
+
     .irdc-procurement-card__empty {
         @apply rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-500;
     }
@@ -1631,6 +1635,102 @@
         }
     }
 
+    /* Home: latest insights grid */
+    .irdc-insights {
+        background:
+            linear-gradient(90deg, rgba(10, 61, 98, 0.045) 0 1px, transparent 1px 100%),
+            linear-gradient(180deg, #ffffff 0%, #f7fbf6 48%, #eef8f3 100%);
+        background-size: 5rem 100%, auto;
+    }
+
+    .irdc-insights::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+            radial-gradient(ellipse 42% 34% at 14% 6%, rgba(14, 165, 233, 0.1), transparent 70%),
+            radial-gradient(ellipse 40% 30% at 90% 10%, rgba(245, 158, 11, 0.12), transparent 72%);
+    }
+
+    .irdc-insights-head {
+        @apply relative z-[1] mb-6 flex flex-col gap-3 sm:mb-8 md:flex-row md:items-end md:justify-between;
+    }
+
+    .irdc-insights-head__eyebrow {
+        @apply mb-2 text-[0.7rem] font-extrabold uppercase tracking-[0.2em] text-emerald-700 sm:text-xs;
+    }
+
+    .irdc-insights-head__title {
+        @apply font-display text-2xl font-extrabold tracking-tight text-[#0A3D62] sm:text-3xl;
+    }
+
+    .irdc-insights-head__lead {
+        @apply mt-2 max-w-2xl text-sm leading-relaxed text-slate-600;
+    }
+
+    .irdc-insights-grid {
+        @apply relative z-[1] grid gap-4 sm:grid-cols-2 lg:grid-cols-3;
+    }
+
+    .irdc-insight-card {
+        @apply h-full overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-[0_16px_34px_-28px_rgba(15,23,42,0.62)] ring-1 ring-slate-900/[0.03] transition duration-300;
+    }
+
+    .irdc-insight-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(16, 185, 129, 0.35);
+        box-shadow: 0 22px 46px -34px rgba(10, 61, 98, 0.45);
+    }
+
+    .irdc-insight-card__image {
+        @apply aspect-[16/9] overflow-hidden bg-slate-100;
+    }
+
+    .irdc-insight-card__image img {
+        @apply h-full w-full object-cover transition duration-500;
+    }
+
+    .irdc-insight-card:hover .irdc-insight-card__image img {
+        transform: scale(1.035);
+    }
+
+    .irdc-insight-card__body {
+        @apply p-4;
+    }
+
+    .irdc-insight-card__meta {
+        @apply mb-2 flex flex-wrap items-center gap-2 text-[0.65rem] font-extrabold uppercase tracking-[0.13em] text-emerald-700;
+    }
+
+    .irdc-insight-card__meta span {
+        @apply rounded-full bg-emerald-50 px-3 py-1 text-emerald-800 ring-1 ring-emerald-100;
+    }
+
+    .irdc-insight-card__meta time {
+        @apply text-slate-500;
+    }
+
+    .irdc-insight-card__body h3 {
+        @apply font-display text-lg font-extrabold leading-tight text-slate-950 sm:text-xl;
+    }
+
+    .irdc-insight-card__body p {
+        @apply mt-2 text-sm leading-6 text-slate-600;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .irdc-insight-card--empty {
+        @apply flex min-h-[16rem] items-center;
+    }
+
+    .irdc-insight-card__empty-label {
+        @apply mb-3 inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-extrabold uppercase tracking-[0.18em] text-emerald-800;
+    }
+
     /* Home: success stories slider */
     .irdc-success {
         background-color: #fbfdf8;
@@ -2709,23 +2809,25 @@
         transform: scale(0.95);
     }
 
-    /* About page: modern visual style */
+    /* About page: modern visual style (gradient only — no page mockup image) */
     .irdc-about-modern {
-        background: #edf5ee;
+        background: linear-gradient(180deg, #d4e6d8 0%, #edf5ee 42%, #f6faf7 100%);
     }
 
     .irdc-about-modern__bg {
-        background-image: url('/images/hero/about-modern-bg.png');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        filter: saturate(1.03) contrast(1.02);
+        background:
+            radial-gradient(ellipse 85% 55% at 50% -8%, rgba(255, 255, 255, 0.55), transparent 58%),
+            radial-gradient(ellipse 45% 35% at 88% 92%, rgba(22, 163, 74, 0.1), transparent 55%),
+            radial-gradient(ellipse 40% 30% at 8% 78%, rgba(10, 61, 98, 0.07), transparent 50%);
     }
 
     .irdc-about-modern__overlay {
-        background:
-            radial-gradient(ellipse 75% 50% at 50% 0%, rgba(255, 255, 255, 0.22), transparent 58%),
-            linear-gradient(180deg, rgba(12, 45, 34, 0.14) 0%, rgba(14, 54, 30, 0.08) 48%, rgba(12, 40, 28, 0.18) 100%);
+        background: linear-gradient(
+            180deg,
+            rgba(12, 45, 34, 0.06) 0%,
+            rgba(14, 54, 30, 0.03) 45%,
+            rgba(12, 40, 28, 0.08) 100%
+        );
     }
 
     .irdc-about-modern__wave-top,

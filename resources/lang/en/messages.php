@@ -21,6 +21,7 @@ return [
     'nav_news' => 'News & Events',
     'nav_programmes' => 'Programmes',
     'nav_procurement' => 'Procurement',
+    'nav_other_announcements' => 'Other',
     'nav_downloads' => 'Publications',
     'nav_gallery' => 'Gallery',
     'nav_media_audio' => 'Audio',

@@ -204,4 +204,30 @@ return [
             'M7lc1UVf-VE',
         ],
     ],
+
+    /*
+    | About Us page defaults (used until admin publishes custom content).
+    */
+    'about_page' => [
+        'status' => 'published',
+        'hero_title' => 'About Us',
+        'hero_subtitle' => 'Learn More About Our Mission & Goals',
+        'mission_title' => 'Our Mission',
+        'mission_text' => 'To enhance the resilience and livelihoods of rural communities through sustainable development, water resource management, and climate adaptation.',
+        'objectives_title' => 'Our Objectives',
+        'objectives_text' => 'To resolve rural challenges, improve infrastructure, and foster inclusive growth through practical and climate-smart project interventions.',
+        'grievance_heading' => 'Conflicts Mediation & Grievance Redressal',
+        'grievance_lead' => 'We provide a transparent and systematic approach to addressing grievances and resolving conflicts within project areas.',
+        'grievance_cards' => [
+            ['title' => 'Fair Process', 'text' => 'Ensuring impartial and timely redress for all stakeholders.'],
+            ['title' => 'Safe & Secure', 'text' => 'Protecting the rights and confidentiality of all participants.'],
+            ['title' => 'Community Trust', 'text' => 'Building confidence and cooperation through responsive grievance handling.'],
+        ],
+        'why_heading' => 'Why Choose Us?',
+        'why_cards' => [
+            ['title' => 'Experienced Team', 'text' => 'Expertise you can trust across agriculture and climate resilience.'],
+            ['title' => 'Proven Results', 'text' => 'Positive impact and measurable outcomes in partner communities.'],
+            ['title' => 'Sustainable Approach', 'text' => 'Long-term, inclusive development with strong local ownership.'],
+        ],
+    ],
 ];

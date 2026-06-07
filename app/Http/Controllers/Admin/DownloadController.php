@@ -29,11 +29,13 @@ class DownloadController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validatedData($request, true);
-        $data['file_path'] = $request->file('file')->store('downloads', 'public');
+        $file = $request->file('file');
+        $data['file_path'] = $file->store('downloads', 'public');
+        $data['file_original_name'] = $file->getClientOriginalName();
         unset($data['file']);
         Download::create($data);
 
-        return redirect()->route('admin.downloads.index')->with('success', 'Download item created.');
+        return redirect()->route('admin.downloads.index')->with('success', 'Document created.');
     }
 
     public function edit(Download $download): View
@@ -50,12 +52,15 @@ class DownloadController extends Controller
             if ($download->file_path) {
                 Storage::disk('public')->delete($download->file_path);
             }
-            $data['file_path'] = $request->file('file')->store('downloads', 'public');
+
+            $file = $request->file('file');
+            $data['file_path'] = $file->store('downloads', 'public');
+            $data['file_original_name'] = $file->getClientOriginalName();
         }
 
         $download->update($data);
 
-        return redirect()->route('admin.downloads.index')->with('success', 'Download item updated.');
+        return redirect()->route('admin.downloads.index')->with('success', 'Document updated.');
     }
 
     public function destroy(Download $download): RedirectResponse
@@ -65,26 +70,24 @@ class DownloadController extends Controller
         }
         $download->delete();
 
-        return redirect()->route('admin.downloads.index')->with('success', 'Download item removed.');
+        return redirect()->route('admin.downloads.index')->with('success', 'Document removed.');
     }
 
     private function validatedData(Request $request, bool $requireFile): array
     {
         $rules = [
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string|max:5000',
-            'file_date' => 'nullable|date',
-            'status' => 'required|in:draft,published',
-            'sort_order' => 'nullable|integer|min:0|max:65535',
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:10000'],
+            'file_date' => ['nullable', 'date'],
+            'status' => ['required', 'in:draft,published'],
+            'sort_order' => ['nullable', 'integer', 'min:0', 'max:65535'],
         ];
         $rules['file'] = $requireFile
-            ? 'required|file|max:25600|mimes:pdf,doc,docx,xls,xlsx,zip'
-            : 'nullable|file|max:25600|mimes:pdf,doc,docx,xls,xlsx,zip';
+            ? ['required', 'file', 'max:51200', 'mimes:pdf,doc,docx,xls,xlsx,csv,ppt,pptx,zip']
+            : ['nullable', 'file', 'max:51200', 'mimes:pdf,doc,docx,xls,xlsx,csv,ppt,pptx,zip'];
 
         $data = $request->validate($rules);
-        if (! array_key_exists('sort_order', $data) || $data['sort_order'] === null) {
-            $data['sort_order'] = 0;
-        }
+        $data['sort_order'] = $data['sort_order'] ?? 0;
 
         return $data;
     }

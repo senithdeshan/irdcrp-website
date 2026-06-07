@@ -28,7 +28,9 @@ class VacancyController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validateVacancy($request, true);
-        $data['pdf_path'] = $request->file('pdf')->store('vacancies', 'public');
+        $pdf = $request->file('pdf');
+        $data['pdf_path'] = $pdf->store('vacancies', 'public');
+        $data['pdf_original_name'] = $pdf->getClientOriginalName();
         Vacancy::create($data);
 
         return redirect()->route('admin.vacancies.index')->with('success', 'Vacancy created.');
@@ -47,7 +49,9 @@ class VacancyController extends Controller
             if ($vacancy->pdf_path) {
                 Storage::disk('public')->delete($vacancy->pdf_path);
             }
-            $data['pdf_path'] = $request->file('pdf')->store('vacancies', 'public');
+            $pdf = $request->file('pdf');
+            $data['pdf_path'] = $pdf->store('vacancies', 'public');
+            $data['pdf_original_name'] = $pdf->getClientOriginalName();
         }
 
         $vacancy->update($data);

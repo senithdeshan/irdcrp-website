@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             ShowLaunchingSoon::class,
+            \App\Http\Middleware\EnsureSiteModuleEnabled::class,
             SetLocaleFromSession::class,
         ]);
     })

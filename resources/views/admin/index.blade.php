@@ -17,12 +17,22 @@
 
     <div class="row g-4">
         <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100 border-primary border-2">
+                <h2 class="h5 fw-bold">Site modules</h2>
+                <p class="text-muted small mb-3">Plug in or remove whole features (Vacancies, Gallery, etc.) from the public site. Content stays saved in the database.</p>
+                <a href="{{ route('admin.site-modules.index') }}" class="btn btn-green btn-sm">Manage modules</a>
+            </div>
+        </div>
+        @if($moduleEnabled('news'))
+        <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">News</h2>
                 <p class="text-muted small mb-3">Create and publish news & events.</p>
                 <a href="{{ route('admin.news.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
+        @if($moduleEnabled('programmes'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Programmes</h2>
@@ -30,6 +40,8 @@
                 <a href="{{ route('admin.programmes.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
+        @if($moduleEnabled('gallery'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Gallery</h2>
@@ -37,6 +49,8 @@
                 <a href="{{ route('admin.gallery.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
+        @if($moduleEnabled('vacancies'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Vacancies</h2>
@@ -44,6 +58,8 @@
                 <a href="{{ route('admin.vacancies.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
+        @if($moduleEnabled('procurement'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Procurement Notices</h2>
@@ -51,13 +67,35 @@
                 <a href="{{ route('admin.procurement-notices.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
+        @if($moduleEnabled('downloads'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
-                <h2 class="h5 fw-bold">Downloads</h2>
-                <p class="text-muted small mb-3">Document library (PDF, Office, etc.).</p>
+                <h2 class="h5 fw-bold">Documents</h2>
+                <p class="text-muted small mb-3">Document library with descriptions and downloadable files for the public Documents page.</p>
                 <a href="{{ route('admin.downloads.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
+        @if($moduleEnabled('reports'))
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Reports</h2>
+                <p class="text-muted small mb-3">Add descriptions, report files, and images for the public Reports page.</p>
+                <a href="{{ route('admin.reports.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        @endif
+        @if($moduleEnabled('institutional_development'))
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Capacity Build</h2>
+                <p class="text-muted small mb-3">Add descriptions, documents, and images for the public Capacity Build page.</p>
+                <a href="{{ route('admin.institutional-developments.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        @endif
+        @if($moduleEnabled('safeguards'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Safeguard</h2>
@@ -65,6 +103,8 @@
                 <a href="{{ route('admin.safeguards.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
+        @if($moduleEnabled('other_announcements'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Other announcements</h2>
@@ -72,6 +112,8 @@
                 <a href="{{ route('admin.other-announcements.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
+        @if($moduleEnabled('faq'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">FAQs</h2>
@@ -79,6 +121,7 @@
                 <a href="{{ route('admin.faqs.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">About Us</h2>
@@ -102,11 +145,19 @@
         </div>
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Project areas</h2>
+                <p class="text-muted small mb-3">Edit the coverage image, summary labels, and district-wise table.</p>
+                <a href="{{ route('admin.project-areas.edit') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Impact metrics</h2>
                 <p class="text-muted small mb-3">Edit home page numbers for districts, beneficiaries, investment, and projects.</p>
                 <a href="{{ route('admin.impact-metrics.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @if($moduleEnabled('key_leaders'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Key leaders</h2>
@@ -114,6 +165,8 @@
                 <a href="{{ route('admin.key-leaders.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
+        @if($moduleEnabled('success_stories'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Success stories</h2>
@@ -121,6 +174,8 @@
                 <a href="{{ route('admin.success-stories.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
+        @if($moduleEnabled('latest_insights'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Latest insights</h2>
@@ -128,11 +183,40 @@
                 <a href="{{ route('admin.latest-insights.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Home videos</h2>
                 <p class="text-muted small mb-3">Manage Krushi TV, Field Stories, and Krushi Radio card video links.</p>
                 <a href="{{ route('admin.home-videos.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Home page layout</h2>
+                <p class="text-muted small mb-3">Reorder home page sections (Latest Insights, Key Leaders, Vacancies, etc.) and show or hide each block.</p>
+                <a href="{{ route('admin.home-layout.edit') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Home popup</h2>
+                <p class="text-muted small mb-3">Upload an announcement image and show it when visitors enter the website.</p>
+                <a href="{{ route('admin.home-popup.edit') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Project partners</h2>
+                <p class="text-muted small mb-3">Stakeholder logos and website links on the home page above the footer.</p>
+                <a href="{{ route('admin.project-partners.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Weather widget</h2>
+                <p class="text-muted small mb-3">Change the Live forecasts image and add or edit districts on the home page weather card.</p>
+                <a href="{{ route('admin.weather-districts.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
         <div class="col-md-6 col-lg-4">
@@ -149,6 +233,7 @@
                 <a href="{{ route('admin.site-settings.edit') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @if($moduleEnabled('grm'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">GRM complaints</h2>
@@ -156,6 +241,8 @@
                 <a href="{{ route('admin.grm-complaints.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
+        @if($moduleEnabled('contact'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Support messages</h2>
@@ -163,6 +250,7 @@
                 <a href="{{ route('admin.support-messages.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
+        @endif
     </div>
 </section>
 @endsection

@@ -10,7 +10,11 @@ class NewsController extends Controller
 {
     public function index()
     {
-        $news = News::latest()->get();
+        $news = News::query()
+            ->orderByDesc('is_pinned')
+            ->latest('published_date')
+            ->latest('id')
+            ->get();
 
         return view('admin.news.index', compact('news'));
     }
@@ -31,10 +35,12 @@ class NewsController extends Controller
             'content_ta' => 'nullable|string',
             'published_date' => 'nullable|date',
             'status' => 'required|in:draft,published',
+            'is_pinned' => 'nullable|boolean',
             'images' => 'nullable|array|max:20',
             'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:8192',
         ]);
 
+        $data['is_pinned'] = $request->boolean('is_pinned');
         $imagePaths = $this->storeImages($request);
         $data['image'] = $imagePaths[0] ?? null;
         $data['images'] = $imagePaths;
@@ -60,12 +66,14 @@ class NewsController extends Controller
             'content_ta' => 'nullable|string',
             'published_date' => 'nullable|date',
             'status' => 'required|in:draft,published',
+            'is_pinned' => 'nullable|boolean',
             'images' => 'nullable|array|max:20',
             'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:8192',
             'remove_images' => 'nullable|array',
             'remove_images.*' => 'string',
         ]);
 
+        $data['is_pinned'] = $request->boolean('is_pinned');
         $imagePaths = collect($news->imagePaths());
         $removeImages = collect($data['remove_images'] ?? [])->filter()->values();
 

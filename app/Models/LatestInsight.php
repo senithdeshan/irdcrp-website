@@ -11,6 +11,7 @@ class LatestInsight extends Model
         'category',
         'summary',
         'image',
+        'link_url',
         'insight_date',
         'status',
     ];
@@ -29,5 +30,24 @@ class LatestInsight extends Model
         }
 
         return asset('storage/'.preg_replace('#^/?storage/#', '', ltrim($this->image, '/')));
+    }
+
+    public function linkHref(): ?string
+    {
+        $url = trim((string) ($this->link_url ?? ''));
+
+        return filled($url) ? $url : null;
+    }
+
+    public function hasLink(): bool
+    {
+        return $this->linkHref() !== null;
+    }
+
+    public function linkOpensInNewTab(): bool
+    {
+        $url = $this->linkHref() ?? '';
+
+        return str_starts_with($url, 'http://') || str_starts_with($url, 'https://');
     }
 }

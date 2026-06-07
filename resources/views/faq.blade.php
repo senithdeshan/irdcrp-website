@@ -21,9 +21,6 @@
         <aside class="irdc-faq-panel">
             <span>FAQ</span>
             <h2>Need help finding information?</h2>
-            <p>
-                These answers are maintained by the admin team and can be updated any time from the content management area.
-            </p>
             <a href="{{ url('/contact') }}">Contact support</a>
         </aside>
 

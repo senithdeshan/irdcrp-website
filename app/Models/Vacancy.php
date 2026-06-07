@@ -11,6 +11,7 @@ class Vacancy extends Model
         'title',
         'description',
         'pdf_path',
+        'pdf_original_name',
         'deadline',
         'status',
     ];
@@ -29,5 +30,14 @@ class Vacancy extends Model
         }
 
         return Carbon::today()->lte($this->deadline);
+    }
+
+    public function pdfDownloadName(): string
+    {
+        return \App\Support\PublicFileDownload::downloadName(
+            $this->pdf_original_name,
+            $this->title,
+            (string) $this->pdf_path,
+        );
     }
 }

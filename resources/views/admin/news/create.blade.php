@@ -72,6 +72,13 @@
                 </select>
             </div>
 
+            <div class="form-check form-switch mb-4">
+                <input type="hidden" name="is_pinned" value="0">
+                <input class="form-check-input" type="checkbox" name="is_pinned" value="1" id="is_pinned" @checked(old('is_pinned'))>
+                <label class="form-check-label" for="is_pinned">Pin this news to the top</label>
+                <div class="form-text">Pinned published news appears first on the home page and News & Events page.</div>
+            </div>
+
             <button type="submit" class="btn btn-green">Save News</button>
         </form>
     </div>

@@ -19,6 +19,7 @@
                     <th>Images</th>
                     <th>Title</th>
                     <th>Date</th>
+                    <th>Pinned</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -38,6 +39,13 @@
                         </td>
                         <td>{{ $item->title_en }}</td>
                         <td>{{ $item->published_date }}</td>
+                        <td>
+                            @if($item->is_pinned)
+                                <span class="badge bg-success">Pinned</span>
+                            @else
+                                <span class="text-muted small">No</span>
+                            @endif
+                        </td>
                         <td>{{ ucfirst($item->status) }}</td>
                         <td>
     <a href="{{ route('admin.news.edit', $item->id) }}" class="btn btn-sm btn-primary">Edit</a>

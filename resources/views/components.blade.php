@@ -29,9 +29,6 @@
         <div class="irdc-components-grid">
             @forelse($components as $component)
                 <article class="irdc-component-card">
-                    <div class="irdc-component-card__number">
-                        {{ str_pad((string) $component->component_number, 2, '0', STR_PAD_LEFT) }}
-                    </div>
                     <div class="irdc-component-card__body">
                         <p class="irdc-component-card__kicker">Component {{ $component->component_number }}</p>
                         <h3 class="irdc-component-card__title">{{ $component->title }}</h3>

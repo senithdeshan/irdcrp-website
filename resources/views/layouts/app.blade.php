@@ -39,5 +39,7 @@
 
             @include('layouts.footer')
         </div>
+
+        <x-home-entry-popup />
     </body>
 </html>

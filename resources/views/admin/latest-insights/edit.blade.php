@@ -37,6 +37,11 @@
                     <label class="form-label">Replace image (optional)</label>
                     <input type="file" name="image" class="form-control" accept="image/*">
                 </div>
+                <div class="col-12">
+                    <label class="form-label">Link URL <span class="text-muted fw-normal">(optional)</span></label>
+                    <input type="text" name="link_url" class="form-control" value="{{ old('link_url', $latestInsight->link_url) }}" placeholder="/news/field-update or https://example.com/report.pdf">
+                    <p class="small text-muted mb-0 mt-1">Where visitors go when they click this card. Use a site path (e.g. <code>/news</code>, <code>/about#mission</code>) or a full web address.</p>
+                </div>
             </div>
             <div class="mt-4">
                 <button type="submit" class="btn btn-green">Save changes</button>

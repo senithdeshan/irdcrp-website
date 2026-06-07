@@ -25,7 +25,7 @@
     </div>
 
     <div class="card feature-card p-4">
-        <h3 class="h5 fw-bold mb-3">Process & Reply</h3>
+        <h3 class="h5 fw-bold mb-3">Update status</h3>
         <form method="POST" action="{{ route('admin.grm-complaints.update', $grmComplaint) }}">
             @csrf
             @method('PUT')
@@ -33,20 +33,15 @@
             <div class="mb-3">
                 <label class="form-label fw-semibold">Status</label>
                 <select name="status" class="form-select">
-                    <option value="new" @selected(old('status', $grmComplaint->status) === 'new')>New</option>
+                    <option value="new" @selected(old('status', $grmComplaint->status) === 'new')>Unsolved</option>
                     <option value="in_progress" @selected(old('status', $grmComplaint->status) === 'in_progress')>In Progress</option>
                     <option value="solved" @selected(old('status', $grmComplaint->status) === 'solved')>Solved</option>
                 </select>
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-semibold">Answer to User</label>
-                <textarea name="admin_reply" rows="5" class="form-control">{{ old('admin_reply', $grmComplaint->admin_reply) }}</textarea>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-semibold">Reason / Resolution Notes</label>
-                <textarea name="resolution_reason" rows="4" class="form-control">{{ old('resolution_reason', $grmComplaint->resolution_reason) }}</textarea>
+                <label class="form-label fw-semibold">Admin notes <span class="text-muted fw-normal">(optional)</span></label>
+                <textarea name="admin_reply" rows="5" class="form-control" placeholder="Internal notes or reply details for this complaint">{{ old('admin_reply', $grmComplaint->admin_reply) }}</textarea>
             </div>
 
             @if($grmComplaint->resolved_at)

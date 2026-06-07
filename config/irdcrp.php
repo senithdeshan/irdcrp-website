@@ -25,9 +25,21 @@ return [
     'ministry_line_en' => 'Ministry of Agriculture, Livestock, Land, and Irrigation',
 
     'contact' => [
-        'phone' => '+94-11 000 0000',
-        'email' => 'info@irdcrp.lk',
-        'address' => 'IRDCRP Project Management Unit, Colombo, Sri Lanka',
+        'phone' => '011 2877 550',
+        'email' => 'pmuirdcrp@gmail.com',
+        'address' => 'No 123/2, Pannipitiya Road, Battaramulla, Sri Lanka',
+        'location' => [
+            'title' => 'Our Location',
+            'unit' => 'Project Management Unit',
+            'project' => 'Integrated Rurban Development and Climate Resilience Project (IRDCRP)',
+            'place_name' => 'Integrated Rurban Development and Climate Resilience Project',
+            'latitude' => 6.899084155589944,
+            'longitude' => 79.9232443227406,
+            'map_zoom' => 19,
+            'maps_url' => 'https://maps.app.goo.gl/mZs7sKe5QPZhr9gR8',
+            'image' => '/images/contact/pmu-office.png',
+            'image_caption' => 'Office entrance — look for this sign when you arrive',
+        ],
     ],
 
     'social' => [
@@ -161,7 +173,7 @@ return [
     | Optional Google Maps embed (iframe `src` URL). Leave null to hide map.
     | Example: 'https://www.google.com/maps/embed?pb=...'
     */
-    'map_embed_url' => 'https://www.google.com/maps?q=IRDCRP%20Project%20Management%20Unit%2C%20Colombo%2C%20Sri%20Lanka&output=embed',
+    'map_embed_url' => null,
 
     /*
     | Home weather strip: district list + Open-Meteo (no API key). Optional per-area `image` path under /public.

@@ -14,6 +14,8 @@
         <div class="alert alert-success mb-4">{{ session('success') }}</div>
     @endif
 
+    <x-grm-summary-dashboard :stats="$grmStats" />
+
     <div class="irdc-helpdesk-section">
         <aside class="irdc-helpdesk-card">
             <p class="irdc-helpdesk-label">CONTACT FOR GRM</p>
@@ -31,10 +33,7 @@
                 <a href="tel:0112073044">011 2073 044</a>
             </div>
 
-            <div class="irdc-helpdesk-item">
-                <h4>Address</h4>
-                <p>No 123/2, Pannipitiya Road, Battaramulla, Sri Lanka</p>
-            </div>
+            <x-contact-location-mini />
         </aside>
 
         <div class="irdc-complaint-card">
@@ -53,7 +52,9 @@
                 <textarea rows="5" name="message" required>{{ old('message') }}</textarea>
                 @error('message')<p class="text-danger small mt-1 mb-0">{{ $message }}</p>@enderror
 
-                <button type="submit">Submit</button>
+                <div class="irdc-complaint-card__submit">
+                    <button type="submit">Submit</button>
+                </div>
             </form>
         </div>
     </div>

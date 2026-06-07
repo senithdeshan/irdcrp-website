@@ -33,9 +33,12 @@ class LatestInsightController extends Controller
             'category' => 'nullable|string|max:120',
             'summary' => 'required|string|max:2000',
             'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'link_url' => ['nullable', 'string', 'max:500', $this->linkUrlRule()],
             'insight_date' => 'nullable|date',
             'status' => 'required|in:active,inactive',
         ]);
+
+        $data['link_url'] = filled($data['link_url'] ?? null) ? trim($data['link_url']) : null;
 
         $data['image'] = $request->file('image')->store('latest-insights', 'public');
 
@@ -56,9 +59,12 @@ class LatestInsightController extends Controller
             'category' => 'nullable|string|max:120',
             'summary' => 'required|string|max:2000',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'link_url' => ['nullable', 'string', 'max:500', $this->linkUrlRule()],
             'insight_date' => 'nullable|date',
             'status' => 'required|in:active,inactive',
         ]);
+
+        $data['link_url'] = filled($data['link_url'] ?? null) ? trim($data['link_url']) : null;
 
         if ($request->hasFile('image')) {
             if ($latestInsight->image) {
@@ -84,5 +90,26 @@ class LatestInsightController extends Controller
         $latestInsight->delete();
 
         return redirect()->route('admin.latest-insights.index')->with('success', 'Latest insight removed.');
+    }
+
+    private function linkUrlRule(): \Closure
+    {
+        return function (string $attribute, mixed $value, \Closure $fail): void {
+            if (! filled($value)) {
+                return;
+            }
+
+            $url = trim((string) $value);
+
+            if (str_starts_with($url, '/') || str_starts_with($url, '#')) {
+                return;
+            }
+
+            if (filter_var($url, FILTER_VALIDATE_URL)) {
+                return;
+            }
+
+            $fail('Enter a site path (e.g. /news or /about#mission) or a full URL (https://...).');
+        };
     }
 }

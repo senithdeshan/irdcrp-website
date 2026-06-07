@@ -22,6 +22,12 @@
                             @endif
                         </p>
                         <p class="small mb-2">{{ \Illuminate\Support\Str::limit($item->summary, 120) }}</p>
+                        @if($item->hasLink())
+                            <p class="small mb-2 text-truncate">
+                                <span class="text-muted">Link:</span>
+                                <a href="{{ $item->linkHref() }}" class="text-decoration-none" @if($item->linkOpensInNewTab()) target="_blank" rel="noopener noreferrer" @endif>{{ $item->linkHref() }}</a>
+                            </p>
+                        @endif
                         <p class="small mb-2">
                             <span class="badge {{ $item->status === 'active' ? 'bg-success' : 'bg-secondary' }}">{{ ucfirst($item->status) }}</span>
                         </p>

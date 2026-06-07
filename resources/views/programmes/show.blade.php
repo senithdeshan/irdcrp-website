@@ -11,16 +11,20 @@
             @endif
         </div>
         <div class="irdc-programme-show__image">
-            <img src="{{ str_starts_with($programme->image ?? '', 'images/') ? asset($programme->image) : asset('storage/'.$programme->image) }}" alt="{{ $programme->title }}">
+            <img src="{{ $programme->coverImageUrl() }}" alt="{{ $programme->title }}">
         </div>
     </div>
 </section>
 
 <section class="bg-white">
     <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
-        <div class="prose max-w-none prose-slate">
-            {!! nl2br(e($programme->description ?: $programme->summary)) !!}
-        </div>
+        @if(filled($programme->description))
+            <div class="irdc-programme-show__intro">
+                {!! nl2br(e($programme->description)) !!}
+            </div>
+        @endif
+
+        <x-programme-content-blocks :programme="$programme" />
     </div>
 </section>
 
@@ -31,7 +35,7 @@
             <div class="mt-6 grid grid-cols-1 gap-5 md:grid-cols-3">
                 @foreach($moreProgrammes as $item)
                     <a href="{{ route('programmes.show', $item) }}" class="irdc-programme-mini">
-                        <img src="{{ str_starts_with($item->image ?? '', 'images/') ? asset($item->image) : asset('storage/'.$item->image) }}" alt="{{ $item->title }}">
+                        <img src="{{ $item->coverImageUrl() }}" alt="{{ $item->title }}">
                         <span>{{ $item->title }}</span>
                     </a>
                 @endforeach

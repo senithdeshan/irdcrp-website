@@ -37,7 +37,7 @@
 
                     <div class="irdc-procurement-card__docs">
                         @if ($item->documentExists())
-                            <a href="{{ route('other-announcements.file', $item) }}" target="_blank" rel="noopener">
+                            <a href="{{ route('other-announcements.file', $item) }}">
                                 <span>{{ $item->documentExtension() ?: 'FILE' }}</span>
                                 <strong>{{ $item->documentTypeLabel() }}</strong>
                                 <small>{{ $item->document_original_name ?: 'Download document' }}</small>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Download;
 use App\Models\Faq;
 use App\Models\Gallery;
+use App\Models\GrmComplaint;
 use App\Models\HomeImage;
 use App\Models\HomeVideo;
 use App\Models\ImpactMetric;
@@ -14,10 +15,12 @@ use App\Models\News;
 use App\Models\OtherAnnouncement;
 use App\Models\Page;
 use App\Models\Programme;
+use App\Models\ProjectPartner;
 use App\Models\ProcurementNotice;
 use App\Models\ProjectComponent;
 use App\Models\SuccessStory;
 use App\Models\Vacancy;
+use App\Support\PublicFileDownload;
 use App\Support\SiteSettings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
@@ -32,12 +35,16 @@ class PageController extends Controller
     {
         $latestNews = News::query()
             ->where('status', 'published')
+            ->orderByDesc('is_pinned')
             ->latest('published_date')
+            ->latest('id')
             ->first();
 
         $homeNews = News::query()
             ->where('status', 'published')
+            ->orderByDesc('is_pinned')
             ->latest('published_date')
+            ->latest('id')
             ->take(3)
             ->get();
 
@@ -81,7 +88,6 @@ class PageController extends Controller
                 ->where('status', 'active')
                 ->latest('insight_date')
                 ->latest()
-                ->take(3)
                 ->get()
             : collect();
 
@@ -95,7 +101,7 @@ class PageController extends Controller
 
         $homeImages = Schema::hasTable('home_images')
             ? HomeImage::query()
-                ->where('is_active', true)
+                ->visibleOnHome()
                 ->orderBy('sort_order')
                 ->orderBy('id')
                 ->get()
@@ -113,6 +119,19 @@ class PageController extends Controller
                 ->get()
             : collect();
 
+        $homeBlocks = app(SiteSettings::class)->homeBlocksForPublic();
+        $heroSlideIntervalMs = app(SiteSettings::class)->homeHeroSlideIntervalMs();
+        $weatherLocale = in_array(app()->getLocale(), ['en', 'si', 'ta'], true) ? app()->getLocale() : 'en';
+        $weatherWidget = app(SiteSettings::class)->weatherWidget($weatherLocale);
+
+        $projectPartners = Schema::hasTable('project_partners')
+            ? ProjectPartner::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get()
+            : collect();
+
         return view('home', compact(
             'latestNews',
             'homeNews',
@@ -125,6 +144,10 @@ class PageController extends Controller
             'homeVideos',
             'homeImages',
             'impactMetrics',
+            'homeBlocks',
+            'heroSlideIntervalMs',
+            'projectPartners',
+            'weatherWidget',
         ));
     }
 
@@ -171,14 +194,21 @@ class PageController extends Controller
         return view('programmes.show', compact('programme', 'moreProgrammes'));
     }
 
-    public function areas(): View
+    public function areas(SiteSettings $settings): View
     {
-        return view('areas');
+        return view('areas', [
+            'projectAreas' => $settings->projectAreas(),
+        ]);
     }
 
     public function news(): View
     {
-        $news = News::query()->where('status', 'published')->latest()->get();
+        $news = News::query()
+            ->where('status', 'published')
+            ->orderByDesc('is_pinned')
+            ->latest('published_date')
+            ->latest('id')
+            ->get();
 
         return view('news', compact('news'));
     }
@@ -212,9 +242,9 @@ class PageController extends Controller
         abort_unless(is_array($document) && filled($document['path'] ?? null), 404);
         abort_unless(Storage::disk('public')->exists($document['path']), 404);
 
-        return Storage::disk('public')->download(
+        return PublicFileDownload::fromPublicDisk(
             $document['path'],
-            $document['original_name'] ?? basename($document['path'])
+            $document['original_name'] ?? basename($document['path']),
         );
     }
 
@@ -236,9 +266,18 @@ class PageController extends Controller
             abort(404, 'File not found.');
         }
 
-        $name = basename($download->file_path);
+        return PublicFileDownload::fromPublicDisk(
+            $download->file_path,
+            $download->file_original_name ?: basename($download->file_path),
+        );
+    }
 
-        return Storage::disk('public')->download($download->file_path, $name);
+    public function vacancyFile(Vacancy $vacancy): Response|StreamedResponse
+    {
+        abort_unless(in_array($vacancy->status, ['open', 'closed'], true), 404);
+        abort_unless(filled($vacancy->pdf_path), 404);
+
+        return PublicFileDownload::fromPublicDisk($vacancy->pdf_path, $vacancy->pdfDownloadName());
     }
 
     public function gallerySection(string $section): View
@@ -318,22 +357,50 @@ class PageController extends Controller
         abort_unless($otherAnnouncement->status === 'published', 404);
         abort_unless($otherAnnouncement->documentExists(), 404);
 
-        return Storage::disk('public')->download(
+        return PublicFileDownload::fromPublicDisk(
             $otherAnnouncement->document_path,
             $otherAnnouncement->document_original_name ?: basename($otherAnnouncement->document_path),
         );
     }
 
-    public function showCmsPage(Page $page): View
+    public function showCmsPage(Page $page): View|RedirectResponse
     {
         abort_unless($page->status === 'published' || auth()->check(), 404);
+
+        if ($page->slug === 'organizational-structure') {
+            return redirect()->route('organizational-structure');
+        }
+
+        if ($page->slug === 'reports') {
+            return redirect()->route('reports.index');
+        }
+
+        if ($page->slug === 'institutional-development') {
+            return redirect()->route('institutional-development.index');
+        }
 
         return view('page-show', compact('page'));
     }
 
+    public function organizationalStructure(): View
+    {
+        $projectStaff = KeyLeader::query()
+            ->where('is_active', true)
+            ->where('group', 'project_staff')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        return view('organizational-structure', compact('projectStaff'));
+    }
+
     public function grm(): View
     {
-        return view('grm');
+        $grmStats = Schema::hasTable('grm_complaints')
+            ? GrmComplaint::summaryStats()
+            : ['total' => 0, 'solved' => 0, 'in_progress' => 0, 'unsolved' => 0];
+
+        return view('grm', compact('grmStats'));
     }
 
     public function faq(): View

@@ -31,27 +31,35 @@
 </div>
 
 <div class="mb-3">
-    <label class="form-label">Description</label>
-    <textarea name="description" class="form-control" rows="8">{{ old('description', $programme?->description) }}</textarea>
+    <label class="form-label">Main description</label>
+    <textarea name="description" class="form-control" rows="6" placeholder="Intro text shown before the content blocks below…">{{ old('description', $programme?->description) }}</textarea>
+    <div class="form-text">Use content blocks below to add more text, images, and tables after this intro.</div>
 </div>
 
-@if($programme?->image)
-    <div class="mb-3">
-        <label class="form-label">Current image</label>
-        <div><img src="{{ str_starts_with($programme->image, 'images/') ? asset($programme->image) : asset('storage/'.$programme->image) }}" alt="" class="rounded" style="max-width: 240px; max-height: 150px; object-fit: cover;"></div>
-    </div>
-@endif
+@include('admin.programmes.partials.content-blocks', ['programme' => $programme ?? null])
+
+<div class="irdc-admin-programme-cover mb-4">
+    <label class="form-label">Cover image</label>
+    <div class="form-text mb-2">This image is used on programme cards and at the top of the programme page.</div>
+
+    @if($programme?->image)
+        <div class="mb-3">
+            <div class="irdc-admin-programme-cover__preview">
+                <img src="{{ $programme->coverImageUrl() }}" alt="Current cover image" class="rounded">
+            </div>
+        </div>
+    @endif
+
+    <input type="file" name="image" class="form-control" accept="image/*" @required(! $programme)>
+</div>
 
 <div class="row g-3 mb-4">
-    <div class="col-md-8">
-        <label class="form-label">{{ $programme ? 'Replace image' : 'Image' }}</label>
-        <input type="file" name="image" class="form-control" accept="image/*" @required(! $programme)>
-    </div>
-    <div class="col-md-4">
+    <div class="col-md-12">
         <label class="form-label">Status</label>
         <select name="status" class="form-select">
             <option value="published" @selected(old('status', $programme?->status ?? 'published') === 'published')>Published</option>
             <option value="draft" @selected(old('status', $programme?->status) === 'draft')>Draft</option>
         </select>
+        <div class="form-text">Published programmes appear automatically in the main navigation Programmes dropdown.</div>
     </div>
 </div>

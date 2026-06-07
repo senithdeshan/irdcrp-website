@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\SafeguardResource;
+use App\Support\PublicFileDownload;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -33,7 +33,7 @@ class SafeguardController extends Controller
         abort_unless($safeguard->status === 'published', 404);
         abort_unless($safeguard->documentExists(), 404);
 
-        return Storage::disk('public')->download(
+        return PublicFileDownload::fromPublicDisk(
             $safeguard->document_path,
             $safeguard->document_original_name ?: basename($safeguard->document_path),
         );

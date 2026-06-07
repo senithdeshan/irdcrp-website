@@ -15,7 +15,7 @@
             @forelse($programmes as $programme)
                 <a href="{{ route('programmes.show', $programme) }}" class="irdc-programme-card group">
                     <div class="irdc-programme-card__image">
-                        <img src="{{ str_starts_with($programme->image ?? '', 'images/') ? asset($programme->image) : asset('storage/'.$programme->image) }}" alt="{{ $programme->title }}" loading="lazy" decoding="async">
+                        <img src="{{ $programme->coverImageUrl() }}" alt="{{ $programme->title }}" loading="lazy" decoding="async">
                     </div>
                     <div class="irdc-programme-card__body">
                         <p class="irdc-programme-card__number">Programme {{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>

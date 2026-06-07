@@ -8,6 +8,7 @@ class News extends Model
 {
     protected $casts = [
         'images' => 'array',
+        'is_pinned' => 'boolean',
         'published_date' => 'date',
     ];
 
@@ -22,6 +23,7 @@ class News extends Model
         'images',
         'published_date',
         'status',
+        'is_pinned',
     ];
 
     public function imagePaths(): array

@@ -36,7 +36,7 @@
         @if($news->isNotEmpty())
             <div class="irdc-news-grid">
                 @foreach($news as $item)
-                    <a href="{{ route('news.show', $item) }}" class="irdc-news-card {{ $loop->first ? 'irdc-news-card--featured' : '' }} group">
+                    <a href="{{ route('news.show', $item) }}" class="irdc-news-card group">
                         <article>
                             @if($item->imageUrl())
                                 <div class="irdc-news-card__image">
@@ -49,14 +49,19 @@
                             @endif
 
                             <div class="irdc-news-card__body">
-                                @if($item->published_date)
-                                    <time datetime="{{ $item->published_date->toDateString() }}">{{ $item->published_date->format('M j, Y') }}</time>
-                                @else
-                                    <time>No date</time>
-                                @endif
+                                <div class="irdc-news-card__meta">
+                                    @if($item->published_date)
+                                        <time datetime="{{ $item->published_date->toDateString() }}">{{ $item->published_date->format('M j, Y') }}</time>
+                                    @else
+                                        <time>No date</time>
+                                    @endif
+                                    @if($item->is_pinned)
+                                        <span class="irdc-news-card__pin">Pinned</span>
+                                    @endif
+                                </div>
                                 <h3>{{ $item->{'title_'.$tLoc} ?? $item->title_en }}</h3>
                                 <div class="irdc-news-card__summary">
-                                    {{ \Illuminate\Support\Str::limit(strip_tags($item->{'content_'.$tLoc} ?? $item->content_en), $loop->first ? 190 : 120) }}
+                                    {{ \Illuminate\Support\Str::limit(strip_tags($item->{'content_'.$tLoc} ?? $item->content_en), 120) }}
                                 </div>
                                 <p><span>{{ __('messages.read_more') }}</span></p>
                             </div>

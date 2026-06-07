@@ -275,6 +275,21 @@
         @apply w-full min-w-0;
     }
 
+    .irdc-top-bar,
+    .irdc-header-tools,
+    .irdc-header-tools__cluster {
+        overflow: visible;
+    }
+
+    .irdc-top-bar .irdc-dropdown {
+        position: relative;
+        z-index: 30;
+    }
+
+    .irdc-top-bar .irdc-dropdown__panel {
+        z-index: 10001 !important;
+    }
+
     .irdc-top-bar--slim .irdc-header-logo-parts {
         @apply gap-1.5 sm:gap-2.5;
     }
@@ -1185,6 +1200,77 @@
         @apply aspect-[16/10] w-full rounded-2xl object-cover;
     }
 
+    .irdc-programme-show__intro {
+        @apply text-base leading-relaxed text-slate-700 sm:text-lg;
+    }
+
+    .irdc-programme-blocks {
+        @apply mt-8 grid gap-8;
+    }
+
+    .irdc-programme-show__intro + .irdc-programme-blocks {
+        @apply mt-10;
+    }
+
+    .irdc-programme-block--text {
+        @apply rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5 sm:p-6;
+    }
+
+    .irdc-programme-block__text {
+        @apply text-base leading-relaxed text-slate-700;
+    }
+
+    .irdc-programme-block--image {
+        @apply overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lg shadow-slate-900/5;
+    }
+
+    .irdc-programme-block--image img {
+        @apply w-full object-cover;
+    }
+
+    .irdc-programme-block--image figcaption {
+        @apply border-t border-slate-200 px-4 py-3 text-sm text-slate-600;
+    }
+
+    .irdc-programme-block--table {
+        @apply overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-lg shadow-emerald-900/5;
+    }
+
+    .irdc-programme-block__table-title {
+        @apply border-b border-emerald-100 bg-emerald-50/70 px-4 py-3 font-display text-lg font-extrabold text-[#0A3D62];
+    }
+
+    .irdc-programme-block__table-wrap {
+        @apply overflow-x-auto;
+    }
+
+    .irdc-programme-block__table {
+        @apply min-w-full text-left text-sm;
+    }
+
+    .irdc-programme-block__table thead {
+        @apply bg-[#0A3D62] text-white;
+    }
+
+    .irdc-programme-block__table th,
+    .irdc-programme-block__table td {
+        @apply px-4 py-3 align-top;
+    }
+
+    .irdc-programme-block__table tbody tr:nth-child(even) {
+        @apply bg-slate-50;
+    }
+
+    .irdc-admin-programme-cover__preview img {
+        max-width: 280px;
+        max-height: 180px;
+        object-fit: cover;
+    }
+
+    .irdc-admin-programme-block {
+        border-left: 4px solid #16a34a;
+    }
+
     .irdc-programme-mini {
         @apply overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md;
     }
@@ -1654,19 +1740,35 @@
     }
 
     .irdc-insights-head {
-        @apply relative z-[1] mb-6 flex flex-col gap-3 sm:mb-8 md:flex-row md:items-end md:justify-between;
-    }
-
-    .irdc-insights-head__eyebrow {
-        @apply mb-2 text-[0.7rem] font-extrabold uppercase tracking-[0.2em] text-emerald-700 sm:text-xs;
+        @apply relative z-[1] mx-auto mb-8 max-w-3xl text-center sm:mb-10;
     }
 
     .irdc-insights-head__title {
-        @apply font-display text-2xl font-extrabold tracking-tight text-[#0A3D62] sm:text-3xl;
+        @apply font-display text-3xl font-extrabold tracking-tight text-[#0A3D62] sm:text-4xl lg:text-5xl;
+    }
+
+    .irdc-insights-head__subtitle {
+        @apply mt-3 text-base font-semibold text-slate-700 sm:text-lg;
     }
 
     .irdc-insights-head__lead {
-        @apply mt-2 max-w-2xl text-sm leading-relaxed text-slate-600;
+        @apply mx-auto mt-2 max-w-2xl text-xs leading-relaxed text-slate-500 sm:text-sm;
+    }
+
+    .irdc-insights-slider {
+        @apply relative z-[1];
+    }
+
+    .irdc-insights-nav {
+        @apply absolute top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-xl font-bold text-[#0A3D62] shadow-lg shadow-slate-900/10 ring-1 ring-slate-900/5 transition hover:-translate-y-[54%] hover:bg-slate-50 sm:h-11 sm:w-11 sm:text-2xl;
+    }
+
+    .irdc-insights-nav--left {
+        @apply left-0 sm:left-1;
+    }
+
+    .irdc-insights-nav--right {
+        @apply right-0 sm:right-1;
     }
 
     .irdc-insights-grid {
@@ -1721,6 +1823,27 @@
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
+    }
+
+    .irdc-insight-card--linked {
+        @apply cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A3D62]/35 focus-visible:ring-offset-2;
+    }
+
+    .irdc-insight-card__cta {
+        @apply mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#0A3D62] transition group-hover:text-emerald-700;
+    }
+
+    .irdc-insight-card--linked:hover .irdc-insight-card__cta {
+        @apply text-emerald-700;
+    }
+
+    .irdc-insight-card__cta::after {
+        content: "→";
+        @apply transition-transform duration-300;
+    }
+
+    .irdc-insight-card--linked:hover .irdc-insight-card__cta::after {
+        transform: translateX(0.2rem);
     }
 
     .irdc-insight-card--empty {
@@ -2163,14 +2286,6 @@
         @apply flex h-full flex-col;
     }
 
-    .irdc-news-card--featured {
-        @apply lg:col-span-2 lg:row-span-2;
-    }
-
-    .irdc-news-card--featured article {
-        @apply lg:min-h-[34rem];
-    }
-
     .irdc-news-card__image {
         @apply relative aspect-[16/10] overflow-hidden bg-slate-100;
     }
@@ -2192,8 +2307,16 @@
         @apply flex flex-1 flex-col p-5 sm:p-6;
     }
 
+    .irdc-news-card__meta {
+        @apply mb-4 flex flex-wrap items-center gap-2;
+    }
+
     .irdc-news-card__body time {
-        @apply mb-4 inline-flex w-fit rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-emerald-800;
+        @apply inline-flex w-fit rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-emerald-800;
+    }
+
+    .irdc-news-card__pin {
+        @apply inline-flex w-fit rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-amber-800;
     }
 
     .irdc-news-card__body h3 {
@@ -2202,18 +2325,6 @@
 
     .irdc-news-card__summary {
         @apply mt-4 line-clamp-3 text-sm leading-relaxed text-slate-600 sm:text-base;
-    }
-
-    .irdc-news-card--featured .irdc-news-card__image {
-        @apply lg:aspect-[16/8.6];
-    }
-
-    .irdc-news-card--featured .irdc-news-card__body {
-        @apply lg:p-8;
-    }
-
-    .irdc-news-card--featured .irdc-news-card__body h3 {
-        @apply lg:text-3xl lg:leading-tight;
     }
 
     .irdc-news-card__body p {
@@ -2948,16 +3059,11 @@
     }
 
     .irdc-component-card {
-        @apply relative grid min-h-[19rem] overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-lg shadow-slate-900/5 ring-1 ring-slate-900/[0.03] transition duration-300 sm:grid-cols-[6rem_1fr];
+        @apply relative min-h-[19rem] overflow-hidden rounded-2xl border border-slate-200/90 border-t-[5px] border-t-emerald-600 bg-white shadow-lg shadow-slate-900/5 ring-1 ring-slate-900/[0.03] transition duration-300;
     }
 
     .irdc-component-card:hover {
         @apply -translate-y-1 border-emerald-700/20 shadow-xl shadow-emerald-900/10;
-    }
-
-    .irdc-component-card__number {
-        @apply flex items-center justify-center bg-gradient-to-br from-[#0A3D62] to-emerald-700 px-5 py-5 font-display text-4xl font-extrabold text-white sm:min-h-full sm:[writing-mode:vertical-rl];
-        letter-spacing: 0;
     }
 
     .irdc-component-card__body {
@@ -2965,7 +3071,7 @@
     }
 
     .irdc-component-card__kicker {
-        @apply mb-2 text-xs font-bold uppercase tracking-[0.16em] text-emerald-700;
+        @apply mb-4 inline-flex items-center rounded-xl border-2 border-emerald-300/90 bg-gradient-to-r from-emerald-100 via-emerald-50 to-emerald-50/60 px-4 py-2.5 font-display text-sm font-extrabold uppercase tracking-[0.12em] text-emerald-900 shadow-md shadow-emerald-900/10 ring-2 ring-emerald-200/70 sm:px-5 sm:py-3 sm:text-base;
     }
 
     .irdc-component-card__title {
@@ -3063,15 +3169,119 @@
         margin-bottom: 28px;
     }
 
-    .irdc-contact-modern__hero-card {
+    .irdc-contact-modern__top-card--wide {
+        width: 100%;
+        max-width: none;
+        margin-bottom: 0;
+    }
+
+    .irdc-contact-modern__top-card--wide .irdc-contact-modern__location-card {
+        max-width: none;
+    }
+
+    .irdc-contact-modern__hero-card,
+    .irdc-contact-modern__location-card {
         width: 100%;
         max-width: 920px;
         background: linear-gradient(180deg, #ffffff, #fbfefb);
-        padding: 48px 42px;
-        text-align: center;
         border-radius: 16px;
         border: 1px solid #dff0e3;
         box-shadow: 0 14px 34px -24px rgba(18, 40, 24, 0.35);
+        overflow: hidden;
+    }
+
+    .irdc-contact-modern__hero-card {
+        padding: 48px 42px;
+        text-align: center;
+    }
+
+    .irdc-contact-modern__location-card {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.38fr);
+        align-items: stretch;
+    }
+
+    .irdc-contact-modern__location-map {
+        position: relative;
+        min-height: 280px;
+        overflow: hidden;
+        background: #e8efe9;
+    }
+
+    .irdc-contact-modern__location-map iframe {
+        display: block;
+        width: 100%;
+        height: calc(100% + 56px);
+        min-height: 336px;
+        margin-top: -56px;
+        border: 0;
+    }
+
+    .irdc-contact-modern__location-card--text-only {
+        grid-template-columns: 1fr;
+    }
+
+    .irdc-contact-modern__location-card--text-only .irdc-contact-modern__location-body {
+        padding: 48px 42px;
+        text-align: center;
+    }
+
+    .irdc-contact-modern__location-body {
+        padding: 32px 34px;
+        text-align: left;
+    }
+
+    .irdc-contact-icon--inline {
+        margin: 0 0 16px;
+    }
+
+    .irdc-contact-modern__directions-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 18px;
+        padding: 0.72rem 1.35rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #1fa12e, #178326);
+        color: #fff;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 10px 24px -16px rgba(31, 161, 46, 0.85);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .irdc-contact-modern__directions-btn:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(135deg, #178326, #126a1f);
+        color: #fff;
+        box-shadow: 0 16px 28px -16px rgba(31, 161, 46, 0.95);
+    }
+
+    .irdc-contact-modern__location-photo {
+        margin: 20px 0 0;
+        overflow: hidden;
+        border-radius: 12px;
+        border: 1px solid #e3ebe5;
+        background: #f8fbf9;
+        box-shadow: 0 8px 20px -18px rgba(18, 40, 24, 0.45);
+    }
+
+    .irdc-contact-modern__location-photo img {
+        display: block;
+        width: 100%;
+        max-height: 168px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .irdc-contact-modern__location-photo figcaption {
+        padding: 0.55rem 0.75rem;
+        font-size: 0.78rem;
+        line-height: 1.45;
+        color: #64748b;
+        background: #f4f8f5;
+        border-top: 1px solid #e8efe9;
     }
 
     .irdc-contact-modern__mini-grid {
@@ -3158,8 +3368,25 @@
         }
     }
 
+    @media (max-width: 768px) {
+        .irdc-contact-modern__location-card {
+            grid-template-columns: 1fr;
+        }
+
+        .irdc-contact-modern__location-map iframe {
+            min-height: 276px;
+            margin-top: -52px;
+            height: calc(100% + 52px);
+        }
+
+        .irdc-contact-modern__location-body {
+            padding: 28px 22px;
+        }
+    }
+
     @media (max-width: 576px) {
-        .irdc-contact-modern__hero-card {
+        .irdc-contact-modern__hero-card,
+        .irdc-contact-modern__location-body {
             padding: 30px 18px;
         }
 
@@ -3204,6 +3431,158 @@
 
     .irdc-contact-send-btn {
         @apply inline-flex items-center justify-center rounded-full border border-emerald-500/50 bg-gradient-to-r from-emerald-700 to-green-600 px-8 py-3 text-base font-bold text-white shadow-md transition hover:from-emerald-600 hover:to-green-500;
+    }
+
+    /* GRM page: summary cards + pie chart */
+    .irdc-grm-summary {
+        margin-bottom: 2rem;
+    }
+
+    .irdc-grm-summary__grid {
+        display: grid;
+        gap: 1.25rem;
+        grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 992px) {
+        .irdc-grm-summary__grid {
+            grid-template-columns: 1.35fr 0.65fr;
+            align-items: stretch;
+        }
+    }
+
+    .irdc-grm-summary__cards {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (min-width: 768px) {
+        .irdc-grm-summary__cards {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+    @media (min-width: 992px) {
+        .irdc-grm-summary__cards {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    .irdc-grm-summary-card {
+        border-radius: 1rem;
+        padding: 1rem 1.1rem;
+        border: 1px solid transparent;
+        box-shadow: 0 12px 28px -22px rgba(15, 23, 42, 0.45);
+    }
+
+    .irdc-grm-summary-card__label {
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 0.45rem;
+    }
+
+    .irdc-grm-summary-card__value {
+        font-size: 1.85rem;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 0.35rem;
+    }
+
+    .irdc-grm-summary-card__hint {
+        font-size: 0.78rem;
+        margin-bottom: 0;
+        opacity: 0.85;
+    }
+
+    .irdc-grm-summary-card--total {
+        background: linear-gradient(180deg, #eff6ff, #dbeafe);
+        border-color: #bfdbfe;
+        color: #1e3a8a;
+    }
+
+    .irdc-grm-summary-card--solved {
+        background: linear-gradient(180deg, #ecfdf5, #d1fae5);
+        border-color: #a7f3d0;
+        color: #065f46;
+    }
+
+    .irdc-grm-summary-card--progress {
+        background: linear-gradient(180deg, #fffbeb, #fef3c7);
+        border-color: #fde68a;
+        color: #92400e;
+    }
+
+    .irdc-grm-summary-card--unsolved {
+        background: linear-gradient(180deg, #fef2f2, #fee2e2);
+        border-color: #fecaca;
+        color: #991b1b;
+    }
+
+    .irdc-grm-summary__chart-card {
+        background: #fff;
+        border: 1px solid #dcefe3;
+        border-radius: 1rem;
+        padding: 1.1rem 1.2rem;
+        box-shadow: 0 14px 34px -24px rgba(18, 40, 24, 0.35);
+    }
+
+    .irdc-grm-summary__chart-title {
+        font-size: 1rem;
+        font-weight: 800;
+        color: #0A3D62;
+        margin-bottom: 0.85rem;
+    }
+
+    .irdc-grm-summary__chart-wrap {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .irdc-grm-summary__pie {
+        width: 118px;
+        height: 118px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        box-shadow: inset 0 0 0 12px #fff;
+    }
+
+    .irdc-grm-summary__legend {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.55rem;
+        font-size: 0.84rem;
+        color: #334155;
+    }
+
+    .irdc-grm-summary__legend li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .irdc-grm-summary__dot {
+        width: 0.72rem;
+        height: 0.72rem;
+        border-radius: 999px;
+        flex-shrink: 0;
+    }
+
+    .irdc-grm-summary__dot--solved {
+        background: #22c55e;
+    }
+
+    .irdc-grm-summary__dot--progress {
+        background: #f59e0b;
+    }
+
+    .irdc-grm-summary__dot--unsolved {
+        background: #ef4444;
     }
 
     /* GRM page: modern helpdesk + complaint layout */
@@ -3284,6 +3663,65 @@
         margin-bottom: 0;
     }
 
+    .irdc-helpdesk-location-mini {
+        margin-top: 28px;
+        padding-top: 22px;
+        border-top: 1px solid #dcefe3;
+    }
+
+    .irdc-helpdesk-location-mini__label {
+        color: #344054;
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 10px;
+    }
+
+    .irdc-helpdesk-location-mini__name {
+        color: #10223b;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.5;
+        margin-bottom: 12px;
+    }
+
+    .irdc-helpdesk-location-mini__photo {
+        margin: 0 0 12px;
+        overflow: hidden;
+        border-radius: 10px;
+        border: 1px solid #dcefe3;
+    }
+
+    .irdc-helpdesk-location-mini__photo img {
+        display: block;
+        width: 100%;
+        max-height: 130px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .irdc-helpdesk-location-mini__directions {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.58rem 1.1rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #00a65a, #008c4d);
+        color: #fff;
+        font-size: 0.84rem;
+        font-weight: 700;
+        text-decoration: none;
+        box-shadow: 0 8px 18px -12px rgba(0, 156, 90, 0.75);
+        transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .irdc-helpdesk-location-mini__directions:hover {
+        transform: translateY(-1px);
+        color: #fff;
+        box-shadow: 0 12px 22px -12px rgba(0, 156, 90, 0.9);
+    }
+
     .irdc-complaint-card {
         padding: 34px 30px 31px;
     }
@@ -3319,8 +3757,12 @@
         box-shadow: 0 0 0 4px rgba(0, 156, 90, 0.13);
     }
 
-    .irdc-complaint-card button {
+    .irdc-complaint-card__submit {
         margin-top: 22px;
+        text-align: center;
+    }
+
+    .irdc-complaint-card button {
         background: linear-gradient(135deg, #00a65a, #008c4d);
         color: #fff;
         border: none;
@@ -3612,5 +4054,153 @@
             content: attr(data-label);
             @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500;
         }
+    }
+
+    /* Home entry announcement popup — sits below fixed header; navbar stays visible above */
+    body.irdc-home-popup-open main {
+        overflow: hidden;
+    }
+
+    .irdc-home-popup {
+        position: fixed;
+        top: var(--irdc-header-offset, 8.35rem);
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 9990;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .irdc-home-popup[hidden] {
+        display: none !important;
+    }
+
+    .irdc-home-popup__backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(10, 30, 45, 0.72);
+        backdrop-filter: blur(4px);
+    }
+
+    .irdc-home-popup__dialog {
+        position: relative;
+        z-index: 1;
+        width: min(920px, 100%);
+        max-height: 100%;
+        animation: irdc-home-popup-in 0.35s ease;
+    }
+
+    .irdc-home-popup__image {
+        display: block;
+        width: 100%;
+        max-height: calc(100vh - var(--irdc-header-offset, 8.35rem) - 2rem);
+        object-fit: contain;
+        border-radius: 1rem;
+        box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.55);
+        background: #fff;
+    }
+
+    .irdc-home-popup__link {
+        display: block;
+        line-height: 0;
+    }
+
+    .irdc-home-popup__close {
+        position: absolute;
+        top: 0.65rem;
+        right: 0.65rem;
+        width: 2rem;
+        height: 2rem;
+        border: none;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.96);
+        color: #0A3D62;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+        cursor: pointer;
+        z-index: 3;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition: background-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .irdc-home-popup__close-icon {
+        width: 0.95rem;
+        height: 0.95rem;
+        display: block;
+    }
+
+    .irdc-home-popup__close:hover {
+        background: #fff;
+        transform: scale(1.05);
+    }
+
+    @keyframes irdc-home-popup-in {
+        from {
+            opacity: 0;
+            transform: translateY(12px) scale(0.98);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Home: project partners strip */
+    .irdc-partners {
+        @apply border-y border-slate-200/80 bg-gradient-to-b from-white via-slate-50 to-white py-10 sm:py-12;
+    }
+
+    .irdc-partners__head {
+        @apply mx-auto mb-6 max-w-3xl text-center sm:mb-8;
+    }
+
+    .irdc-partners__title {
+        @apply font-display text-xl font-extrabold tracking-tight text-[#0A3D62] sm:text-2xl md:text-[1.7rem];
+    }
+
+    .irdc-partners__line {
+        @apply mx-auto mt-3 block h-1 w-20 rounded-full bg-gradient-to-r from-emerald-500 via-[#0A3D62] to-emerald-500;
+    }
+
+    .irdc-partners-slider__viewport {
+        @apply relative overflow-hidden px-1 sm:px-2;
+    }
+
+    .irdc-partners-slide {
+        @apply box-border;
+    }
+
+    .irdc-partners-nav {
+        @apply absolute top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-emerald-100 bg-white text-lg font-bold text-[#0A3D62] shadow-md shadow-slate-900/10 transition hover:border-emerald-300 hover:bg-emerald-50 sm:h-10 sm:w-10 sm:text-xl;
+    }
+
+    .irdc-partners-nav--left {
+        @apply -left-1 sm:left-0;
+    }
+
+    .irdc-partners-nav--right {
+        @apply -right-1 sm:right-0;
+    }
+
+    .irdc-partners-card {
+        @apply flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_12px_30px_-22px_rgba(15,23,42,0.45)] ring-1 ring-slate-900/[0.03] transition duration-300 sm:p-6;
+    }
+
+    a.irdc-partners-card--linked {
+        @apply cursor-pointer no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A3D62]/35 focus-visible:ring-offset-2;
+    }
+
+    a.irdc-partners-card--linked:hover {
+        @apply -translate-y-0.5 border-emerald-200 bg-slate-50 shadow-[0_18px_38px_-22px_rgba(10,61,98,0.45)];
+    }
+
+    .irdc-partners-card__logo {
+        @apply h-full w-full object-contain transition duration-300 group-hover:scale-[1.03];
     }
 }

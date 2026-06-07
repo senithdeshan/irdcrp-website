@@ -61,7 +61,7 @@
 
                     <div class="irdc-procurement-card__docs">
                         @forelse($documents as $index => $document)
-                            <a href="{{ route('procurement.file', [$notice, $index]) }}" target="_blank" rel="noopener">
+                            <a href="{{ route('procurement.file', [$notice, $index]) }}">
                                 <span>PDF</span>
                                 <strong>{{ $document['label'] ?? 'Procurement PDF' }}</strong>
                                 <small>{{ $document['original_name'] ?? 'Download document' }}</small>

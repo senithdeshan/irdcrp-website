@@ -6,17 +6,7 @@
 
     <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <section class="irdc-contact-modern__details" aria-label="Project contact details">
-            <div class="irdc-contact-modern__top-card">
-                <article class="irdc-contact-modern__hero-card">
-                    <div class="irdc-contact-icon" aria-hidden="true">📍</div>
-                    <h2 class="irdc-contact-modern__hero-title">Address</h2>
-                    <p class="irdc-contact-modern__hero-line">Project Management Unit</p>
-                    <p class="irdc-contact-modern__hero-line">Integrated Rurban Development and Climate Resilience Project (IRDCRP)</p>
-                    <div class="irdc-contact-modern__address-block">
-                        <p>No 123/2, Pannipitiya Road, Battaramulla, Sri Lanka</p>
-                    </div>
-                </article>
-            </div>
+            <x-contact-location-card />
 
             <div class="irdc-contact-modern__mini-grid">
                 <article class="irdc-contact-modern__mini-card">

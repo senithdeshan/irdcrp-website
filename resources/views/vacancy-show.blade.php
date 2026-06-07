@@ -24,7 +24,7 @@
                 <div class="prose" style="white-space: pre-wrap;">{!! nl2br(e($vacancy->description)) !!}</div>
             </div>
             <p>
-                <a class="btn btn-danger" target="_blank" rel="noopener" href="{{ asset('storage/'.$vacancy->pdf_path) }}">Download notice (PDF)</a>
+                <a class="btn btn-danger" href="{{ route('vacancies.file', $vacancy) }}">Download notice (PDF)</a>
             </p>
         </div>
     </div>

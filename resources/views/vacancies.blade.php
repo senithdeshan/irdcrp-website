@@ -70,7 +70,7 @@
                         </div>
                         <div class="irdc-notice-card__actions">
                             @if(filled($v->pdf_path))
-                                <a href="{{ asset('storage/'.$v->pdf_path) }}" rel="noopener" target="_blank" class="irdc-button irdc-button--amber">Download PDF</a>
+                                <a href="{{ route('vacancies.file', $v) }}" class="irdc-button irdc-button--amber">Download PDF</a>
                             @endif
                             <a href="{{ route('vacancies.show', $v) }}" class="irdc-button irdc-button--small-outline">View details</a>
                         </div>

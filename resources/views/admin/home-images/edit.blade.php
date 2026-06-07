@@ -55,6 +55,21 @@
                             <option value="0" @selected((string) $activeOld === '0')>Hidden</option>
                         </select>
                     </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Display from</label>
+                        <input type="date" name="display_from" class="form-control" value="{{ old('display_from', optional($homeImage->display_from)->format('Y-m-d')) }}">
+                        <p class="small text-muted mb-0 mt-1">Leave empty to show immediately.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Display until</label>
+                        <input type="date" name="display_until" class="form-control" value="{{ old('display_until', optional($homeImage->display_until)->format('Y-m-d')) }}">
+                        <p class="small text-muted mb-0 mt-1">Leave empty to keep showing with no end date.</p>
+                    </div>
+                    <div class="col-12">
+                        <div class="alert alert-info small mb-0">
+                            Use the display period to schedule seasonal or event hero images. The slide appears on the home page only between these dates (when status is Active).
+                        </div>
+                    </div>
                     <div class="col-12">
                         <label class="form-label">Caption</label>
                         <textarea name="caption" class="form-control" rows="4" maxlength="500">{{ old('caption', $homeImage->caption) }}</textarea>

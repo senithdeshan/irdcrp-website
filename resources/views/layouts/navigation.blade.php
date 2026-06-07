@@ -1,4 +1,13 @@
 @php
+    $moduleEnabled = $moduleEnabled ?? fn (string $id): bool => true;
+    $navItemsForModule = function (array $items) use ($moduleEnabled): array {
+        return array_values(array_filter($items, function (array $item) use ($moduleEnabled): bool {
+            $module = $item['module'] ?? null;
+
+            return $module === null || $moduleEnabled($module);
+        }));
+    };
+
     $inGallery = request()->is('gallery*');
     $inGrm = request()->is('grm*') || request()->is('admin/grm-complaints*');
     $inSupport = request()->is('contact') || request()->is('admin/support-messages*');
@@ -11,9 +20,11 @@
         return $page ? route('page.show', $page) : $fallback;
     };
     $pathIs = fn (...$patterns) => request()->is(...$patterns);
-    $inProject = $pathIs('about', 'components', 'areas', 'p/activities', 'p/organizational-structure');
+    $inProject = $pathIs('about', 'components', 'areas', 'p/activities', 'organizational-structure', 'p/organizational-structure');
     $inResources = $pathIs(
         'downloads*',
+        'reports*',
+        'institutional-development*',
         'safeguards*',
         'p/reports',
         'p/safeguard',
@@ -29,18 +40,18 @@
     );
     $inAnnouncements = $pathIs('procurement*', 'vacancies*', 'announcements/other*');
     $inFaq = $pathIs('faq');
-    $projectItems = [
+    $projectItems = $navItemsForModule([
         ['label' => 'About Us', 'href' => url('/about'), 'active' => $pathIs('about')],
         ['label' => 'Components', 'href' => url('/components'), 'active' => $pathIs('components')],
         ['label' => 'Areas', 'href' => url('/areas'), 'active' => $pathIs('areas')],
-        ['label' => 'Organizational Structure', 'href' => $pageUrl('organizational-structure', url('/#key-leaders')), 'active' => $pathIs('p/organizational-structure')],
-    ];
-    $resourceItems = [
-        ['label' => 'Documents', 'href' => route('downloads.index'), 'active' => $pathIs('downloads*')],
-        ['label' => 'Reports', 'href' => $pageUrl('reports', route('downloads.index')), 'active' => $pathIs('p/reports')],
-        ['type' => 'submenu', 'label' => 'Safeguard', 'active' => $inSafeguard],
-        ['label' => 'Institutional Development', 'href' => $pageUrl('institutional-development', route('downloads.index')), 'active' => $pathIs('p/institutional-development')],
-    ];
+        ['module' => 'key_leaders', 'label' => 'Organizational Structure', 'href' => route('organizational-structure'), 'active' => $pathIs('organizational-structure', 'p/organizational-structure')],
+    ]);
+    $resourceItems = $navItemsForModule([
+        ['module' => 'downloads', 'label' => 'Documents', 'href' => route('downloads.index'), 'active' => $pathIs('downloads*')],
+        ['module' => 'reports', 'label' => 'Reports', 'href' => route('reports.index'), 'active' => $pathIs('reports*', 'p/reports')],
+        ['module' => 'safeguards', 'type' => 'submenu', 'label' => 'Safeguard', 'active' => $inSafeguard],
+        ['module' => 'institutional_development', 'label' => 'Capacity Build', 'href' => route('institutional-development.index'), 'active' => $pathIs('institutional-development*', 'p/institutional-development')],
+    ]);
     $safeguardItems = [
         [
             'label' => 'Social Management Plan & Social Screening Report',
@@ -53,11 +64,34 @@
             'active' => $pathIs('safeguards/environment-management-plan-environment-screening-plan', 'p/environment-management-plan-environment-screening-plan'),
         ],
     ];
-    $announcementItems = [
-        ['label' => 'Procurement', 'href' => url('/procurement'), 'active' => $pathIs('procurement*')],
-        ['label' => 'Vacancy', 'href' => route('vacancies.index'), 'active' => $pathIs('vacancies*')],
-        ['label' => 'Other', 'href' => route('other-announcements.index'), 'active' => $pathIs('announcements/other*')],
-    ];
+    $announcementItems = $navItemsForModule([
+        ['module' => 'procurement', 'label' => 'Procurement', 'href' => url('/procurement'), 'active' => $pathIs('procurement*')],
+        ['module' => 'vacancies', 'label' => 'Vacancy', 'href' => route('vacancies.index'), 'active' => $pathIs('vacancies*')],
+        ['module' => 'other_announcements', 'label' => 'Other', 'href' => route('other-announcements.index'), 'active' => $pathIs('announcements/other*')],
+    ]);
+    $inProgrammes = $pathIs('programmes', 'programmes/*');
+    $navProgrammes = \Illuminate\Support\Facades\Schema::hasTable('programmes')
+        ? \App\Models\Programme::query()
+            ->where('status', 'published')
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->get(['id', 'title', 'slug'])
+        : collect();
+    $programmeNavItems = $navProgrammes
+        ->map(fn (\App\Models\Programme $programme): array => [
+            'label' => $programme->title,
+            'href' => route('programmes.show', $programme),
+            'active' => $pathIs('programmes/'.$programme->slug),
+        ])
+        ->prepend([
+            'label' => 'All Programmes',
+            'href' => route('programmes.index'),
+            'active' => request()->routeIs('programmes.index'),
+        ])
+        ->values()
+        ->all();
+    $showResourcesNav = count($resourceItems) > 0;
+    $showAnnouncementsNav = count($announcementItems) > 0;
     $navLink = 'irdc-nav-link relative inline-flex items-center whitespace-nowrap rounded-md px-1.5 py-2 text-[0.82rem] font-semibold tracking-wide font-display border-b-[3px] transition-colors duration-300 sm:px-2 sm:text-sm md:px-2 md:text-[0.86rem] lg:px-2 lg:text-[0.9rem] xl:px-2.5 xl:text-[0.98rem]';
     $active = 'border-[#0A3D62] bg-slate-50 text-[#0A3D62] font-bold shadow-sm hover:text-[#0A3D62]';
     $activeGalleryNav = 'border-[#0A3D62] bg-slate-50 text-[#0A3D62] font-bold shadow-sm hover:text-[#0A3D62]';
@@ -65,10 +99,10 @@
 @endphp
 
 <div
-    x-data="{ mobile: false, projectMobile: @js($inProject), resourcesMobile: @js($inResources), safeguardMobile: @js($inSafeguard), announcementsMobile: @js($inAnnouncements) }"
+    x-data="{ mobile: false, projectMobile: @js($inProject), resourcesMobile: @js($inResources), safeguardMobile: @js($inSafeguard), announcementsMobile: @js($inAnnouncements), programmesMobile: @js($inProgrammes) }"
     class="sticky top-0 z-[9999]"
 >
-<header class="relative z-[1]">
+<header class="relative z-[3]">
     <div class="irdc-top-bar irdc-top-bar--slim border-b border-slate-200/80 bg-white/95">
         <div class="relative z-10 mx-auto max-w-7xl px-3 py-1.5 sm:px-5 sm:py-2 lg:px-8">
             <div class="irdc-top-bar__row flex w-full min-w-0 items-center justify-between gap-2 sm:gap-4">
@@ -170,6 +204,7 @@
                         </x-slot>
                     </x-dropdown>
 
+                    @if($showResourcesNav)
                     <x-dropdown align="left" width="w-max max-w-[30rem]" panelMinWidth="" panelRounded="rounded-lg" panelExtraClass="shadow-[0_6px_18px_rgba(0,0,0,0.12)]" contentOverflow="overflow-visible" contentClasses="bg-white py-1 [&>a]:!px-3 [&>a]:!py-2 [&>a]:!text-sm [&>a]:!leading-snug [&>a:hover]:!pl-4">
                         <x-slot name="trigger">
                             <button type="button" class="group {{ $navLink }} {{ $inResources ? $activeGalleryNav : $inactive }} !inline-flex max-w-max items-center gap-1" aria-haspopup="true">
@@ -235,11 +270,35 @@
                             @endforeach
                         </x-slot>
                     </x-dropdown>
+                    @endif
 
-                    <a href="{{ route('programmes.index') }}" class="{{ $navLink }} {{ request()->is('programmes*') ? $active : $inactive }}">Programmes</a>
+                    @if($moduleEnabled('programmes'))
+                    <x-dropdown align="left" width="w-max max-w-[28rem]" panelMinWidth="" panelRounded="rounded-lg" panelExtraClass="shadow-[0_6px_18px_rgba(0,0,0,0.12)]" contentClasses="bg-white py-1 [&>a]:!px-3 [&>a]:!py-2 [&>a]:!text-sm [&>a]:!leading-snug [&>a:hover]:!pl-4">
+                        <x-slot name="trigger">
+                            <button type="button" class="group {{ $navLink }} {{ $inProgrammes ? $activeGalleryNav : $inactive }} !inline-flex max-w-max items-center gap-1" aria-haspopup="true">
+                                <span class="whitespace-nowrap">Programmes</span>
+                                <span class="inline-flex shrink-0 text-slate-700 transition-colors duration-300 group-hover:text-black" aria-hidden="true">
+                                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-[11px] w-[11px] max-h-[11px] max-w-[11px]">
+                                        <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+                                    </svg>
+                                </span>
+                            </button>
+                        </x-slot>
+                        <x-slot name="content">
+                            @foreach($programmeNavItems as $item)
+                                <x-dropdown-link href="{{ $item['href'] }}" @class(['font-bold text-[#0A3D62]' => $item['active']])>{{ $item['label'] }}</x-dropdown-link>
+                            @endforeach
+                        </x-slot>
+                    </x-dropdown>
+                    @endif
+                    @if($moduleEnabled('news'))
                     <a href="{{ route('news.index') }}" class="{{ $navLink }} {{ request()->is('news*') ? $active : $inactive }}">News &amp; Events</a>
+                    @endif
+                    @if($moduleEnabled('gallery'))
                     <a href="{{ route('gallery.index') }}" class="{{ $navLink }} {{ $inGallery ? $active : $inactive }}">Gallery</a>
+                    @endif
 
+                    @if($showAnnouncementsNav)
                     <x-dropdown align="left" width="w-max max-w-[13rem]" panelMinWidth="" panelRounded="rounded-lg" panelExtraClass="shadow-[0_6px_18px_rgba(0,0,0,0.12)]" contentClasses="bg-white py-1 [&>a]:!px-3 [&>a]:!py-2 [&>a]:!text-sm [&>a]:!leading-snug [&>a:hover]:!pl-4">
                         <x-slot name="trigger">
                             <button type="button" class="group {{ $navLink }} {{ $inAnnouncements ? $activeGalleryNav : $inactive }} !inline-flex max-w-max items-center gap-1" aria-haspopup="true">
@@ -257,10 +316,17 @@
                             @endforeach
                         </x-slot>
                     </x-dropdown>
+                    @endif
 
+                    @if($moduleEnabled('grm'))
                     <a href="{{ url('/grm') }}" class="{{ $navLink }} {{ $inGrm ? $active : $inactive }}">GRM</a>
+                    @endif
+                    @if($moduleEnabled('faq'))
                     <a href="{{ url('/faq') }}" class="{{ $navLink }} {{ $inFaq ? $active : $inactive }}">FAQ</a>
+                    @endif
+                    @if($moduleEnabled('contact'))
                     <a href="{{ url('/contact') }}" class="{{ $navLink }} {{ $inSupport ? $active : $inactive }}">Contact Us</a>
+                    @endif
 
                     @auth
                         <a href="{{ route('admin.home') }}" class="{{ $navLink }} {{ request()->is('admin*') ? $active : $inactive }}">Admin</a>
@@ -320,6 +386,7 @@
                     </div>
                 </div>
 
+                @if($showResourcesNav)
                 <div class="border-b border-slate-200">
                     <button type="button" class="flex w-full items-center justify-between rounded-lg py-3.5 pl-1 pr-1 text-start transition hover:bg-slate-100" @click="resourcesMobile = ! resourcesMobile" :aria-expanded="resourcesMobile">
                         <span class="{{ $inResources ? 'font-bold text-[#0A3D62]' : '' }}">Resources</span>
@@ -366,11 +433,31 @@
                         @endforeach
                     </div>
                 </div>
+                @endif
 
-                <a class="block rounded-lg border-b border-slate-200 py-3.5 pl-1 transition duration-300 hover:bg-slate-100 {{ request()->is('programmes*') ? 'font-bold text-[#0A3D62]' : '' }}" href="{{ route('programmes.index') }}" @click="mobile = false">Programmes</a>
+                @if($moduleEnabled('programmes'))
+                <div class="border-b border-slate-200">
+                    <button type="button" class="flex w-full items-center justify-between rounded-lg py-3.5 pl-1 pr-1 text-start transition hover:bg-slate-100" @click="programmesMobile = ! programmesMobile" :aria-expanded="programmesMobile">
+                        <span class="{{ $inProgrammes ? 'font-bold text-[#0A3D62]' : '' }}">Programmes</span>
+                        <span class="inline-flex shrink-0 text-slate-500 transition-transform duration-200" :class="programmesMobile ? 'rotate-180' : ''" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block h-3.5 w-3.5 max-h-[14px] max-w-[14px]"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" /></svg>
+                        </span>
+                    </button>
+                    <div x-show="programmesMobile" x-cloak class="space-y-0 border-t border-slate-200 bg-slate-50 py-1 pl-3">
+                        @foreach($programmeNavItems as $item)
+                            <a class="block rounded-md py-2.5 pl-2 text-sm transition duration-300 hover:bg-white {{ $item['active'] ? 'font-bold text-[#0A3D62]' : 'text-slate-700' }}" href="{{ $item['href'] }}" @click="mobile = false; programmesMobile = false">{{ $item['label'] }}</a>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+                @if($moduleEnabled('news'))
                 <a class="block rounded-lg border-b border-slate-200 py-3.5 pl-1 transition duration-300 hover:bg-slate-100" href="{{ route('news.index') }}" @click="mobile = false">News &amp; Events</a>
+                @endif
+                @if($moduleEnabled('gallery'))
                 <a class="block rounded-lg border-b border-slate-200 py-3.5 pl-1 transition duration-300 hover:bg-slate-100" href="{{ route('gallery.index') }}" @click="mobile = false">Gallery</a>
+                @endif
 
+                @if($showAnnouncementsNav)
                 <div class="border-b border-slate-200">
                     <button type="button" class="flex w-full items-center justify-between rounded-lg py-3.5 pl-1 pr-1 text-start transition hover:bg-slate-100" @click="announcementsMobile = ! announcementsMobile" :aria-expanded="announcementsMobile">
                         <span class="{{ $inAnnouncements ? 'font-bold text-[#0A3D62]' : '' }}">Announcements</span>
@@ -384,10 +471,17 @@
                         @endforeach
                     </div>
                 </div>
+                @endif
 
+                @if($moduleEnabled('grm'))
                 <a class="block rounded-lg border-b border-slate-200 py-3.5 pl-1 transition duration-300 hover:bg-slate-100" href="/grm" @click="mobile = false">GRM</a>
+                @endif
+                @if($moduleEnabled('faq'))
                 <a class="block rounded-lg border-b border-slate-200 py-3.5 pl-1 transition duration-300 hover:bg-slate-100" href="/faq" @click="mobile = false">FAQ</a>
+                @endif
+                @if($moduleEnabled('contact'))
                 <a class="block rounded-lg border-b border-slate-200 py-3.5 pl-1 transition duration-300 hover:bg-slate-100" href="/contact" @click="mobile = false">Contact Us</a>
+                @endif
 
                 @auth
                     <a class="mt-2 block rounded-lg py-3.5 pl-1 font-bold text-[#0A3D62] transition hover:bg-slate-100" href="{{ route('admin.home') }}" @click="mobile = false">Admin</a>

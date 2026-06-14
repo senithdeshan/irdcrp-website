@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Download;
+use App\Models\CercDocument;
 use App\Models\Faq;
 use App\Models\Gallery;
 use App\Models\GrmComplaint;
@@ -16,13 +17,14 @@ use App\Models\OtherAnnouncement;
 use App\Models\Page;
 use App\Models\Programme;
 use App\Models\ProjectPartner;
-use App\Models\ProcurementNotice;
 use App\Models\ProjectComponent;
+use App\Models\ProcurementNotice;
 use App\Models\SuccessStory;
 use App\Models\Vacancy;
 use App\Support\PublicFileDownload;
 use App\Support\SiteSettings;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -49,6 +51,7 @@ class PageController extends Controller
             ->get();
 
         $programmes = Programme::query()
+            ->with('projectComponent')
             ->where('status', 'published')
             ->orderBy('sort_order')
             ->orderBy('title')
@@ -58,8 +61,7 @@ class PageController extends Controller
         $galleryPreview = Gallery::query()
             ->where('category', 'photos')
             ->where('status', 'published')
-            ->orderByDesc('item_date')
-            ->orderByDesc('id')
+            ->orderedForDisplay()
             ->take(6)
             ->get();
 
@@ -120,6 +122,7 @@ class PageController extends Controller
             : collect();
 
         $homeBlocks = app(SiteSettings::class)->homeBlocksForPublic();
+        $projectIdentity = app(SiteSettings::class)->homeIdentityForPublic();
         $heroSlideIntervalMs = app(SiteSettings::class)->homeHeroSlideIntervalMs();
         $weatherLocale = in_array(app()->getLocale(), ['en', 'si', 'ta'], true) ? app()->getLocale() : 'en';
         $weatherWidget = app(SiteSettings::class)->weatherWidget($weatherLocale);
@@ -145,6 +148,7 @@ class PageController extends Controller
             'homeImages',
             'impactMetrics',
             'homeBlocks',
+            'projectIdentity',
             'heroSlideIntervalMs',
             'projectPartners',
             'weatherWidget',
@@ -169,22 +173,43 @@ class PageController extends Controller
         return view('components', compact('components'));
     }
 
-    public function programmes(): View
+    public function programmes(Request $request): View
     {
-        $programmes = Programme::query()
+        $components = ProjectComponent::query()
             ->where('status', 'published')
+            ->orderBy('component_number')
+            ->get();
+
+        $selectedComponent = null;
+        if ($request->filled('component')) {
+            $selectedComponent = $components->firstWhere(
+                'component_number',
+                (int) $request->query('component'),
+            );
+        }
+
+        $programmes = Programme::query()
+            ->with('projectComponent')
+            ->where('status', 'published')
+            ->when(
+                $selectedComponent,
+                fn ($query) => $query->where('project_component_id', $selectedComponent->id),
+            )
             ->orderBy('sort_order')
             ->orderBy('title')
             ->get();
 
-        return view('programmes.index', compact('programmes'));
+        return view('programmes.index', compact('programmes', 'components', 'selectedComponent'));
     }
 
     public function showProgramme(Programme $programme): View
     {
         abort_unless($programme->status === 'published' || auth()->check(), 404);
 
+        $programme->load('projectComponent');
+
         $moreProgrammes = Programme::query()
+            ->with('projectComponent')
             ->where('status', 'published')
             ->whereKeyNot($programme->id)
             ->orderBy('sort_order')
@@ -259,6 +284,29 @@ class PageController extends Controller
         return view('downloads', compact('downloads'));
     }
 
+    public function cerc(): View
+    {
+        $cerc = app(SiteSettings::class)->cercPage();
+        $component = ProjectComponent::query()
+            ->where('status', 'published')
+            ->where(function ($query): void {
+                $query
+                    ->where('component_number', 5)
+                    ->orWhere('title', 'like', '%Contingent Emergency Response%')
+                    ->orWhere('title', 'like', '%CERC%');
+            })
+            ->orderBy('sort_order')
+            ->first();
+
+        $documents = CercDocument::query()
+            ->where('status', 'published')
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
+            ->get();
+
+        return view('cerc', compact('cerc', 'component', 'documents'));
+    }
+
     public function downloadFile(Download $download): RedirectResponse|Response|StreamedResponse
     {
         abort_unless($download->status === 'published', 404);
@@ -268,7 +316,18 @@ class PageController extends Controller
 
         return PublicFileDownload::fromPublicDisk(
             $download->file_path,
-            $download->file_original_name ?: basename($download->file_path),
+            PublicFileDownload::downloadName($download->file_original_name, $download->title, $download->file_path),
+        );
+    }
+
+    public function cercFile(CercDocument $cercDocument): Response|StreamedResponse
+    {
+        abort_unless($cercDocument->status === 'published', 404);
+        abort_unless($cercDocument->fileExists(), 404);
+
+        return PublicFileDownload::fromPublicDisk(
+            $cercDocument->file_path,
+            PublicFileDownload::downloadName($cercDocument->file_original_name, $cercDocument->title, $cercDocument->file_path),
         );
     }
 
@@ -286,8 +345,7 @@ class PageController extends Controller
             $items = Gallery::query()
                 ->where('category', 'photos')
                 ->where('status', 'published')
-                ->orderByDesc('item_date')
-                ->orderByDesc('id')
+                ->orderedForDisplay()
                 ->get();
 
             return view('gallery.photos', compact('items'));
@@ -303,8 +361,7 @@ class PageController extends Controller
         $items = Gallery::query()
             ->where('category', $section)
             ->where('status', 'published')
-            ->orderByDesc('item_date')
-            ->orderByDesc('id')
+            ->orderedForDisplay()
             ->get();
 
         return view('gallery.media', [
@@ -391,7 +448,14 @@ class PageController extends Controller
             ->orderBy('id')
             ->get();
 
-        return view('organizational-structure', compact('projectStaff'));
+        $structure = app(SiteSettings::class)->organizationalStructure();
+
+        return view('organizational-structure', [
+            'projectStaff' => $projectStaff,
+            'structure' => $structure,
+            'structureImageUrl' => app(SiteSettings::class)->organizationalStructureImageUrl($structure['image'] ?? null),
+            'staffFallbackImageUrl' => app(SiteSettings::class)->organizationalStructureImageUrl($structure['staff_fallback_image'] ?? null),
+        ]);
     }
 
     public function grm(): View

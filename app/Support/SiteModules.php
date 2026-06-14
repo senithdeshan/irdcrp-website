@@ -86,8 +86,17 @@ class SiteModules
                 'home_block' => null,
             ],
             [
+                'id' => 'cerc',
+                'label' => 'CERC Documents',
+                'description' => 'Contingent Emergency Response Component page and downloadable files.',
+                'enabled' => true,
+                'public_patterns' => ['cerc', 'cerc/*'],
+                'admin_route' => 'admin.cerc-documents.index',
+                'home_block' => null,
+            ],
+            [
                 'id' => 'institutional_development',
-                'label' => 'Capacity Build',
+                'label' => 'Institutional Development & Capacity Building',
                 'description' => 'Institutional development / capacity build resources.',
                 'enabled' => true,
                 'public_patterns' => ['institutional-development', 'institutional-development/*'],

@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Models\ProjectAreaDistrict;
 use App\Models\SiteSetting;
 use App\Models\WeatherDistrict;
 use Illuminate\Support\Facades\Cache;
@@ -26,6 +27,102 @@ class SiteSettings
         'phone',
         'logo',
     ];
+
+    public function homeIdentityDefaults(): array
+    {
+        return [
+            'eyebrow' => 'Project identity',
+            'title' => 'Integrated Rurban Development and Climate Resilience Project',
+            'paragraphs' => [
+                'The Integrated Rurban Development and Climate Resilience Project builds on current and recently closed World Bank-financed operations and other sector engagements designed to rapidly address pressing development challenges, especially as Sri Lanka recovers from the economic crisis. It is the first in a Series of Projects (SOP), envisioning two projects over a nine-year period, that incorporates learning and institutional development for multisector solutions and adjusts the implementation approach as needed across projects.',
+                'The World Bank and IFC are collaborating to create an enabling environment for smallholder producers to link with commercial buyers and financial institutions, with IFC providing complementary technical assistance to the sector to enhance service delivery.',
+                'The SOP will deepen investments in the enabling environment, boost market links, and invest in coordinated efforts for climate resilience to bring greater competitiveness and private sector engagement in the agriculture, livestock, plantation, and aquaculture sectors.',
+                'This will support Sri Lanka\'s objectives of increasing agriculture exports and ensuring a sustainable and climate-resilient agri-food production system with improved coordination among a number of departments and agencies.',
+            ],
+            'badges' => [
+                'Climate resilience',
+                'Rurban development',
+                'Smallholder value chains',
+            ],
+            'names' => [
+                'si' => config('irdcrp.project_name.si'),
+                'ta' => config('irdcrp.project_name.ta'),
+                'en' => config('irdcrp.project_name.en', 'Integrated Rurban Development and Climate Resilience Project'),
+            ],
+        ];
+    }
+
+    public function homeIdentityForAdmin(): array
+    {
+        $defaults = $this->homeIdentityDefaults();
+        $saved = $this->savedHomeIdentity();
+        $identity = array_replace($defaults, $saved);
+        $identity['names'] = array_replace(
+            $defaults['names'],
+            is_array($saved['names'] ?? null) ? $saved['names'] : [],
+        );
+
+        return $this->normalizeHomeIdentity($identity);
+    }
+
+    public function homeIdentityForPublic(): array
+    {
+        return $this->homeIdentityForAdmin();
+    }
+
+    public function putHomeIdentity(array $identity): void
+    {
+        SiteSetting::query()->updateOrCreate(
+            ['key' => 'home_identity'],
+            ['value' => json_encode($this->normalizeHomeIdentity($identity), JSON_UNESCAPED_UNICODE)],
+        );
+
+        Cache::forget('irdcrp.site_settings.home_identity');
+    }
+
+    public function cercPageDefaults(): array
+    {
+        return [
+            'hero_eyebrow' => 'Resources',
+            'hero_title' => 'Contingent Emergency Response Component (CERC)',
+            'hero_lead' => 'A zero-allocation component that enables rapid project support when an eligible crisis or emergency is declared.',
+            'summary_label' => 'Emergency readiness',
+            'summary_copy' => 'CERC helps IRDCRP respond quickly to natural or man-made disasters and other eligible emergencies that may cause significant economic or social impacts.',
+            'document_section_title' => 'CERC document library',
+            'document_section_description' => 'Official CERC guidelines, forms, reports, and emergency response documents available for public download.',
+        ];
+    }
+
+    public function cercPage(): array
+    {
+        $defaults = $this->cercPageDefaults();
+
+        if (! Schema::hasTable('site_settings')) {
+            return $defaults;
+        }
+
+        $json = Cache::rememberForever('irdcrp.site_settings.cerc_page', function (): ?string {
+            return SiteSetting::query()->where('key', 'cerc_page')->value('value');
+        });
+
+        if (! filled($json)) {
+            return $defaults;
+        }
+
+        $saved = json_decode($json, true);
+
+        return is_array($saved) ? array_replace($defaults, $saved) : $defaults;
+    }
+
+    public function putCercPage(array $settings): void
+    {
+        SiteSetting::query()->updateOrCreate(
+            ['key' => 'cerc_page'],
+            ['value' => json_encode(array_replace($this->cercPageDefaults(), $settings), JSON_UNESCAPED_UNICODE)],
+        );
+
+        Cache::forget('irdcrp.site_settings.cerc_page');
+    }
 
     public function projectAreasDefaults(): array
     {
@@ -71,8 +168,11 @@ class SiteSettings
     public function projectAreas(): array
     {
         $defaults = $this->projectAreasDefaults();
+        $districtRows = $this->projectAreaDistrictRowsForPublic();
 
         if (! Schema::hasTable('site_settings')) {
+            $defaults['table_rows'] = $districtRows;
+
             return $defaults;
         }
 
@@ -81,12 +181,16 @@ class SiteSettings
         });
 
         if (! filled($json)) {
+            $defaults['table_rows'] = $districtRows;
+
             return $defaults;
         }
 
         $saved = json_decode($json, true);
 
         if (! is_array($saved)) {
+            $defaults['table_rows'] = $districtRows;
+
             return $defaults;
         }
 
@@ -96,9 +200,60 @@ class SiteSettings
             is_array($saved['table_headings'] ?? null) ? $saved['table_headings'] : [],
         );
         $projectAreas['summary'] = is_array($saved['summary'] ?? null) ? $saved['summary'] : $defaults['summary'];
-        $projectAreas['table_rows'] = is_array($saved['table_rows'] ?? null) ? $saved['table_rows'] : $defaults['table_rows'];
+        $projectAreas['table_rows'] = $districtRows;
 
         return $projectAreas;
+    }
+
+    /**
+     * @return list<array{district: string, ds_divisions: string, focus: string}>
+     */
+    public function projectAreaDistrictRowsForPublic(): array
+    {
+        if (Schema::hasTable('project_area_districts')) {
+            $districts = ProjectAreaDistrict::query()
+                ->orderedForDisplay()
+                ->get();
+
+            if ($districts->isNotEmpty()) {
+                return $districts
+                    ->map(fn (ProjectAreaDistrict $district): array => $district->toTableRow())
+                    ->values()
+                    ->all();
+            }
+        }
+
+        $saved = [];
+
+        if (Schema::hasTable('site_settings')) {
+            $json = SiteSetting::query()->where('key', 'project_areas')->value('value');
+
+            if (filled($json)) {
+                $decoded = json_decode($json, true);
+                $saved = is_array($decoded['table_rows'] ?? null) ? $decoded['table_rows'] : [];
+            }
+        }
+
+        if ($saved !== []) {
+            return $saved;
+        }
+
+        return $this->projectAreasDefaults()['table_rows'];
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, ProjectAreaDistrict>
+     */
+    public function projectAreaDistrictsForAdmin()
+    {
+        if (! Schema::hasTable('project_area_districts')) {
+            return collect();
+        }
+
+        return ProjectAreaDistrict::query()
+            ->orderBy('sort_order')
+            ->orderBy('district')
+            ->get();
     }
 
     public function putProjectAreas(array $projectAreas): void
@@ -118,6 +273,75 @@ class SiteSettings
         }
 
         Storage::disk('public')->delete(Str::after($path, 'storage/'));
+    }
+
+    public function organizationalStructureDefaults(): array
+    {
+        return [
+            'section_title' => 'Organizational Structure',
+            'section_subtitle' => 'Project implementation and reporting structure.',
+            'image' => null,
+            'image_alt' => 'IRDCRP organizational structure',
+            'staff_fallback_image' => null,
+            'staff_fallback_image_alt' => 'IRDCRP project staff',
+        ];
+    }
+
+    public function organizationalStructure(): array
+    {
+        $defaults = $this->organizationalStructureDefaults();
+
+        if (! Schema::hasTable('site_settings')) {
+            return $defaults;
+        }
+
+        $json = Cache::rememberForever('irdcrp.site_settings.organizational_structure', function (): ?string {
+            return SiteSetting::query()->where('key', 'organizational_structure')->value('value');
+        });
+
+        if (! filled($json)) {
+            return $defaults;
+        }
+
+        $saved = json_decode($json, true);
+
+        return is_array($saved) ? array_replace($defaults, $saved) : $defaults;
+    }
+
+    public function putOrganizationalStructure(array $structure): void
+    {
+        SiteSetting::query()->updateOrCreate(
+            ['key' => 'organizational_structure'],
+            ['value' => json_encode(array_replace($this->organizationalStructureDefaults(), $structure), JSON_UNESCAPED_UNICODE)],
+        );
+
+        Cache::forget('irdcrp.site_settings.organizational_structure');
+    }
+
+    public function deleteStoredOrganizationalStructureImage(?string $path): void
+    {
+        if (! $path || ! Str::startsWith($path, 'storage/organizational-structure/')) {
+            return;
+        }
+
+        Storage::disk('public')->delete(Str::after($path, 'storage/'));
+    }
+
+    public function organizationalStructureImageUrl(?string $path): ?string
+    {
+        if (! filled($path)) {
+            return null;
+        }
+
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            return $path;
+        }
+
+        if (Str::startsWith($path, 'storage/')) {
+            return asset($path);
+        }
+
+        return asset(ltrim($path, '/'));
     }
 
     public function socialLinks(): array
@@ -230,6 +454,102 @@ class SiteSettings
         );
 
         Cache::forget('irdcrp.site_settings.about_page');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function contactPageDefaults(): array
+    {
+        $contact = config('irdcrp.contact', []);
+        $location = is_array($contact['location'] ?? null) ? $contact['location'] : [];
+
+        return [
+            'emails' => array_values(array_filter([
+                $contact['email'] ?? null,
+                'irdcrp_moa@agrimin.gov.lk',
+            ])),
+            'phone' => (string) ($contact['phone'] ?? ''),
+            'fax' => '011 2073 044',
+            'website_url' => 'https://www.irdcrp.lk',
+            'website_label' => 'www.irdcrp.lk',
+            'address' => (string) ($contact['address'] ?? ''),
+            'form_title' => 'Drop us a message for any query',
+            'form_subtitle' => 'If you have an idea, we would love to hear about it.',
+            'location' => $location,
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function contactPageForAdmin(): array
+    {
+        $defaults = $this->contactPageDefaults();
+        $saved = $this->savedContactPage();
+
+        $page = array_replace_recursive($defaults, $saved);
+        $page['emails'] = array_values(array_filter(
+            is_array($page['emails'] ?? null) ? $page['emails'] : [],
+            fn ($email): bool => filled($email),
+        ));
+
+        return $page;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function contactPageForPublic(): array
+    {
+        return $this->contactPageForAdmin();
+    }
+
+    /**
+     * @param  array<string, mixed>  $contactPage
+     */
+    public function putContactPage(array $contactPage): void
+    {
+        SiteSetting::query()->updateOrCreate(
+            ['key' => 'contact_page'],
+            ['value' => json_encode($contactPage, JSON_UNESCAPED_UNICODE)],
+        );
+
+        Cache::forget('irdcrp.site_settings.contact_page');
+    }
+
+    public function contactLocationImageUrl(?string $path): ?string
+    {
+        if (! filled($path)) {
+            return null;
+        }
+
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            return $path;
+        }
+
+        if (Str::startsWith($path, 'storage/')) {
+            return asset($path);
+        }
+
+        if (Str::startsWith($path, ['images/', '/images/'])) {
+            return asset(ltrim($path, '/'));
+        }
+
+        return asset('storage/'.ltrim($path, '/'));
+    }
+
+    public function deleteStoredContactLocationImage(?string $path): void
+    {
+        if (! filled($path) || Str::startsWith($path, ['images/', '/images/'])) {
+            return;
+        }
+
+        $storagePath = Str::startsWith($path, 'storage/')
+            ? Str::after($path, 'storage/')
+            : ltrim($path, '/');
+
+        Storage::disk('public')->delete($storagePath);
     }
 
     public function homePopupDefaults(): array
@@ -446,6 +766,53 @@ class SiteSettings
         return is_array($decoded) ? $decoded : [];
     }
 
+    private function savedHomeIdentity(): array
+    {
+        if (! Schema::hasTable('site_settings')) {
+            return [];
+        }
+
+        $json = Cache::rememberForever('irdcrp.site_settings.home_identity', function (): ?string {
+            return SiteSetting::query()->where('key', 'home_identity')->value('value');
+        });
+
+        if (! filled($json)) {
+            return [];
+        }
+
+        $decoded = json_decode($json, true);
+
+        return is_array($decoded) ? $decoded : [];
+    }
+
+    private function normalizeHomeIdentity(array $identity): array
+    {
+        $defaults = $this->homeIdentityDefaults();
+        $paragraphs = $identity['paragraphs'] ?? $defaults['paragraphs'];
+        $badges = $identity['badges'] ?? $defaults['badges'];
+        $names = is_array($identity['names'] ?? null) ? $identity['names'] : [];
+
+        return [
+            'eyebrow' => filled($identity['eyebrow'] ?? null) ? (string) $identity['eyebrow'] : $defaults['eyebrow'],
+            'title' => filled($identity['title'] ?? null) ? (string) $identity['title'] : $defaults['title'],
+            'paragraphs' => collect(is_array($paragraphs) ? $paragraphs : [])
+                ->map(fn ($paragraph): string => trim((string) $paragraph))
+                ->filter(fn (string $paragraph): bool => filled($paragraph))
+                ->values()
+                ->all() ?: $defaults['paragraphs'],
+            'badges' => collect(is_array($badges) ? $badges : [])
+                ->map(fn ($badge): string => trim((string) $badge))
+                ->filter(fn (string $badge): bool => filled($badge))
+                ->values()
+                ->all() ?: $defaults['badges'],
+            'names' => [
+                'si' => filled($names['si'] ?? null) ? (string) $names['si'] : $defaults['names']['si'],
+                'ta' => filled($names['ta'] ?? null) ? (string) $names['ta'] : $defaults['names']['ta'],
+                'en' => filled($names['en'] ?? null) ? (string) $names['en'] : $defaults['names']['en'],
+            ],
+        ];
+    }
+
     private function savedHomePopup(): array
     {
         if (! Schema::hasTable('site_settings')) {
@@ -621,6 +988,28 @@ class SiteSettings
         }
 
         Storage::disk('public')->delete(ltrim($path, '/'));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function savedContactPage(): array
+    {
+        if (! Schema::hasTable('site_settings')) {
+            return [];
+        }
+
+        $json = Cache::rememberForever('irdcrp.site_settings.contact_page', function (): ?string {
+            return SiteSetting::query()->where('key', 'contact_page')->value('value');
+        });
+
+        if (! filled($json)) {
+            return [];
+        }
+
+        $decoded = json_decode($json, true);
+
+        return is_array($decoded) ? $decoded : [];
     }
 
     /**

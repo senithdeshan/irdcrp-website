@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Programme;
+use App\Models\ProjectComponent;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -13,6 +14,11 @@ class ProgrammeTest extends TestCase
 {
     use RefreshDatabase;
 
+    private function componentOneId(): int
+    {
+        return (int) ProjectComponent::query()->where('component_number', 1)->value('id');
+    }
+
     public function test_programmes_page_displays_seeded_programmes(): void
     {
         config(['irdcrp.launching_soon.enabled' => false]);
@@ -20,6 +26,23 @@ class ProgrammeTest extends TestCase
         $this->get(route('programmes.index'))
             ->assertOk()
             ->assertSee('Climate Smart Agronomic Improvements Programme');
+    }
+
+    public function test_programmes_page_filters_by_component(): void
+    {
+        config(['irdcrp.launching_soon.enabled' => false]);
+
+        $componentOne = ProjectComponent::query()->where('component_number', 1)->firstOrFail();
+        $componentTwo = ProjectComponent::query()->where('component_number', 2)->firstOrFail();
+
+        Programme::query()->update(['project_component_id' => $componentOne->id]);
+
+        Programme::query()->firstOrFail()->update(['project_component_id' => $componentTwo->id]);
+
+        $this->get(route('programmes.index', ['component' => 2]))
+            ->assertOk()
+            ->assertSee('Component 2')
+            ->assertSee(Programme::query()->where('project_component_id', $componentTwo->id)->value('title'));
     }
 
     public function test_admin_can_create_programme(): void
@@ -34,6 +57,7 @@ class ProgrammeTest extends TestCase
             ->post(route('admin.programmes.store'), [
                 'title' => 'New Field Programme',
                 'slug' => 'new-field-programme',
+                'project_component_id' => $this->componentOneId(),
                 'summary' => 'Short field summary.',
                 'description' => 'Longer field programme description.',
                 'sort_order' => 10,
@@ -66,6 +90,7 @@ class ProgrammeTest extends TestCase
             ->post(route('admin.programmes.store'), [
                 'title' => 'Extended Field Programme',
                 'slug' => 'extended-field-programme',
+                'project_component_id' => $this->componentOneId(),
                 'summary' => 'Short field summary.',
                 'description' => 'Intro description.',
                 'sort_order' => 11,

@@ -5,6 +5,9 @@
     <div class="mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-6 sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-8">
         <div>
             <a href="{{ route('programmes.index') }}" class="irdc-programme-show__back">Back to programmes</a>
+            @if($programme->componentLabel())
+                <p class="irdc-programme-show__component">{{ $programme->componentLabel() }}</p>
+            @endif
             <h1 class="irdc-programme-show__title">{{ $programme->title }}</h1>
             @if($programme->summary)
                 <p class="irdc-programme-show__lead">{{ $programme->summary }}</p>

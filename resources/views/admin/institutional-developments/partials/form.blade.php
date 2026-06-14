@@ -17,7 +17,7 @@
 
 <div class="mb-3 mt-3">
     <label class="form-label">Description</label>
-    <textarea name="description" class="form-control" rows="6" placeholder="Summary shown on the public Capacity Build table…">{{ old('description', $item?->description) }}</textarea>
+    <textarea name="description" class="form-control" rows="6" placeholder="Summary shown on the public Institutional Development & Capacity Building table...">{{ old('description', $item?->description) }}</textarea>
     @error('description')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
 </div>
 

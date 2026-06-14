@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProjectComponent extends Model
 {
@@ -15,4 +16,9 @@ class ProjectComponent extends Model
         'sort_order',
         'status',
     ];
+
+    public function programmes(): HasMany
+    {
+        return $this->hasMany(Programme::class);
+    }
 }

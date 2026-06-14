@@ -23,11 +23,12 @@ class GalleryController extends Controller
             ->when(array_key_exists($category, Gallery::CATEGORIES), function ($query) use ($category) {
                 $query->where('category', $category);
             })
-            ->orderByDesc('item_date')
-            ->orderByDesc('id')
+            ->orderedForDisplay()
             ->get();
 
-        return view('admin.gallery.index', compact('items', 'category'));
+        $pinnedCount = $items->where('is_pinned', true)->count();
+
+        return view('admin.gallery.index', compact('items', 'category', 'pinnedCount'));
     }
 
     public function create(): View
@@ -42,6 +43,7 @@ class GalleryController extends Controller
     {
         $data = $this->validatedGallery($request);
         $data = $this->storeMedia($request, $data);
+        $data['is_pinned'] = false;
 
         Gallery::create($data);
 
@@ -61,6 +63,7 @@ class GalleryController extends Controller
     {
         $data = $this->validatedGallery($request, $gallery);
         $data = $this->storeMedia($request, $data, $gallery);
+        unset($data['is_pinned']);
 
         $gallery->update($data);
 
@@ -75,6 +78,28 @@ class GalleryController extends Controller
         $gallery->delete();
 
         return redirect()->route('admin.gallery.index')->with('success', 'Gallery item removed.');
+    }
+
+    public function togglePin(Request $request, Gallery $gallery): RedirectResponse
+    {
+        $category = $request->input('category', '');
+
+        if ($gallery->is_pinned) {
+            $gallery->update(['is_pinned' => false]);
+
+            $message = 'Removed from pinned items.';
+        } else {
+            $replaced = $this->applyPinLimit($gallery->category, $gallery->id);
+            $gallery->update(['is_pinned' => true]);
+
+            $message = $replaced
+                ? 'Pinned to top. The oldest pinned item in this category was replaced.'
+                : 'Pinned to top of this category.';
+        }
+
+        return redirect()
+            ->route('admin.gallery.index', array_filter(['category' => $category]))
+            ->with('success', $message);
     }
 
     private function validatedGallery(Request $request, ?Gallery $gallery = null): array
@@ -103,6 +128,29 @@ class GalleryController extends Controller
         unset($data['media_file']);
 
         return $data;
+    }
+
+    private function applyPinLimit(string $category, ?int $ignoreId = null): bool
+    {
+        $pinned = Gallery::query()
+            ->where('category', $category)
+            ->where('is_pinned', true)
+            ->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))
+            ->orderBy('item_date')
+            ->orderBy('id')
+            ->get();
+
+        $overflow = $pinned->count() - Gallery::MAX_PINNED_PER_CATEGORY + 1;
+
+        if ($overflow <= 0) {
+            return false;
+        }
+
+        $pinned
+            ->take($overflow)
+            ->each(fn (Gallery $item) => $item->update(['is_pinned' => false]));
+
+        return true;
     }
 
     private function fileRuleFor(Request $request): string

@@ -48,9 +48,20 @@
                 <p class="small text-muted">Resolved at: {{ $grmComplaint->resolved_at->format('Y-m-d H:i') }}</p>
             @endif
 
-            <button class="btn btn-green">Save Update</button>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-green">Save Update</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card feature-card p-4 mt-4 border-danger">
+        <h3 class="h5 fw-bold mb-2 text-danger">Delete complaint</h3>
+        <p class="small text-muted mb-3">Remove this grievance permanently from the admin panel and public GRM statistics.</p>
+        <form method="POST" action="{{ route('admin.grm-complaints.destroy', $grmComplaint) }}" onsubmit="return confirm('Delete this GRM complaint permanently?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-outline-danger">Delete complaint</button>
         </form>
     </div>
 </section>
 @endsection
-

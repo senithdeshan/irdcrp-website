@@ -70,4 +70,34 @@ class NewsImagesTest extends TestCase
             ->assertSee('/storage/news/cover.jpg', false)
             ->assertSee('/storage/news/detail.jpg', false);
     }
+
+    public function test_updating_news_retains_published_date_when_field_is_blank(): void
+    {
+        $user = User::factory()->create([
+            'email' => config('irdcrp.super_admin.login'),
+        ]);
+
+        $news = News::query()->create([
+            'title_en' => 'Date retention news',
+            'content_en' => 'Original body text.',
+            'published_date' => '2026-05-15',
+            'status' => 'published',
+        ]);
+
+        $this
+            ->actingAs($user)
+            ->put(route('admin.news.update', $news), [
+                'title_en' => 'Date retention news updated',
+                'content_en' => 'Updated body text.',
+                'published_date' => '',
+                'status' => 'published',
+            ])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('admin.news.index'));
+
+        $news->refresh();
+
+        $this->assertSame('2026-05-15', $news->published_date?->format('Y-m-d'));
+        $this->assertSame('Date retention news updated', $news->title_en);
+    }
 }

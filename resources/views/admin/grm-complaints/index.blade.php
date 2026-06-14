@@ -56,6 +56,7 @@
                     <th>Message</th>
                     <th>Status</th>
                     <th>Submitted</th>
+                    <th>Admin approval</th>
                     <th></th>
                 </tr>
             </thead>
@@ -75,13 +76,42 @@
                             </span>
                         </td>
                         <td>{{ $item->created_at->format('Y-m-d H:i') }}</td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-1">
+                                @foreach ([
+                                    'new' => 'Unsolved',
+                                    'in_progress' => 'In Progress',
+                                    'solved' => 'Solved',
+                                ] as $statusValue => $statusLabel)
+                                    <form method="POST" action="{{ route('admin.grm-complaints.update', $item) }}">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="status" value="{{ $statusValue }}">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm {{ $item->status === $statusValue ? 'btn-green' : 'btn-outline-secondary' }}"
+                                            @disabled($item->status === $statusValue)
+                                        >
+                                            {{ $statusLabel }}
+                                        </button>
+                                    </form>
+                                @endforeach
+                            </div>
+                        </td>
                         <td class="text-nowrap">
-                            <a href="{{ route('admin.grm-complaints.edit', $item) }}" class="btn btn-sm btn-primary">Open</a>
+                            <div class="d-flex flex-wrap gap-1">
+                                <a href="{{ route('admin.grm-complaints.edit', $item) }}" class="btn btn-sm btn-primary">Open</a>
+                                <form method="POST" action="{{ route('admin.grm-complaints.destroy', $item) }}" onsubmit="return confirm('Delete this GRM complaint permanently?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted p-4">
+                        <td colspan="7" class="text-center text-muted p-4">
                             @if(filled($search) || filled($status))
                                 No complaints matched your filters.
                             @else

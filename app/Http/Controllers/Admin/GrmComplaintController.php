@@ -66,5 +66,13 @@ class GrmComplaintController extends Controller
             ->route('admin.grm-complaints.index')
             ->with('success', 'GRM complaint updated successfully.');
     }
-}
 
+    public function destroy(GrmComplaint $grmComplaint): RedirectResponse
+    {
+        $grmComplaint->delete();
+
+        return redirect()
+            ->route('admin.grm-complaints.index')
+            ->with('success', 'GRM complaint deleted successfully.');
+    }
+}

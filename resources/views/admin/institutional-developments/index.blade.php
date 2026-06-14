@@ -4,8 +4,8 @@
 <section class="container py-5">
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
         <div>
-            <h2 class="section-title mb-1">Capacity Build</h2>
-            <p class="text-muted mb-0">Manage descriptions, images, and downloadable files for the public Capacity Build page.</p>
+            <h2 class="section-title mb-1">Institutional Development &amp; Capacity Building</h2>
+            <p class="text-muted mb-0">Manage descriptions, images, and downloadable files for the public Institutional Development &amp; Capacity Building page.</p>
         </div>
         <a href="{{ route('admin.institutional-developments.create') }}" class="btn btn-green">Add item</a>
     </div>

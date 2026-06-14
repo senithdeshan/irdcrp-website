@@ -1,24 +1,12 @@
 @props(['wide' => false])
 
 @php
-    $location = config('irdcrp.contact.location', []);
-    $locationImage = $location['image'] ?? null;
-    $hasLocationImage = filled($locationImage) && file_exists(public_path(ltrim($locationImage, '/')));
-    $mapLat = $location['latitude'] ?? null;
-    $mapLng = $location['longitude'] ?? null;
-    $mapZoom = (int) ($location['map_zoom'] ?? 19);
-    $mapEmbedUrl = filled($mapLat) && filled($mapLng)
-        ? sprintf(
-            'https://www.google.com/maps?q=%s,%s&hl=en&z=%d&t=h&output=embed',
-            $mapLat,
-            $mapLng,
-            $mapZoom
-        )
-        : ($location['map_embed_url'] ?? config('irdcrp.map_embed_url'));
-    $mapsDirectionsUrl = $location['maps_url']
-        ?? (filled($mapLat) && filled($mapLng)
-            ? sprintf('https://www.google.com/maps/dir/?api=1&destination=%s,%s', $mapLat, $mapLng)
-            : null);
+    use App\Support\ContactLocation;
+
+    $location = ContactLocation::config();
+    $locationImageUrl = ContactLocation::imageUrl();
+    $mapEmbedUrl = ContactLocation::mapEmbedUrl();
+    $mapsDirectionsUrl = ContactLocation::directionsUrl();
 @endphp
 
 <div @class([
@@ -35,7 +23,7 @@
             <p class="irdc-contact-modern__hero-line">{{ $location['unit'] ?? 'Project Management Unit' }}</p>
             <p class="irdc-contact-modern__hero-line">{{ $location['project'] ?? 'Integrated Rurban Development and Climate Resilience Project (IRDCRP)' }}</p>
             <div class="irdc-contact-modern__address-block">
-                <p>{{ config('irdcrp.contact.address') }}</p>
+                <p>{{ ContactLocation::address() }}</p>
             </div>
 
             @if (filled($mapsDirectionsUrl))
@@ -49,10 +37,10 @@
                 </a>
             @endif
 
-            @if ($hasLocationImage)
+            @if ($locationImageUrl)
                 <figure class="irdc-contact-modern__location-photo">
                     <img
-                        src="{{ asset(ltrim($locationImage, '/')) }}"
+                        src="{{ $locationImageUrl }}"
                         alt="{{ $location['place_name'] ?? 'IRDCRP Project Management Unit' }} — office entrance at Battaramulla"
                         width="360"
                         height="220"

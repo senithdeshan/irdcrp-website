@@ -64,6 +64,9 @@
                     </div>
                 </button>
                 <div class="rounded-b-2xl border-t border-stone-200/60 bg-white px-3.5 py-2.5 sm:px-4 sm:py-3">
+                    @if($item->is_pinned)
+                        <p class="mb-1 inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-900">Pinned</p>
+                    @endif
                     <p class="line-clamp-2 text-sm font-semibold leading-snug text-slate-800">{{ $item->title }}</p>
                     @if($item->item_date)
                         <p class="mt-0.5 text-xs text-slate-500">{{ $item->item_date->format('M j, Y') }}</p>

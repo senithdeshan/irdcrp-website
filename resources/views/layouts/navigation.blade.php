@@ -24,6 +24,7 @@
     $inResources = $pathIs(
         'downloads*',
         'reports*',
+        'cerc*',
         'institutional-development*',
         'safeguards*',
         'p/reports',
@@ -49,8 +50,9 @@
     $resourceItems = $navItemsForModule([
         ['module' => 'downloads', 'label' => 'Documents', 'href' => route('downloads.index'), 'active' => $pathIs('downloads*')],
         ['module' => 'reports', 'label' => 'Reports', 'href' => route('reports.index'), 'active' => $pathIs('reports*', 'p/reports')],
+        ['module' => 'cerc', 'label' => 'Contingent Emergency Response Component (CERC)', 'href' => route('cerc'), 'active' => $pathIs('cerc*')],
         ['module' => 'safeguards', 'type' => 'submenu', 'label' => 'Safeguard', 'active' => $inSafeguard],
-        ['module' => 'institutional_development', 'label' => 'Capacity Build', 'href' => route('institutional-development.index'), 'active' => $pathIs('institutional-development*', 'p/institutional-development')],
+        ['module' => 'institutional_development', 'label' => 'Institutional Development & Capacity Building', 'href' => route('institutional-development.index'), 'active' => $pathIs('institutional-development*', 'p/institutional-development')],
     ]);
     $safeguardItems = [
         [

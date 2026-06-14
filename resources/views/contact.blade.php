@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    use App\Support\ContactLocation;
+
+    $contactPage = ContactLocation::page();
+    $emails = array_values(array_filter($contactPage['emails'] ?? [], fn ($email) => filled($email)));
+@endphp
 
 <section class="irdc-contact-modern relative overflow-hidden py-16 sm:py-20">
 
@@ -9,37 +15,46 @@
             <x-contact-location-card />
 
             <div class="irdc-contact-modern__mini-grid">
+                @if ($emails !== [])
                 <article class="irdc-contact-modern__mini-card">
                     <div class="irdc-contact-icon" aria-hidden="true">✉</div>
                     <h3 class="irdc-contact-modern__mini-head">Email</h3>
-                    <a href="mailto:pmuirdcrp@gmail.com" class="irdc-contact-modern__mini-link">pmuirdcrp@gmail.com</a>
-                    <a href="mailto:irdcrp_moa@agrimin.gov.lk" class="irdc-contact-modern__mini-link">irdcrp_moa@agrimin.gov.lk</a>
+                    @foreach ($emails as $email)
+                        <a href="mailto:{{ $email }}" class="irdc-contact-modern__mini-link">{{ $email }}</a>
+                    @endforeach
                 </article>
+                @endif
 
+                @if (filled($contactPage['phone'] ?? null))
                 <article class="irdc-contact-modern__mini-card">
                     <div class="irdc-contact-icon" aria-hidden="true">☎</div>
                     <h3 class="irdc-contact-modern__mini-head">Call Us</h3>
-                    <a href="tel:0112877550" class="irdc-contact-modern__mini-link">011 2877 550</a>
+                    <a href="tel:{{ ContactLocation::phoneTel() }}" class="irdc-contact-modern__mini-link">{{ $contactPage['phone'] }}</a>
                 </article>
+                @endif
 
+                @if (filled($contactPage['fax'] ?? null))
                 <article class="irdc-contact-modern__mini-card">
                     <div class="irdc-contact-icon" aria-hidden="true">📠</div>
                     <h3 class="irdc-contact-modern__mini-head">Fax</h3>
-                    <p class="irdc-contact-modern__mini-link">011 2073 044</p>
+                    <p class="irdc-contact-modern__mini-link">{{ $contactPage['fax'] }}</p>
                 </article>
+                @endif
 
+                @if (filled($contactPage['website_url'] ?? null))
                 <article class="irdc-contact-modern__mini-card">
                     <div class="irdc-contact-icon" aria-hidden="true">🌐</div>
                     <h3 class="irdc-contact-modern__mini-head">Web</h3>
-                    <a href="https://www.irdcrp.lk" class="irdc-contact-modern__mini-link" rel="noopener noreferrer" target="_blank">www.irdcrp.lk</a>
+                    <a href="{{ $contactPage['website_url'] }}" class="irdc-contact-modern__mini-link" rel="noopener noreferrer" target="_blank">{{ $contactPage['website_label'] ?? $contactPage['website_url'] }}</a>
                 </article>
+                @endif
             </div>
         </section>
 
         <div class="irdc-contact-modern__glass">
             <header class="text-center">
-                <h1 class="irdc-contact-modern__title">Drop us a message for any query</h1>
-                <p class="irdc-contact-modern__subtitle">If you have an idea, we would love to hear about it.</p>
+                <h1 class="irdc-contact-modern__title">{{ $contactPage['form_title'] ?? 'Drop us a message for any query' }}</h1>
+                <p class="irdc-contact-modern__subtitle">{{ $contactPage['form_subtitle'] ?? 'If you have an idea, we would love to hear about it.' }}</p>
             </header>
 
             @if (session('success'))

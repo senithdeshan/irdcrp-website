@@ -1,19 +1,23 @@
 <?php
 
 use App\Http\Controllers\Admin\AboutPageController;
+use App\Http\Controllers\Admin\ContactPageController;
 use App\Http\Controllers\Admin\CmsPageController;
+use App\Http\Controllers\Admin\CercDocumentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DownloadController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\GrmComplaintController as AdminGrmComplaintController;
 use App\Http\Controllers\Admin\HomePageLayoutController;
+use App\Http\Controllers\Admin\HomeIdentityController;
 use App\Http\Controllers\Admin\HomePopupController;
 use App\Http\Controllers\Admin\HomeImageController;
 use App\Http\Controllers\Admin\HomeVideoController;
 use App\Http\Controllers\Admin\ImpactMetricController;
 use App\Http\Controllers\Admin\KeyLeaderController;
 use App\Http\Controllers\Admin\LatestInsightController;
+use App\Http\Controllers\Admin\OrganizationalStructureController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
 use App\Http\Controllers\Admin\ProjectPartnerController;
 use App\Http\Controllers\Admin\ProcurementNoticeController;
@@ -21,6 +25,7 @@ use App\Http\Controllers\Admin\OtherAnnouncementController;
 use App\Http\Controllers\Admin\InstitutionalDevelopmentController as AdminInstitutionalDevelopmentController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ProjectAreaController;
+use App\Http\Controllers\Admin\ProjectAreaDistrictController;
 use App\Http\Controllers\Admin\ProjectComponentController;
 use App\Http\Controllers\Admin\SafeguardResourceController;
 use App\Http\Controllers\Admin\SiteModuleController;
@@ -56,6 +61,8 @@ Route::get('/downloads', [PageController::class, 'downloads'])->name('downloads.
 Route::get('/downloads/file/{download}', [PageController::class, 'downloadFile'])->name('download.file');
 Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 Route::get('/reports/file/{report}', [ReportController::class, 'download'])->name('reports.download');
+Route::get('/cerc', [PageController::class, 'cerc'])->name('cerc');
+Route::get('/cerc/file/{cercDocument}', [PageController::class, 'cercFile'])->name('cerc.file');
 Route::get('/institutional-development', [InstitutionalDevelopmentController::class, 'index'])->name('institutional-development.index');
 Route::get('/institutional-development/file/{institutionalDevelopment}', [InstitutionalDevelopmentController::class, 'download'])->name('institutional-development.download');
 Route::get('/safeguards/{category}', [SafeguardController::class, 'show'])->name('safeguards.show');
@@ -95,10 +102,13 @@ Route::middleware(['auth', EnsureSuperAdmin::class])->prefix('admin')->name('adm
 
     Route::resource('programmes', AdminProgrammeController::class)->except(['show']);
     Route::resource('gallery', GalleryController::class)->except(['show']);
+    Route::post('gallery/{gallery}/toggle-pin', [GalleryController::class, 'togglePin'])->name('gallery.toggle-pin');
     Route::resource('vacancies', VacancyController::class)->except(['show']);
     Route::resource('procurement-notices', ProcurementNoticeController::class)->except(['show']);
     Route::resource('other-announcements', OtherAnnouncementController::class)->except(['show']);
     Route::resource('downloads', DownloadController::class)->except(['show']);
+    Route::put('cerc-documents/settings', [CercDocumentController::class, 'updateSettings'])->name('cerc-documents.settings.update');
+    Route::resource('cerc-documents', CercDocumentController::class)->except(['show']);
     Route::resource('reports', AdminReportController::class)->except(['show']);
     Route::resource('institutional-developments', AdminInstitutionalDevelopmentController::class)->except(['show']);
     Route::resource('safeguards', SafeguardResourceController::class)->except(['show']);
@@ -116,6 +126,8 @@ Route::middleware(['auth', EnsureSuperAdmin::class])->prefix('admin')->name('adm
     Route::put('home-images/settings/slider', [HomeImageController::class, 'updateSliderSettings'])->name('home-images.slider-settings.update');
     Route::get('home-layout', [HomePageLayoutController::class, 'edit'])->name('home-layout.edit');
     Route::put('home-layout', [HomePageLayoutController::class, 'update'])->name('home-layout.update');
+    Route::get('home-identity', [HomeIdentityController::class, 'edit'])->name('home-identity.edit');
+    Route::put('home-identity', [HomeIdentityController::class, 'update'])->name('home-identity.update');
     Route::get('home-popup', [HomePopupController::class, 'edit'])->name('home-popup.edit');
     Route::put('home-popup', [HomePopupController::class, 'update'])->name('home-popup.update');
     Route::resource('home-videos', HomeVideoController::class)->except(['show']);
@@ -125,13 +137,19 @@ Route::middleware(['auth', EnsureSuperAdmin::class])->prefix('admin')->name('adm
     Route::put('site-settings', [SiteSettingController::class, 'update'])->name('site-settings.update');
     Route::get('project-areas', [ProjectAreaController::class, 'edit'])->name('project-areas.edit');
     Route::put('project-areas', [ProjectAreaController::class, 'update'])->name('project-areas.update');
+    Route::resource('project-area-districts', ProjectAreaDistrictController::class)->except(['index', 'show']);
+    Route::get('organizational-structure', [OrganizationalStructureController::class, 'edit'])->name('organizational-structure.edit');
+    Route::put('organizational-structure', [OrganizationalStructureController::class, 'update'])->name('organizational-structure.update');
     Route::get('about-page', [AboutPageController::class, 'edit'])->name('about-page.edit');
     Route::put('about-page', [AboutPageController::class, 'update'])->name('about-page.update');
+    Route::get('contact-page', [ContactPageController::class, 'edit'])->name('contact-page.edit');
+    Route::put('contact-page', [ContactPageController::class, 'update'])->name('contact-page.update');
     Route::get('impact-metrics', [ImpactMetricController::class, 'index'])->name('impact-metrics.index');
     Route::put('impact-metrics', [ImpactMetricController::class, 'update'])->name('impact-metrics.update');
     Route::get('grm-complaints', [AdminGrmComplaintController::class, 'index'])->name('grm-complaints.index');
     Route::get('grm-complaints/{grmComplaint}/edit', [AdminGrmComplaintController::class, 'edit'])->name('grm-complaints.edit');
     Route::put('grm-complaints/{grmComplaint}', [AdminGrmComplaintController::class, 'update'])->name('grm-complaints.update');
+    Route::delete('grm-complaints/{grmComplaint}', [AdminGrmComplaintController::class, 'destroy'])->name('grm-complaints.destroy');
     Route::get('support-messages', [AdminSupportMessageController::class, 'index'])->name('support-messages.index');
     Route::get('support-messages/{supportMessage}/edit', [AdminSupportMessageController::class, 'edit'])->name('support-messages.edit');
     Route::put('support-messages/{supportMessage}', [AdminSupportMessageController::class, 'update'])->name('support-messages.update');

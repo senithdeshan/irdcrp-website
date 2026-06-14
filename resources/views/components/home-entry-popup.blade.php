@@ -3,7 +3,7 @@
     $imageUrl = app(\App\Support\SiteSettings::class)->homePopupImageUrl($popup['image'] ?? null);
     $shouldRender = filled($imageUrl)
         && ($popup['enabled'] ?? false)
-        && ! request()->is('admin', 'admin/*', 'login', 'dashboard', 'profile*');
+        && request()->path() === '/';
 @endphp
 
 @if($shouldRender)
@@ -25,7 +25,7 @@
             </button>
 
             @if(filled($popup['link_url'] ?? null))
-                <a href="{{ $popup['link_url'] }}" class="irdc-home-popup__link" target="_blank" rel="noopener noreferrer">
+                <a href="{{ $popup['link_url'] }}" class="irdc-home-popup__link" target="_blank" rel="noopener noreferrer" data-popup-link>
                     <img
                         src="{{ $imageUrl }}"
                         alt="{{ $popup['alt'] ?? 'Important announcement' }}"
@@ -56,7 +56,23 @@
             const version = popup.dataset.version || '1';
             const storageKey = 'irdcrp_home_popup_dismissed';
 
-            if (sessionStorage.getItem(storageKey) === version) {
+            function readDismissedVersion() {
+                try {
+                    return localStorage.getItem(storageKey);
+                } catch (error) {
+                    return null;
+                }
+            }
+
+            function rememberDismissedVersion() {
+                try {
+                    localStorage.setItem(storageKey, version);
+                } catch (error) {
+                    // If storage is unavailable, keep the popup dismissible for this page view.
+                }
+            }
+
+            if (readDismissedVersion() === version) {
                 return;
             }
 
@@ -64,13 +80,17 @@
             document.body.classList.add('irdc-home-popup-open');
 
             function dismissPopup() {
-                sessionStorage.setItem(storageKey, version);
+                rememberDismissedVersion();
                 popup.hidden = true;
                 document.body.classList.remove('irdc-home-popup-open');
             }
 
             popup.querySelectorAll('[data-dismiss]').forEach(function (element) {
                 element.addEventListener('click', dismissPopup);
+            });
+
+            popup.querySelectorAll('[data-popup-link]').forEach(function (element) {
+                element.addEventListener('click', rememberDismissedVersion);
             });
 
             document.addEventListener('keydown', function (event) {

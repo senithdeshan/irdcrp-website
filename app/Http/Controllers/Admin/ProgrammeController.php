@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Programme;
+use App\Models\ProjectComponent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -17,6 +18,7 @@ class ProgrammeController extends Controller
     public function index(): View
     {
         $items = Programme::query()
+            ->with('projectComponent')
             ->orderBy('sort_order')
             ->orderBy('title')
             ->get();
@@ -26,7 +28,9 @@ class ProgrammeController extends Controller
 
     public function create(): View
     {
-        return view('admin.programmes.create');
+        return view('admin.programmes.create', [
+            'components' => $this->publishedComponents(),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -45,7 +49,10 @@ class ProgrammeController extends Controller
 
     public function edit(Programme $programme): View
     {
-        return view('admin.programmes.edit', compact('programme'));
+        return view('admin.programmes.edit', [
+            'programme' => $programme,
+            'components' => $this->publishedComponents(),
+        ]);
     }
 
     public function update(Request $request, Programme $programme): RedirectResponse
@@ -84,6 +91,7 @@ class ProgrammeController extends Controller
                 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
                 Rule::unique('programmes', 'slug')->ignore($programme?->id),
             ],
+            'project_component_id' => ['required', 'integer', Rule::exists('project_components', 'id')],
             'summary' => 'nullable|string|max:1000',
             'description' => 'nullable|string|max:10000',
             'sort_order' => 'required|integer|min:0|max:999',
@@ -214,5 +222,16 @@ class ProgrammeController extends Controller
         if (filled($path) && ! str_starts_with($path, 'images/')) {
             Storage::disk('public')->delete($path);
         }
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<int, ProjectComponent>
+     */
+    private function publishedComponents()
+    {
+        return ProjectComponent::query()
+            ->where('status', 'published')
+            ->orderBy('component_number')
+            ->get();
     }
 }

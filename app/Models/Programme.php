@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Programme extends Model
@@ -10,6 +12,7 @@ class Programme extends Model
     protected $fillable = [
         'title',
         'slug',
+        'project_component_id',
         'summary',
         'description',
         'image',
@@ -32,6 +35,18 @@ class Programme extends Model
                 $programme->slug = Str::slug($programme->title);
             }
         });
+    }
+
+    public function projectComponent(): BelongsTo
+    {
+        return $this->belongsTo(ProjectComponent::class);
+    }
+
+    public function componentLabel(): ?string
+    {
+        $number = $this->projectComponent?->component_number;
+
+        return $number ? 'Component '.$number : null;
     }
 
     public function coverImageUrl(): string

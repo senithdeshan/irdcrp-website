@@ -484,6 +484,39 @@
     }
 
     /* Auth: IRDCRP login */
+    .irdc-auth-page {
+        @apply relative grid min-h-screen place-items-center overflow-hidden px-4 py-8 sm:px-6 lg:px-8;
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+
+    .irdc-auth-bg {
+        @apply absolute inset-0;
+        background:
+            radial-gradient(circle at top left, rgba(16, 185, 129, 0.2), transparent 20%),
+            radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.16), transparent 30%);
+    }
+
+    .irdc-auth-wrap {
+        @apply relative z-[1] flex min-h-full w-full flex-col items-center justify-center;
+    }
+
+    .irdc-auth-brand {
+        @apply mb-6 inline-flex items-center justify-center rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-white no-underline shadow-lg shadow-slate-950/40 backdrop-blur-sm transition hover:border-white/20 hover:bg-white/10 sm:mb-8;
+    }
+
+    .irdc-auth-brand__logo {
+        @apply h-14 w-14 rounded-2xl bg-white p-1.5;
+    }
+
+    .irdc-auth-brand span {
+        @apply ml-3 text-sm font-semibold tracking-wide;
+    }
+
+    .irdc-auth-frame {
+        @apply mx-auto w-full max-w-5xl;
+    }
+
     .irdc-login-shell {
         @apply grid overflow-hidden rounded-[2rem] bg-white shadow-2xl shadow-slate-950/35 ring-1 ring-white/20 lg:grid-cols-[1.05fr_0.95fr];
     }
@@ -1038,6 +1071,30 @@
 
     .irdc-programmes-section {
         @apply bg-white;
+    }
+
+    .irdc-programmes-filter {
+        @apply mb-8 flex flex-wrap items-center justify-center gap-2 sm:gap-2.5;
+    }
+
+    .irdc-programmes-filter__btn {
+        @apply inline-flex items-center rounded-xl border border-slate-200 bg-white px-3.5 py-2 font-display text-sm font-bold text-slate-700 shadow-sm transition duration-200 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-900 sm:px-4 sm:py-2.5;
+    }
+
+    .irdc-programmes-filter__btn--active {
+        @apply border-emerald-600 bg-gradient-to-r from-emerald-100 via-emerald-50 to-emerald-50/70 text-emerald-900 shadow-md ring-2 ring-emerald-200/80;
+    }
+
+    .irdc-programmes-filter__summary {
+        @apply mx-auto mb-8 max-w-3xl rounded-xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-center text-sm leading-relaxed text-slate-700 sm:text-base;
+    }
+
+    .irdc-programme-card__component {
+        @apply mb-2 inline-flex rounded-lg border border-emerald-200/90 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-800;
+    }
+
+    .irdc-programme-show__component {
+        @apply mb-3 inline-flex rounded-lg border border-emerald-200/90 bg-emerald-50 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.12em] text-emerald-800;
     }
 
     .irdc-home-programmes {
@@ -1658,6 +1715,22 @@
         @apply mx-auto mt-12 h-1 w-full max-w-5xl rounded-full bg-gradient-to-r from-transparent via-red-600 to-transparent shadow-sm sm:mt-14;
     }
 
+    .irdc-org-structure-image-card {
+        @apply rounded-2xl border border-emerald-100 bg-white p-3 shadow-xl shadow-slate-900/5 ring-1 ring-slate-900/[0.03] sm:p-5;
+    }
+
+    .irdc-org-structure-image-card__img {
+        @apply mx-auto block h-auto w-full object-contain;
+    }
+
+    .irdc-org-structure-image-card__img--chart {
+        max-height: 75vh;
+    }
+
+    .irdc-org-structure-chart {
+        @apply relative z-[1];
+    }
+
     .irdc-leaders-group-head {
         @apply mx-auto mt-8 flex max-w-3xl flex-col items-center text-center;
     }
@@ -1776,7 +1849,7 @@
     }
 
     .irdc-insight-card {
-        @apply h-full overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-[0_16px_34px_-28px_rgba(15,23,42,0.62)] ring-1 ring-slate-900/[0.03] transition duration-300;
+        @apply h-full max-w-[21.25rem] overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-[0_16px_34px_-28px_rgba(15,23,42,0.62)] ring-1 ring-slate-900/[0.03] transition duration-300;
     }
 
     .irdc-insight-card:hover {
@@ -3154,6 +3227,132 @@
         @apply inline-flex h-10 w-10 items-center justify-center rounded-full border border-emerald-200/40 bg-emerald-700 text-xs font-bold text-white shadow-sm shadow-emerald-950/25 transition hover:-translate-y-0.5 hover:border-white/70 hover:bg-white hover:text-emerald-800;
     }
 
+    /* Project Areas: modern coverage table */
+    .irdc-areas-table-card {
+        @apply overflow-hidden rounded-2xl border border-emerald-100/80 bg-white shadow-xl shadow-emerald-950/[0.06] ring-1 ring-slate-900/[0.03];
+    }
+
+    .irdc-areas-table-card__head {
+        @apply flex flex-wrap items-center justify-between gap-3 border-b border-emerald-100 bg-gradient-to-r from-emerald-50 via-white to-sky-50 px-5 py-4 sm:px-6;
+    }
+
+    .irdc-areas-table-card__eyebrow {
+        @apply mb-1 text-xs font-extrabold uppercase tracking-[0.16em] text-emerald-700;
+    }
+
+    .irdc-areas-table-card__title {
+        @apply mb-0 font-display text-2xl font-extrabold tracking-tight text-[#0A3D62];
+    }
+
+    .irdc-areas-table-card__count {
+        @apply inline-flex rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-extrabold uppercase tracking-[0.08em] text-emerald-800 shadow-sm;
+    }
+
+    .irdc-areas-table-wrap {
+        @apply overflow-x-auto;
+    }
+
+    .irdc-areas-table {
+        @apply mb-0 w-full border-collapse bg-white text-left text-sm;
+    }
+
+    .irdc-areas-table thead {
+        @apply bg-[#0A3D62] text-white;
+    }
+
+    .irdc-areas-table th {
+        @apply px-5 py-3 text-xs font-extrabold uppercase tracking-[0.12em] sm:px-6;
+    }
+
+    .irdc-areas-table td {
+        @apply border-b border-slate-100 px-5 py-4 align-top text-slate-600 sm:px-6;
+    }
+
+    .irdc-areas-table tbody tr {
+        @apply transition duration-200;
+    }
+
+    .irdc-areas-table tbody tr:hover {
+        @apply bg-emerald-50/70;
+    }
+
+    .irdc-areas-table__district {
+        @apply font-extrabold text-slate-950;
+    }
+
+    .irdc-areas-table__division {
+        @apply leading-relaxed text-slate-600;
+    }
+
+    .irdc-areas-table__focus {
+        @apply inline-flex max-w-full rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold leading-relaxed text-emerald-900;
+    }
+
+    .irdc-areas-table__empty {
+        @apply px-5 py-8 text-center text-sm font-semibold text-slate-500;
+    }
+
+    @media (max-width: 640px) {
+        .irdc-areas-table-wrap {
+            @apply overflow-visible;
+        }
+
+        .irdc-areas-table,
+        .irdc-areas-table thead,
+        .irdc-areas-table tbody,
+        .irdc-areas-table th,
+        .irdc-areas-table td,
+        .irdc-areas-table tr {
+            display: block;
+        }
+
+        .irdc-areas-table thead {
+            @apply sr-only;
+        }
+
+        .irdc-areas-table tbody {
+            @apply space-y-3 bg-slate-50 p-3;
+        }
+
+        .irdc-areas-table tbody tr {
+            @apply rounded-2xl border border-slate-200 bg-white p-4 shadow-sm;
+        }
+
+        .irdc-areas-table tbody tr:hover {
+            @apply bg-white;
+        }
+
+        .irdc-areas-table td {
+            @apply border-0 px-0 py-2;
+        }
+
+        .irdc-areas-table td::before {
+            content: attr(data-label);
+            @apply mb-1 block text-[0.68rem] font-extrabold uppercase tracking-[0.12em] text-emerald-700;
+        }
+
+        .irdc-areas-table__empty {
+            @apply p-0 text-left;
+        }
+    }
+
+    /* Project Areas: coverage image lightbox */
+    .irdc-areas-image-preview__trigger {
+        cursor: zoom-in;
+    }
+
+    .irdc-areas-lightbox {
+        @apply fixed inset-0 z-[10000] flex items-center justify-center bg-slate-900/90 p-4 backdrop-blur-sm;
+    }
+
+    .irdc-areas-lightbox__image {
+        @apply max-h-[90vh] w-auto max-w-full rounded-lg object-contain shadow-2xl;
+    }
+
+    .irdc-areas-lightbox__close {
+        @apply absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full text-3xl leading-none text-white/90 transition hover:bg-white/10 hover:text-white;
+    }
+
     /* Contact page: modern glass layout */
     .irdc-contact-modern {
         background: linear-gradient(180deg, #eef5ef 0%, #f7faf7 45%, #ffffff 100%);
@@ -4189,7 +4388,7 @@
     }
 
     .irdc-partners-card {
-        @apply flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_12px_30px_-22px_rgba(15,23,42,0.45)] ring-1 ring-slate-900/[0.03] transition duration-300 sm:p-6;
+        @apply flex w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_12px_30px_-22px_rgba(15,23,42,0.45)] ring-1 ring-slate-900/[0.03] transition duration-300 sm:p-6;
     }
 
     a.irdc-partners-card--linked {
@@ -4202,5 +4401,12 @@
 
     .irdc-partners-card__logo {
         @apply h-full w-full object-contain transition duration-300 group-hover:scale-[1.03];
+    }
+
+    .irdc-partners-card__name {
+        @apply mx-auto mt-3 max-w-full overflow-hidden text-center text-xs font-extrabold leading-snug text-slate-700 sm:text-sm;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
     }
 }

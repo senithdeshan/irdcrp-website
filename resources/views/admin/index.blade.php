@@ -86,11 +86,20 @@
             </div>
         </div>
         @endif
+        @if($moduleEnabled('cerc'))
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">CERC Documents</h2>
+                <p class="text-muted small mb-3">Document library with downloadable files for the public CERC page.</p>
+                <a href="{{ route('admin.cerc-documents.index') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        @endif
         @if($moduleEnabled('institutional_development'))
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
-                <h2 class="h5 fw-bold">Capacity Build</h2>
-                <p class="text-muted small mb-3">Add descriptions, documents, and images for the public Capacity Build page.</p>
+                <h2 class="h5 fw-bold">Institutional Development &amp; Capacity Building</h2>
+                <p class="text-muted small mb-3">Add descriptions, documents, and images for the public Institutional Development &amp; Capacity Building page.</p>
                 <a href="{{ route('admin.institutional-developments.index') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
@@ -146,8 +155,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Project areas</h2>
-                <p class="text-muted small mb-3">Edit the coverage image, summary labels, and district-wise table.</p>
+                <p class="text-muted small mb-3">Edit the coverage image, summary labels, and unlimited district-wise areas.</p>
                 <a href="{{ route('admin.project-areas.edit') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Organizational Structure</h2>
+                <p class="text-muted small mb-3">Upload or update the public structure image and section text.</p>
+                <a href="{{ route('admin.organizational-structure.edit') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>
         <div class="col-md-6 col-lg-4">
@@ -200,6 +216,13 @@
         </div>
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Project identity</h2>
+                <p class="text-muted small mb-3">Edit the home page Project Identity title, introduction, focus badges, and trilingual project names.</p>
+                <a href="{{ route('admin.home-identity.edit') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Home popup</h2>
                 <p class="text-muted small mb-3">Upload an announcement image and show it when visitors enter the website.</p>
                 <a href="{{ route('admin.home-popup.edit') }}" class="btn btn-green btn-sm">Manage</a>
@@ -243,6 +266,13 @@
         </div>
         @endif
         @if($moduleEnabled('contact'))
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card p-4 h-100">
+                <h2 class="h5 fw-bold">Contact page</h2>
+                <p class="text-muted small mb-3">Edit emails, phone, fax, address, map, and form heading on the Contact Us page.</p>
+                <a href="{{ route('admin.contact-page.edit') }}" class="btn btn-green btn-sm">Manage</a>
+            </div>
+        </div>
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Support messages</h2>

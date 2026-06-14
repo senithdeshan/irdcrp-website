@@ -81,7 +81,7 @@
 
             <div class="mb-3">
                 <label>Published Date</label>
-                <input type="date" name="published_date" class="form-control" value="{{ $news->published_date }}">
+                <input type="date" name="published_date" class="form-control" value="{{ old('published_date', $news->published_date?->format('Y-m-d')) }}">
             </div>
 
             <div class="mb-3">

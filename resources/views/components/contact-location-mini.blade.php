@@ -1,13 +1,9 @@
 @php
-    $location = config('irdcrp.contact.location', []);
-    $locationImage = $location['image'] ?? null;
-    $hasLocationImage = filled($locationImage) && file_exists(public_path(ltrim($locationImage, '/')));
-    $mapLat = $location['latitude'] ?? null;
-    $mapLng = $location['longitude'] ?? null;
-    $mapsDirectionsUrl = $location['maps_url']
-        ?? (filled($mapLat) && filled($mapLng)
-            ? sprintf('https://www.google.com/maps/dir/?api=1&destination=%s,%s', $mapLat, $mapLng)
-            : null);
+    use App\Support\ContactLocation;
+
+    $location = ContactLocation::config();
+    $locationImageUrl = ContactLocation::imageUrl();
+    $mapsDirectionsUrl = ContactLocation::directionsUrl();
     $placeName = $location['place_name'] ?? 'Integrated Rurban Development and Climate Resilience Project';
 @endphp
 
@@ -15,10 +11,10 @@
     <h4 class="irdc-helpdesk-location-mini__label">Our Location</h4>
     <p class="irdc-helpdesk-location-mini__name">{{ $placeName }}</p>
 
-    @if ($hasLocationImage)
+    @if ($locationImageUrl)
         <figure class="irdc-helpdesk-location-mini__photo">
             <img
-                src="{{ asset(ltrim($locationImage, '/')) }}"
+                src="{{ $locationImageUrl }}"
                 alt="{{ $placeName }} — office entrance"
                 width="320"
                 height="160"

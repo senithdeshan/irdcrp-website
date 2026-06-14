@@ -88,6 +88,11 @@ class NewsController extends Controller
             ->values();
 
         unset($data['remove_images']);
+
+        if (blank($data['published_date'] ?? null)) {
+            $data['published_date'] = $news->published_date;
+        }
+
         $data['image'] = $imagePaths->first();
         $data['images'] = $imagePaths->all();
 

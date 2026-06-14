@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Gallery extends Model
 {
+    public const MAX_PINNED_PER_CATEGORY = 3;
+
     protected $fillable = [
         'title',
         'category',
@@ -15,6 +18,7 @@ class Gallery extends Model
         'external_url',
         'description',
         'status',
+        'is_pinned',
         'item_date',
     ];
 
@@ -22,7 +26,16 @@ class Gallery extends Model
     {
         return [
             'item_date' => 'date',
+            'is_pinned' => 'boolean',
         ];
+    }
+
+    public function scopeOrderedForDisplay(Builder $query): Builder
+    {
+        return $query
+            ->orderByDesc('is_pinned')
+            ->orderByDesc('item_date')
+            ->orderByDesc('id');
     }
 
     public const CATEGORIES = [

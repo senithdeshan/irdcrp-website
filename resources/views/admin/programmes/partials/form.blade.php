@@ -20,6 +20,22 @@
 </div>
 
 <div class="mb-3 mt-3">
+    <label class="form-label">Project component</label>
+    <select name="project_component_id" class="form-select" required>
+        <option value="" disabled @selected(! old('project_component_id', $programme?->project_component_id))>Select component…</option>
+        @foreach($components ?? [] as $component)
+            <option
+                value="{{ $component->id }}"
+                @selected((string) old('project_component_id', $programme?->project_component_id) === (string) $component->id)
+            >
+                Component {{ $component->component_number }} — {{ $component->title }}
+            </option>
+        @endforeach
+    </select>
+    <div class="form-text">Programmes are grouped and filtered on the public Programmes page by this component.</div>
+</div>
+
+<div class="mb-3 mt-3">
     <label class="form-label">Slug</label>
     <input type="text" name="slug" class="form-control" value="{{ old('slug', $programme?->slug) }}" pattern="[a-z0-9]+(?:-[a-z0-9]+)*">
     <div class="form-text">Leave empty to generate from title.</div>

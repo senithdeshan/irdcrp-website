@@ -27,6 +27,9 @@
                     if (w >= 640) return 188;
                     return 172;
                 },
+                slideHeight() {
+                    return this.cardSize() + 58;
+                },
                 get visible() {
                     if (window.innerWidth >= 1280) return Math.min(4, this.totalItems);
                     if (window.innerWidth >= 768) return Math.min(3, this.totalItems);
@@ -69,7 +72,7 @@
                     @foreach ($projectPartners as $partner)
                         <article
                             class="irdc-partners-slide shrink-0"
-                            :style="`width: ${cardSize()}px; height: ${cardSize()}px`"
+                            :style="`width: ${cardSize()}px; min-height: ${slideHeight()}px`"
                         >
                             @if($partner->hasWebsite())
                                 <a
@@ -79,6 +82,7 @@
                                     class="irdc-partners-card irdc-partners-card--linked group"
                                     aria-label="{{ $partner->name }} (opens in new tab)"
                                     title="{{ $partner->name }}"
+                                    :style="`height: ${cardSize()}px`"
                                 >
                                     <img
                                         src="{{ $partner->logoUrl() }}"
@@ -89,7 +93,7 @@
                                     >
                                 </a>
                             @else
-                                <div class="irdc-partners-card" title="{{ $partner->name }}">
+                                <div class="irdc-partners-card" title="{{ $partner->name }}" :style="`height: ${cardSize()}px`">
                                     <img
                                         src="{{ $partner->logoUrl() }}"
                                         alt="{{ $partner->name }}"
@@ -99,6 +103,7 @@
                                     >
                                 </div>
                             @endif
+                            <p class="irdc-partners-card__name">{{ $partner->name }}</p>
                         </article>
                     @endforeach
                 </div>

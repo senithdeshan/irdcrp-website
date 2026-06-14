@@ -4,7 +4,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
             <h2 class="section-title mb-1">Gallery Media</h2>
-            <p class="text-muted mb-0">Manage Audio, Photos, Videos, Presentation, and Voice of people.</p>
+            <p class="text-muted mb-0">Manage Audio, Photos, Videos, Presentation, and Voice of people. Pin up to {{ \App\Models\Gallery::MAX_PINNED_PER_CATEGORY }} photos per category from the list below.</p>
         </div>
         <a href="{{ route('admin.gallery.create') }}" class="btn btn-green">Add media</a>
     </div>
@@ -20,6 +20,16 @@
     </form>
 
     @if (session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+
+    @if($category !== '')
+        <p class="small text-muted mb-3">
+            Pinned in this category: <strong>{{ $pinnedCount ?? 0 }}</strong> / {{ \App\Models\Gallery::MAX_PINNED_PER_CATEGORY }}
+        </p>
+    @else
+        <p class="small text-muted mb-3">
+            Use <strong>Pin</strong> on photo items to keep up to {{ \App\Models\Gallery::MAX_PINNED_PER_CATEGORY }} images at the top of each category.
+        </p>
+    @endif
 
     <div class="row g-4">
         @forelse($items as $item)
@@ -42,11 +52,29 @@
                             <span class="badge text-bg-success">{{ $item->categoryLabel() }}</span>
                             <span class="badge text-bg-secondary">{{ $item->mediaTypeLabel() }}</span>
                             <span class="badge text-bg-{{ $item->status === 'published' ? 'primary' : 'light' }}">{{ $item->status }}</span>
+                            @if($item->is_pinned)
+                                <span class="badge text-bg-warning text-dark">Pinned</span>
+                            @endif
                         </div>
                         <h3 class="h6 fw-bold mb-1">{{ $item->title }}</h3>
                         <p class="text-muted small mb-3">{{ $item->item_date?->format('Y-m-d') ?? '-' }}</p>
                         <div class="d-flex flex-wrap gap-2">
                             <a href="{{ route('admin.gallery.edit', $item) }}" class="btn btn-sm btn-primary">Edit</a>
+                            @if($item->media_type === 'image')
+                                <form method="POST" action="{{ route('admin.gallery.toggle-pin', $item) }}" class="d-inline">
+                                    @csrf
+                                    @if($category !== '')
+                                        <input type="hidden" name="category" value="{{ $category }}">
+                                    @endif
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm {{ $item->is_pinned ? 'btn-outline-warning' : 'btn-warning' }}"
+                                        title="{{ $item->is_pinned ? 'Remove pin' : 'Pin to top (max '. \App\Models\Gallery::MAX_PINNED_PER_CATEGORY .' per category)' }}"
+                                    >
+                                        {{ $item->is_pinned ? 'Unpin' : 'Pin' }}
+                                    </button>
+                                </form>
+                            @endif
                             @if($item->mediaUrl())
                                 <a href="{{ $item->mediaUrl() }}" class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener">Open</a>
                             @endif

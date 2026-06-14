@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Support\SiteSettings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class ProjectAreaController extends Controller
@@ -14,6 +15,8 @@ class ProjectAreaController extends Controller
     {
         return view('admin.project-areas.edit', [
             'projectAreas' => $settings->projectAreas(),
+            'districts' => $settings->projectAreaDistrictsForAdmin(),
+            'districtTableReady' => Schema::hasTable('project_area_districts'),
         ]);
     }
 
@@ -33,10 +36,6 @@ class ProjectAreaController extends Controller
             'table_headings.district' => ['required', 'string', 'max:120'],
             'table_headings.ds_divisions' => ['required', 'string', 'max:120'],
             'table_headings.focus' => ['required', 'string', 'max:120'],
-            'table_rows' => ['required', 'array'],
-            'table_rows.*.district' => ['nullable', 'string', 'max:255'],
-            'table_rows.*.ds_divisions' => ['nullable', 'string', 'max:255'],
-            'table_rows.*.focus' => ['nullable', 'string', 'max:500'],
         ]);
 
         $current = $settings->projectAreas();
@@ -51,7 +50,6 @@ class ProjectAreaController extends Controller
             'summary' => $this->filledSummaryRows($validated['summary']),
             'table_title' => $validated['table_title'],
             'table_headings' => $validated['table_headings'],
-            'table_rows' => $this->filledTableRows($validated['table_rows']),
         ];
 
         if ($request->hasFile('summary_image')) {
@@ -79,16 +77,4 @@ class ProjectAreaController extends Controller
             ->all();
     }
 
-    private function filledTableRows(array $rows): array
-    {
-        return collect($rows)
-            ->map(fn (array $row): array => [
-                'district' => trim((string) ($row['district'] ?? '')),
-                'ds_divisions' => trim((string) ($row['ds_divisions'] ?? '')),
-                'focus' => trim((string) ($row['focus'] ?? '')),
-            ])
-            ->filter(fn (array $row): bool => filled($row['district']) || filled($row['ds_divisions']) || filled($row['focus']))
-            ->values()
-            ->all();
-    }
 }

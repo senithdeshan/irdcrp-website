@@ -46,6 +46,9 @@
                         <div class="mb-2 flex flex-wrap gap-2">
                             <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800">{{ $item->categoryLabel() }}</span>
                             <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">{{ $item->mediaTypeLabel() }}</span>
+                            @if($item->is_pinned)
+                                <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-900">Pinned</span>
+                            @endif
                         </div>
                         <h2 class="font-display text-lg font-extrabold text-slate-900">{{ $item->title }}</h2>
                         @if($item->item_date)

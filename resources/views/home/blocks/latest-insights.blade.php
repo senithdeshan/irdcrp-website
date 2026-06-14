@@ -28,9 +28,17 @@
         goTo(idx) { this.i = idx; },
         cardWidth() {
             const gap = this.cardGap();
+            const viewport = Math.max(this.viewportWidth || window.innerWidth, 280);
+            const maxCardWidth = 340;
+            const minCardWidth = 280;
             const totalGaps = gap * Math.max(this.visible - 1, 0);
-            const available = Math.max((this.viewportWidth || window.innerWidth) - totalGaps, 240);
-            return Math.max(available / this.visible, 240);
+            const fitWidth = (viewport - totalGaps) / this.visible;
+
+            return Math.max(minCardWidth, Math.min(maxCardWidth, Math.floor(fitWidth)));
+        },
+        trackFillsViewport() {
+            const trackWidth = (this.total * this.cardWidth()) + (Math.max(this.total - 1, 0) * this.cardGap());
+            return trackWidth >= ((this.viewportWidth || window.innerWidth) - 8);
         },
         start() {
             this.stop();
@@ -65,6 +73,7 @@
             <div
                 x-ref="track"
                 class="flex gap-4 transition-transform duration-700 ease-out"
+                :class="!trackFillsViewport() ? 'justify-center' : ''"
                 :style="`transform: translateX(-${i * cardStep()}px);`"
             >
                 @forelse ($latestInsights as $insight)

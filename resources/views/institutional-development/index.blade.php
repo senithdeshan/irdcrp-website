@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Capacity Build | '.config('app.name'))
+@section('title', 'Institutional Development & Capacity Building | '.config('app.name'))
 
 @section('content')
 <section class="irdc-safeguard-hero">
     <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div class="max-w-3xl">
             <p class="irdc-safeguard-hero__eyebrow">Resources</p>
-            <h1 class="irdc-safeguard-hero__title">Capacity Build</h1>
+            <h1 class="irdc-safeguard-hero__title">Institutional Development &amp; Capacity Building</h1>
             <p class="irdc-safeguard-hero__lead">
-                Capacity-building materials, training resources, and related publications published by IRDCRP.
+                Institutional development and capacity-building materials, training resources, and related publications published by IRDCRP.
             </p>
         </div>
     </div>
@@ -105,7 +105,7 @@
                                             class="irdc-news-lightbox"
                                             role="dialog"
                                             aria-modal="true"
-                                            aria-label="Capacity Build image viewer"
+                                            aria-label="Institutional Development & Capacity Building image viewer"
                                         >
                                             <button type="button" class="irdc-news-lightbox__backdrop" x-on:click="close()" aria-label="Close image viewer"></button>
                                             <div class="irdc-news-lightbox__panel">
@@ -124,7 +124,7 @@
                     @empty
                         <tr>
                             <td colspan="6" class="irdc-safeguard-table__empty">
-                                No published items yet. Content will appear here once added from the admin Capacity Build area.
+                                No published items yet. Content will appear here once added from the admin Institutional Development & Capacity Building area.
                             </td>
                         </tr>
                     @endforelse

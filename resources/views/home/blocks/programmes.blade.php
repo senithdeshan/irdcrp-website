@@ -22,6 +22,9 @@
                             >
                         </div>
                         <div class="irdc-programme-card__body">
+                            @if($programme->componentLabel())
+                                <p class="irdc-programme-card__component">{{ $programme->componentLabel() }}</p>
+                            @endif
                             <h3 class="irdc-programme-card__title">{{ $programme->title }}</h3>
                             @if($programme->summary)
                                 <p class="irdc-programme-card__summary">{{ $programme->summary }}</p>

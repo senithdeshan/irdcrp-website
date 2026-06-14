@@ -38,7 +38,7 @@ class HomePageBlocks
                 'id' => 'about_project',
                 'label' => 'Project identity',
                 'description' => 'Trilingual project name and introduction text.',
-                'admin_route' => null,
+                'admin_route' => 'admin.home-identity.edit',
                 'enabled' => true,
                 'sort_order' => 40,
             ],

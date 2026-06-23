@@ -13,8 +13,45 @@
                 <p class="irdc-programme-show__lead">{{ $programme->summary }}</p>
             @endif
         </div>
-        <div class="irdc-programme-show__image">
-            <img src="{{ $programme->coverImageUrl() }}" alt="{{ $programme->title }}">
+        <div
+            class="irdc-programme-show__image"
+            x-data="{ open: false }"
+            x-on:keydown.window.escape="open = false"
+        >
+            <button
+                type="button"
+                class="irdc-programme-show__image-button"
+                x-on:click="open = true"
+                aria-label="Open programme cover image"
+            >
+                <img src="{{ $programme->coverImageUrl() }}" alt="{{ $programme->title }}">
+            </button>
+
+            <template x-teleport="body">
+                <div
+                    x-show="open"
+                    x-cloak
+                    x-transition.opacity
+                    class="irdc-news-lightbox irdc-programme-lightbox"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Programme cover image viewer"
+                >
+                    <button type="button" class="irdc-news-lightbox__backdrop" x-on:click="open = false" aria-label="Close image viewer"></button>
+                    <div class="irdc-news-lightbox__panel">
+                        <div class="irdc-news-lightbox__top">
+                            <span>{{ $programme->title }}</span>
+                            <button type="button" x-on:click="open = false" aria-label="Close image viewer">Close</button>
+                        </div>
+
+                        <div class="irdc-news-lightbox__stage">
+                            <span class="irdc-news-lightbox__nav" style="visibility: hidden;" aria-hidden="true"></span>
+                            <img src="{{ $programme->coverImageUrl() }}" alt="{{ $programme->title }}">
+                            <span class="irdc-news-lightbox__nav" style="visibility: hidden;" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 </section>

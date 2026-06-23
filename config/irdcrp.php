@@ -65,6 +65,8 @@ return [
     */
     'launching_soon' => [
         'enabled' => env('IRDCRP_LAUNCHING_SOON', true),
+        'launch_at' => env('IRDCRP_LAUNCH_AT', '2026-06-23 10:56:06'),
+        'timezone' => env('IRDCRP_LAUNCH_TIMEZONE', 'Asia/Colombo'),
     ],
 
     /*

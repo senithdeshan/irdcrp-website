@@ -437,11 +437,9 @@
 
     <script>
         (function () {
-            document.getElementById('launch-date-text').textContent = 'Launch date will be announced soon.';
-            return;
-
-            // TEMPORARY TEST TIMER: change back to the real launch date/time after testing.
-            var launchDate = new Date(Date.now() + 300000);
+            var launchTimestamp = @json($launchAt?->toIso8601String());
+            var serverTimestamp = @json($serverNow->toIso8601String());
+            var launchTimezone = @json($launchTimezone);
             var labels = {
                 days: document.getElementById('days'),
                 hours: document.getElementById('hours'),
@@ -453,7 +451,15 @@
             };
             var finished = false;
             var timerId = null;
-            var finishedStorageKey = 'irdcrp-maintenance-test-finished';
+
+            if (!launchTimestamp) {
+                labels.launchText.textContent = 'Launch date will be announced soon.';
+                return;
+            }
+
+            var launchDate = new Date(launchTimestamp);
+            var serverNow = new Date(serverTimestamp);
+            var clientTargetTime = Date.now() + Math.max(0, launchDate.getTime() - serverNow.getTime());
 
             function pad(value) {
                 return String(value).padStart(2, '0');
@@ -464,7 +470,7 @@
                     labels.launchText.textContent = 'Launching on ' + new Intl.DateTimeFormat('en-LK', {
                         dateStyle: 'full',
                         timeStyle: 'short',
-                        timeZone: 'Asia/Colombo'
+                        timeZone: launchTimezone
                     }).format(launchDate);
                 } catch (error) {
                     labels.launchText.textContent = 'Launching soon.';
@@ -493,13 +499,10 @@
                     timerId = null;
                 }
 
-                try {
-                    window.localStorage.setItem(finishedStorageKey, '1');
-                } catch (error) {
-                    // Local storage may be unavailable in private or restricted browsers.
-                }
-
                 showLiveState();
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 1200);
             }
 
             function tick() {
@@ -507,7 +510,7 @@
                     return;
                 }
 
-                var diff = Math.max(0, launchDate.getTime() - Date.now());
+                var diff = Math.max(0, clientTargetTime - Date.now());
 
                 var totalSeconds = Math.ceil(diff / 1000);
                 var days = Math.floor(totalSeconds / 86400);
@@ -525,17 +528,8 @@
                 }
             }
 
-            try {
-                if (window.localStorage.getItem(finishedStorageKey) === '1') {
-                    finished = true;
-                    showLiveState();
-                    return;
-                }
-            } catch (error) {
-                // Continue with normal countdown if local storage cannot be read.
-            }
-
             updateDateText();
+            labels.countdown.classList.remove('is-hidden');
             tick();
             if (!finished) {
                 timerId = window.setInterval(tick, 1000);

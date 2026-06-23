@@ -36,7 +36,9 @@ class ContactPageTest extends TestCase
             ->put(route('admin.contact-page.update'), [
                 'emails_raw' => "new.contact@irdcrp.lk\nsecond@irdcrp.lk",
                 'phone' => '011 1111 111',
-                'fax' => '011 2222 222',
+                'fax_label' => 'WhatsApp',
+                'fax' => 'Message us',
+                'fax_url' => 'https://wa.me/94112222222',
                 'website_url' => 'https://www.example.lk',
                 'website_label' => 'www.example.lk',
                 'address' => 'Updated address line',
@@ -61,6 +63,8 @@ class ContactPageTest extends TestCase
             ->assertOk()
             ->assertSee('new.contact@irdcrp.lk')
             ->assertSee('second@irdcrp.lk')
+            ->assertSee('WhatsApp')
+            ->assertSee('https://wa.me/94112222222')
             ->assertSee('Write to us')
             ->assertSee('Updated address line');
     }

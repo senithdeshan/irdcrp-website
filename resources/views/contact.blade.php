@@ -6,6 +6,9 @@
 
     $contactPage = ContactLocation::page();
     $emails = array_values(array_filter($contactPage['emails'] ?? [], fn ($email) => filled($email)));
+    $customContactLabel = $contactPage['fax_label'] ?? 'Fax';
+    $customContactText = $contactPage['fax'] ?? '';
+    $customContactUrl = $contactPage['fax_url'] ?? '';
 @endphp
 
 <section class="irdc-contact-modern relative overflow-hidden py-16 sm:py-20">
@@ -33,11 +36,15 @@
                 </article>
                 @endif
 
-                @if (filled($contactPage['fax'] ?? null))
+                @if (filled($customContactText) || filled($customContactUrl))
                 <article class="irdc-contact-modern__mini-card">
-                    <div class="irdc-contact-icon" aria-hidden="true">📠</div>
-                    <h3 class="irdc-contact-modern__mini-head">Fax</h3>
-                    <p class="irdc-contact-modern__mini-link">{{ $contactPage['fax'] }}</p>
+                    <div class="irdc-contact-icon" aria-hidden="true">+</div>
+                    <h3 class="irdc-contact-modern__mini-head">{{ filled($customContactLabel) ? $customContactLabel : 'Contact' }}</h3>
+                    @if (filled($customContactUrl))
+                        <a href="{{ $customContactUrl }}" class="irdc-contact-modern__mini-link" rel="noopener noreferrer" target="_blank">{{ filled($customContactText) ? $customContactText : $customContactUrl }}</a>
+                    @else
+                        <p class="irdc-contact-modern__mini-link">{{ $customContactText }}</p>
+                    @endif
                 </article>
                 @endif
 

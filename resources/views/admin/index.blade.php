@@ -269,7 +269,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card p-4 h-100">
                 <h2 class="h5 fw-bold">Contact page</h2>
-                <p class="text-muted small mb-3">Edit emails, phone, fax, address, map, and form heading on the Contact Us page.</p>
+                <p class="text-muted small mb-3">Edit emails, phone, custom contact card, address, map, and form heading on the Contact Us page.</p>
                 <a href="{{ route('admin.contact-page.edit') }}" class="btn btn-green btn-sm">Manage</a>
             </div>
         </div>

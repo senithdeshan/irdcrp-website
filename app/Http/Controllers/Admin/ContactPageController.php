@@ -25,7 +25,9 @@ class ContactPageController extends Controller
         $validated = $request->validate([
             'emails_raw' => ['required', 'string', 'max:2000'],
             'phone' => ['required', 'string', 'max:100'],
+            'fax_label' => ['nullable', 'string', 'max:100'],
             'fax' => ['nullable', 'string', 'max:100'],
+            'fax_url' => ['nullable', 'url', 'max:500'],
             'website_url' => ['required', 'url', 'max:500'],
             'website_label' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:1000'],
@@ -85,7 +87,9 @@ class ContactPageController extends Controller
         $settings->putContactPage([
             'emails' => $emails,
             'phone' => $validated['phone'],
+            'fax_label' => $validated['fax_label'] ?? 'Fax',
             'fax' => $validated['fax'] ?? '',
+            'fax_url' => $validated['fax_url'] ?? '',
             'website_url' => $validated['website_url'],
             'website_label' => $validated['website_label'],
             'address' => $validated['address'],

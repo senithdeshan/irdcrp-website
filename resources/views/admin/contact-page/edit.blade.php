@@ -5,7 +5,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
         <div>
             <h1 class="section-title mb-1">Contact page</h1>
-            <p class="text-muted mb-0">Edit emails, phone, fax, website, address, map location, and the contact form heading on the public Contact Us page.</p>
+            <p class="text-muted mb-0">Edit emails, phone, custom contact card, website, address, map location, and the contact form heading on the public Contact Us page.</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
             <a href="{{ url('/contact') }}" class="btn btn-outline-secondary" target="_blank" rel="noopener">View page</a>
@@ -44,14 +44,26 @@
                     @error('phone')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Fax</label>
-                    <input type="text" name="fax" class="form-control" value="{{ old('fax', $contact['fax'] ?? '') }}">
+                    <label class="form-label">Custom contact label</label>
+                    <input type="text" name="fax_label" class="form-control" value="{{ old('fax_label', $contact['fax_label'] ?? 'Fax') }}" placeholder="Fax, WhatsApp, Hotline">
+                    <div class="form-text">This replaces the fixed Fax heading on the public page.</div>
+                    @error('fax_label')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Custom contact text</label>
+                    <input type="text" name="fax" class="form-control" value="{{ old('fax', $contact['fax'] ?? '') }}" placeholder="011 2073 044 or contact name">
                     @error('fax')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Website label</label>
                     <input type="text" name="website_label" class="form-control" value="{{ old('website_label', $contact['website_label'] ?? '') }}" required>
                     @error('website_label')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Custom contact link (optional)</label>
+                    <input type="url" name="fax_url" class="form-control" value="{{ old('fax_url', $contact['fax_url'] ?? '') }}" placeholder="https://wa.me/... or https://example.lk/contact">
+                    <div class="form-text">Leave blank to show the custom contact text without a link.</div>
+                    @error('fax_url')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-12">
                     <label class="form-label">Website URL</label>

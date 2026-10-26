@@ -14,14 +14,14 @@
                 'New videos are added on the YouTube channel as they are ready.',
             ];
             $mediaCards = $homeVideos->isNotEmpty()
-                ? $homeVideos->sortBy('sort_order')->values()->map(function ($video) use ($commonItems): array {
+                ? $homeVideos->sortBy('sort_order')->values()->map(function ($video): array {
                     return [
                         'title' => $video->title,
-                        'items' => [
-                            $video->bullet_one ?: $commonItems[0],
-                            $video->bullet_two ?: $commonItems[1],
-                            $video->bullet_three ?: $commonItems[2],
-                        ],
+                        'items' => array_filter([
+                            $video->bullet_one,
+                            $video->bullet_two,
+                            $video->bullet_three,
+                        ], fn ($item) => filled($item)),
                         'video_id' => $video->youtube_id,
                     ];
                 })
@@ -39,11 +39,13 @@
                 @foreach($mediaCards as $card)
                 <article class="irdc-media-feature-card">
                     <h3 class="irdc-media-feature-card__title">{{ $card['title'] }}</h3>
+                    @if(count($card['items']) > 0)
                     <ul class="irdc-media-feature-card__list">
                         @foreach($card['items'] as $item)
                             <li>{{ $item }}</li>
                         @endforeach
                     </ul>
+                    @endif
 
                     @if(filled($card['video_id']))
                         <div class="irdc-media-feature-card__video">

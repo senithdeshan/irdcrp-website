@@ -17,16 +17,16 @@
         </select>
     </div>
     <div class="col-12">
-        <label class="form-label">Bullet line 1</label>
-        <input type="text" name="bullet_one" class="form-control" value="{{ old('bullet_one', $item->bullet_one ?? 'On-the-ground activities and good agricultural practices in partner areas.') }}" maxlength="255">
+        <label class="form-label">Bullet line 1 (optional)</label>
+        <input type="text" name="bullet_one" class="form-control" value="{{ old('bullet_one', $item->bullet_one ?? '') }}" maxlength="255">
     </div>
     <div class="col-12">
-        <label class="form-label">Bullet line 2</label>
-        <input type="text" name="bullet_two" class="form-control" value="{{ old('bullet_two', $item->bullet_two ?? 'Highlights of training, workshops, and engagement with communities.') }}" maxlength="255">
+        <label class="form-label">Bullet line 2 (optional)</label>
+        <input type="text" name="bullet_two" class="form-control" value="{{ old('bullet_two', $item->bullet_two ?? '') }}" maxlength="255">
     </div>
     <div class="col-12">
-        <label class="form-label">Bullet line 3</label>
-        <input type="text" name="bullet_three" class="form-control" value="{{ old('bullet_three', $item->bullet_three ?? 'New videos are added on the YouTube channel as they are ready.') }}" maxlength="255">
+        <label class="form-label">Bullet line 3 (optional)</label>
+        <input type="text" name="bullet_three" class="form-control" value="{{ old('bullet_three', $item->bullet_three ?? '') }}" maxlength="255">
     </div>
     <div class="col-12">
         <label class="form-label">YouTube URL</label>

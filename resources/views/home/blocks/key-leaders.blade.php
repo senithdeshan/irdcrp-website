@@ -10,7 +10,6 @@
         });
         $leaderSections = [
             ['key_leader', null, $keyLeaderGroups->get('key_leader', collect())],
-            ['project_staff', 'Project Staff', $keyLeaderGroups->get('project_staff', collect())],
         ];
     @endphp
     <section id="key-leaders" class="irdc-leaders-section irdc-scroll-mt-header" aria-labelledby="key-leaders-heading">
@@ -34,18 +33,6 @@
             </header>
             @foreach ($leaderSections as [$groupKey, $groupTitle, $leaders])
                 @if($leaders->isNotEmpty())
-                    @if($groupKey === 'project_staff')
-                        <div class="irdc-leaders-divider" aria-hidden="true"></div>
-                        <div class="irdc-leaders-group-head">
-                            <p class="irdc-leaders-eyebrow">Implementation Team</p>
-                            <h3>
-                                <a href="{{ route('organizational-structure') }}" class="text-inherit no-underline transition hover:text-emerald-700">
-                                    {{ $groupTitle }}
-                                </a>
-                            </h3>
-                        </div>
-                    @endif
-
                     <x-leader-grid :leaders="$leaders" :staff="$groupKey === 'project_staff'" />
                 @endif
                 @endforeach

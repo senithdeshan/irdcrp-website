@@ -2125,11 +2125,11 @@
     }
 
     .irdc-media-card-grid {
-        @apply grid gap-5 lg:grid-cols-3;
+        @apply grid items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3;
     }
 
     .irdc-media-feature-card {
-        @apply rounded-[1.4rem] border border-slate-200/85 bg-white p-5 shadow-[0_24px_60px_-44px_rgba(15,23,42,0.75)] ring-1 ring-slate-900/[0.03] transition duration-300;
+        @apply flex min-w-0 flex-col rounded-[1.4rem] border border-slate-200/85 bg-white p-5 shadow-[0_24px_60px_-44px_rgba(15,23,42,0.75)] ring-1 ring-slate-900/[0.03] transition duration-300;
     }
 
     .irdc-media-feature-card:hover {
@@ -2137,28 +2137,61 @@
     }
 
     .irdc-media-feature-card__title {
-        @apply font-display text-4xl font-extrabold leading-tight tracking-tight text-[#8B4A1F] sm:text-5xl;
+        @apply font-display text-xl font-bold leading-snug text-[#8B4A1F];
+        min-height: 3.5rem;
+        overflow-wrap: anywhere;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
+
+    .irdc-media-feature-card__copy {
+        height: 13rem;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+    }
+
+    .irdc-media-feature-card__copy.is-expanded {
+        overflow-y: auto;
+        scrollbar-width: thin;
+        padding-right: 0.5rem;
+    }
+
+    .irdc-media-feature-card__copy.is-expanded .irdc-media-feature-card__title,
+    .irdc-media-feature-card__copy.is-expanded .irdc-media-feature-card__list li {
+        display: block;
+        overflow: visible;
+        -webkit-line-clamp: unset;
+    }
+
+    .irdc-media-feature-card__more {
+        @apply mt-3 self-start rounded text-sm font-semibold text-emerald-700 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-600;
     }
 
     .irdc-media-feature-card__list {
-        @apply mt-5 space-y-2.5 text-sm leading-relaxed text-slate-700 sm:text-base;
+        @apply mt-3 space-y-2 text-sm leading-relaxed text-slate-600;
     }
 
     .irdc-media-feature-card__list li {
-        @apply relative pl-7;
+        @apply relative pl-5;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
     }
 
     .irdc-media-feature-card__list li::before {
         content: "";
-        @apply absolute left-0 top-2.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100;
+        @apply absolute left-1 top-2 h-1.5 w-1.5 rounded-full bg-emerald-500;
     }
 
     .irdc-media-feature-card__video {
-        @apply mt-5 aspect-video overflow-hidden rounded-[1rem] border-2 border-dashed border-amber-300/80 bg-slate-900;
+        @apply mt-4 aspect-video w-full shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-900;
     }
 
     .irdc-media-feature-card__empty {
-        @apply mt-5 flex aspect-video items-center justify-center rounded-[1rem] border-2 border-dashed border-slate-300 bg-slate-50 text-sm font-semibold text-slate-500;
+        @apply mt-4 flex aspect-video w-full shrink-0 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-sm font-semibold text-slate-500;
     }
 
     .irdc-media-feature-card__cta {

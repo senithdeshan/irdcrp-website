@@ -34,7 +34,7 @@ class Gallery extends Model
     {
         return $query
             ->orderByDesc('is_pinned')
-            ->orderByDesc('item_date')
+            ->orderByDesc('created_at')
             ->orderByDesc('id');
     }
 

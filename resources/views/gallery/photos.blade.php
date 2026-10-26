@@ -5,7 +5,6 @@
 @include('gallery.partials.subnav')
 
 @php
-    $maxHeights = [380, 270, 340, 300, 360];
     $galleryJson = $items->map(function ($item) {
         return [
             'src' => $item->mediaUrl(),
@@ -43,31 +42,30 @@
 >
     @forelse($items as $item)
         @if($loop->first)
-            <div class="columns-1 gap-4 [column-fill:_balance] sm:columns-2 sm:gap-5 lg:columns-3">
+            <div class="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
         @endif
-        <article class="mb-4 break-inside-avoid group sm:mb-5">
-            <div class="overflow-hidden rounded-2xl bg-stone-100 shadow-sm ring-1 ring-stone-200/70 transition duration-300 hover:shadow-lg hover:ring-stone-300/90">
+        <article class="group min-w-0">
+            <div class="flex h-full flex-col overflow-hidden rounded-2xl bg-stone-100 shadow-sm ring-1 ring-stone-200/70 transition duration-300 hover:shadow-lg hover:ring-stone-300/90">
                 <button
                     type="button"
                     @click="openAt({{ $loop->index }})"
-                    class="block w-full rounded-t-2xl text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+                    class="block w-full shrink-0 rounded-t-2xl text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
                 >
-                    <div class="relative w-full overflow-hidden bg-stone-200/50">
+                    <div class="relative aspect-[4/3] w-full overflow-hidden bg-stone-200/50">
                         <img
                             src="{{ $item->mediaUrl() }}"
                             alt="{{ $item->title }}"
-                            class="h-auto w-full object-cover object-center transition duration-500 group-hover:scale-[1.02]"
-                            style="max-height: {{ $maxHeights[$loop->index % 5] }}px"
+                            class="h-full w-full object-cover object-center transition duration-500 group-hover:scale-[1.02]"
                             loading="lazy"
                             decoding="async"
                         >
                     </div>
                 </button>
-                <div class="rounded-b-2xl border-t border-stone-200/60 bg-white px-3.5 py-2.5 sm:px-4 sm:py-3">
+                <div class="flex-1 rounded-b-2xl border-t border-stone-200/60 bg-white px-3.5 py-2.5 sm:px-4 sm:py-3">
                     @if($item->is_pinned)
                         <p class="mb-1 inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-900">Pinned</p>
                     @endif
-                    <p class="line-clamp-2 text-sm font-semibold leading-snug text-slate-800">{{ $item->title }}</p>
+                    <p class="line-clamp-2 break-words text-sm font-semibold leading-snug text-slate-800">{{ $item->title }}</p>
                     @if($item->item_date)
                         <p class="mt-0.5 text-xs text-slate-500">{{ $item->item_date->format('M j, Y') }}</p>
                     @endif

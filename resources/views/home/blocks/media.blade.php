@@ -37,7 +37,8 @@
         @if($mediaCards->isNotEmpty())
             <div class="irdc-media-card-grid" data-reveal-stagger>
                 @foreach($mediaCards as $card)
-                <article class="irdc-media-feature-card">
+                <article class="irdc-media-feature-card" x-data="{ expanded: false }">
+                    <div class="irdc-media-feature-card__copy" :class="{ 'is-expanded': expanded }" :id="'media-copy-{{ $loop->index }}'">
                     <h3 class="irdc-media-feature-card__title">{{ $card['title'] }}</h3>
                     @if(count($card['items']) > 0)
                     <ul class="irdc-media-feature-card__list">
@@ -46,6 +47,11 @@
                         @endforeach
                     </ul>
                     @endif
+                    </div>
+                    <button type="button" class="irdc-media-feature-card__more" @click="expanded = !expanded" :aria-expanded="expanded" aria-controls="media-copy-{{ $loop->index }}">
+                        <span x-text="expanded ? 'See less' : 'See more'">See more</span>
+                        <span class="sr-only"> about {{ $card['title'] }}</span>
+                    </button>
 
                     @if(filled($card['video_id']))
                         <div class="irdc-media-feature-card__video">
@@ -53,6 +59,7 @@
                                 class="h-full w-full"
                                 src="https://www.youtube.com/embed/{{ $card['video_id'] }}?rel=0"
                                 title="{{ $card['title'] }} video"
+                                loading="lazy"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowfullscreen
                             ></iframe>

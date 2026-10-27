@@ -1739,6 +1739,22 @@
         @apply mx-auto mt-8 grid max-w-6xl grid-cols-1 gap-5 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4;
     }
 
+    .irdc-staff-callout {
+        @apply mt-10 flex flex-col items-start gap-6 rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-white p-6 shadow-sm sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10;
+    }
+
+    .irdc-staff-callout__title {
+        @apply mt-2 font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl;
+    }
+
+    .irdc-staff-callout__description {
+        @apply mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base;
+    }
+
+    .irdc-staff-callout > a {
+        @apply shrink-0 gap-2;
+    }
+
     .irdc-leaders-divider {
         @apply mx-auto mt-12 h-1 w-full max-w-5xl rounded-full bg-gradient-to-r from-transparent via-red-600 to-transparent shadow-sm sm:mt-14;
     }
@@ -2865,6 +2881,10 @@
     }
 
     /* Vacancies index page */
+    .irdc-vacancy-download {
+        @apply w-full border-2 border-emerald-800 bg-emerald-800 text-center leading-snug text-white no-underline shadow-sm hover:border-emerald-900 hover:bg-emerald-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-700 sm:w-auto;
+    }
+
     .irdc-vacancies-hero {
         @apply relative overflow-hidden bg-[#0A3D62] text-white;
         background:

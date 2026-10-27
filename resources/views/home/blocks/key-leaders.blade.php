@@ -36,6 +36,19 @@
                     <x-leader-grid :leaders="$leaders" :staff="$groupKey === 'project_staff'" />
                 @endif
                 @endforeach
+            <div class="irdc-staff-callout" aria-labelledby="home-staff-heading">
+                <div>
+                    <p class="irdc-leaders-eyebrow">Implementation Team</p>
+                    <h3 id="home-staff-heading" class="irdc-staff-callout__title">Project Staff</h3>
+                    <p class="irdc-staff-callout__description">Core PMU and field staff responsible for project operations, monitoring, and stakeholder support.</p>
+                </div>
+                <a href="{{ route('organizational-structure') }}" class="irdc-button irdc-button--green">
+                    Project Staff
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </a>
+            </div>
         </div>
     </section>
 @endif

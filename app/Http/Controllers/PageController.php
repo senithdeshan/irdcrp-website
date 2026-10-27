@@ -66,8 +66,10 @@ class PageController extends Controller
             ->get();
 
         $vacanciesPreview = Vacancy::query()
-            ->whereIn('status', ['open', 'closed'])
-            ->orderByDesc('deadline')
+            ->where('status', 'open')
+            ->whereDate('deadline', '>=', today()->toDateString())
+            ->orderBy('deadline')
+            ->orderByDesc('id')
             ->get();
 
         $keyLeaders = KeyLeader::query()

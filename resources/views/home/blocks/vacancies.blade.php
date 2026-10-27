@@ -27,6 +27,7 @@
                         <div class="irdc-notice-card__content">
                             <span>{{ __('messages.home_vacancy_deadline') }}: {{ $v->deadline->format('M j, Y') }}</span>
                             <h3>{{ $v->title }}</h3>
+                            @if($loop->first)
                             <a
                                 href="{{ route('vacancies.show', $v) }}"
                                 class="irdc-notice-countdown"
@@ -37,6 +38,7 @@
                                 <span class="irdc-notice-countdown__dot" aria-hidden="true"></span>
                                 <span x-text="label"></span>
                             </a>
+                            @endif
                         </div>
                         <div class="irdc-notice-card__actions">
                             @if(filled($v->pdf_path))
